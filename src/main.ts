@@ -1,5 +1,5 @@
 import { graphStore } from './graph/PhyGraphStore.ts';
-import { SEED_DATA } from './pipeline/seedData.ts';
+import { graphDataLoader } from './services/GraphDataLoader.ts';
 import { TreeCanvasRenderer } from './renderer/TreeCanvasRenderer.ts';
 import { Navbar } from './ui/Navbar.ts';
 import { TimelineBar } from './ui/TimelineBar.ts';
@@ -31,17 +31,9 @@ class PhyLifeApp {
     this.bootstrap();
   }
 
-  private bootstrap(): void {
-    // 1. Seed initial local graph database
-    graphStore.importJSON({
-      version: '1.0.0',
-      timestamp: new Date().toISOString(),
-      root_id: 'div_luca',
-      taxa: SEED_DATA.taxa,
-      divergences: SEED_DATA.divergences,
-      edges: SEED_DATA.edges,
-      synonyms: SEED_DATA.synonyms
-    });
+  private async bootstrap(): Promise<void> {
+    // 1. Load initial persisted knowledge graph
+    await graphDataLoader.loadInitialGraph(graphStore);
 
     // 2. Build UI containers
     this.setupUI();
