@@ -7,15 +7,15 @@
     "dev": "npm run graph:seed && vite",
     "build": "npm run graph:seed && tsc && vite build",
     "preview": "vite preview",
-    "graph:seed": "npx tsx scripts/seed-disk.ts",
-    "graph:refresh": "npx tsx scripts/refresh-graph.ts",
+    "graph:seed": "node --experimental-strip-types scripts/seed-disk.ts",
+    "graph:refresh": "node --experimental-strip-types scripts/refresh-graph.ts",
     "pipeline:sync": "node --experimental-strip-types scripts/sync.ts",
     "pipeline:seed": "node --experimental-strip-types scripts/seed.ts",
     "pipeline:stats": "node --experimental-strip-types scripts/stats.ts",
-    "test:persisted-kg": "npx tsx scripts/test-persisted-graph.ts",
-    "test:backend": "npx tsx scripts/test-backend-integrations.ts",
-    "test:walkthrough": "npx tsx scripts/test-ui-walkthrough.ts",
-    "test": "npx tsx scripts/test-persisted-graph.ts && npx tsx scripts/test-backend-integrations.ts && npx tsx scripts/test-ui-walkthrough.ts"
+    "test:persisted-kg": "node --experimental-strip-types scripts/test-persisted-graph.ts",
+    "test:backend": "node --experimental-strip-types scripts/test-backend-integrations.ts",
+    "test:walkthrough": "node --experimental-strip-types scripts/test-ui-walkthrough.ts",
+    "test": "npm run test:persisted-kg && npm run test:backend && npm run test:walkthrough"
   },
   "dependencies": {
     "lucide": "^0.475.0"
