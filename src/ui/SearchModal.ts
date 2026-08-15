@@ -94,7 +94,7 @@ export class SearchModal {
 
     if (this.currentResults.length === 0) {
       list.innerHTML = `
-        <div style="padding: 24px; text-align: center; color: var(--text-muted); font-size: 13px;">
+        <div style="padding: 24px; text-align: center; color: var(--text-muted); font-size: 13px;" role="status">
           No matching taxa or clades found. Try searching for "Homo", "Lion", "Fungi", "Cyanobacteria", or "LUCA".
         </div>
       `;
@@ -109,7 +109,13 @@ export class SearchModal {
         : `${node.common_name || 'Divergence Clade'} • ${node.divergence_mya} Ma (${node.geological_era})`;
 
       return `
-        <div class="search-result-item ${idx === this.selectedIndex ? 'selected' : ''}" data-id="${node.id}">
+        <div class="search-result-item ${idx === this.selectedIndex ? 'selected' : ''}" 
+             data-id="${node.id}" 
+             id="search-opt-${idx}"
+             role="option" 
+             aria-selected="${idx === this.selectedIndex}"
+             tabindex="0"
+             aria-label="${title}, ${sub}">
           <div class="result-main">
             <div class="result-name">${title}</div>
             <div class="result-sub">${sub}</div>
@@ -120,40 +126,57 @@ export class SearchModal {
     }).join('');
 
     list.querySelectorAll('.search-result-item').forEach(item => {
-      item.addEventListener('click', () => {
+      const selectItem = () => {
         const id = item.getAttribute('data-id');
         const node = this.store.getNode(id || '');
         if (node) {
           this.onSelectCallback(node);
           this.close();
         }
+      };
+
+      item.addEventListener('click', selectItem);
+      item.addEventListener('keydown', e => {
+        if ((e as KeyboardEvent).key === 'Enter') {
+          selectItem();
+        }
       });
     });
   }
 
   private render(): void {
+    this.element.setAttribute('role', 'dialog');
+    this.element.setAttribute('aria-modal', 'true');
+    this.element.setAttribute('aria-label', 'Search tree of life');
+
     this.element.innerHTML = `
       <div class="search-modal">
         <div class="search-input-box">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted);" aria-hidden="true">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
-          <input type="text" class="search-input" placeholder="Search tree of life (scientific or common name)..." autofocus>
-          <span class="kbd-shortcut">ESC</span>
+          <input type="text" 
+                 class="search-input" 
+                 placeholder="Search tree of life (scientific or common name)..." 
+                 aria-label="Search tree of life (scientific or common name)"
+                 aria-autocomplete="list"
+                 aria-controls="search-results-list"
+                 autofocus>
+          <button class="drawer-close-btn" id="search-modal-close" aria-label="Close search (Escape)" title="Close search (Escape)" style="position: static; width: 26px; height: 26px; font-size: 11px;">✕</button>
         </div>
 
-        <div style="padding: 10px 16px 0; display: flex; gap: 6px; flex-wrap: wrap;">
-          <button class="badge domain-chip active" data-domain="all">All Domains</button>
-          <button class="badge domain-chip" data-domain="Metazoa" style="border-color: var(--domain-metazoa);">Animals</button>
-          <button class="badge domain-chip" data-domain="Viridiplantae" style="border-color: var(--domain-plantae);">Plants</button>
-          <button class="badge domain-chip" data-domain="Fungi" style="border-color: var(--domain-fungi);">Fungi</button>
-          <button class="badge domain-chip" data-domain="Protista" style="border-color: var(--domain-protista);">Protists</button>
-          <button class="badge domain-chip" data-domain="Bacteria" style="border-color: var(--domain-bacteria);">Bacteria</button>
-          <button class="badge domain-chip" data-domain="Archaea" style="border-color: var(--domain-archaea);">Archaea</button>
+        <div style="padding: 10px 16px 0; display: flex; gap: 6px; flex-wrap: wrap;" role="toolbar" aria-label="Filter search by taxonomic domain">
+          <button class="badge domain-chip active" data-domain="all" aria-pressed="true" aria-label="Show all domains">All Domains</button>
+          <button class="badge domain-chip" data-domain="Metazoa" aria-pressed="false" aria-label="Filter animals" style="border-color: var(--domain-metazoa);">Animals</button>
+          <button class="badge domain-chip" data-domain="Viridiplantae" aria-pressed="false" aria-label="Filter plants" style="border-color: var(--domain-plantae);">Plants</button>
+          <button class="badge domain-chip" data-domain="Fungi" aria-pressed="false" aria-label="Filter fungi" style="border-color: var(--domain-fungi);">Fungi</button>
+          <button class="badge domain-chip" data-domain="Protista" aria-pressed="false" aria-label="Filter protists" style="border-color: var(--domain-protista);">Protists</button>
+          <button class="badge domain-chip" data-domain="Bacteria" aria-pressed="false" aria-label="Filter bacteria" style="border-color: var(--domain-bacteria);">Bacteria</button>
+          <button class="badge domain-chip" data-domain="Archaea" aria-pressed="false" aria-label="Filter archaea" style="border-color: var(--domain-archaea);">Archaea</button>
         </div>
 
-        <div class="search-results-list"></div>
+        <div class="search-results-list" id="search-results-list" role="listbox" aria-label="Search suggestions"></div>
       </div>
     `;
 
@@ -161,6 +184,8 @@ export class SearchModal {
     this.element.addEventListener('click', e => {
       if (e.target === this.element) this.close();
     });
+
+    this.element.querySelector('#search-modal-close')?.addEventListener('click', () => this.close());
 
     const input = this.element.querySelector('.search-input') as HTMLInputElement;
     input.addEventListener('input', e => {
@@ -170,8 +195,12 @@ export class SearchModal {
     // Domain chips
     this.element.querySelectorAll('.domain-chip').forEach(chip => {
       chip.addEventListener('click', () => {
-        this.element.querySelectorAll('.domain-chip').forEach(c => c.classList.remove('active'));
+        this.element.querySelectorAll('.domain-chip').forEach(c => {
+          c.classList.remove('active');
+          c.setAttribute('aria-pressed', 'false');
+        });
         chip.classList.add('active');
+        chip.setAttribute('aria-pressed', 'true');
 
         const domain = chip.getAttribute('data-domain');
         this.selectedDomain = domain === 'all' ? null : (domain as DomainKingdom);

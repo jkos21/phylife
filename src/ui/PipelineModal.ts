@@ -7,13 +7,18 @@ export class PipelineModal {
   private store: PhyGraphStore;
   private onGraphUpdatedCallback?: () => void;
   private unsubscribeProgress?: () => void;
+  private isOpen = false;
 
   constructor(store: PhyGraphStore, onGraphUpdated?: () => void) {
     this.store = store;
     this.onGraphUpdatedCallback = onGraphUpdated;
     this.element = document.createElement('div');
     this.element.className = 'modal-backdrop';
+    this.element.setAttribute('role', 'dialog');
+    this.element.setAttribute('aria-modal', 'true');
+    this.element.setAttribute('aria-label', 'Ingestion and Reconciliation Pipeline Console');
     this.render();
+    this.initGlobalKeys();
   }
 
   public getElement(): HTMLElement {
@@ -21,6 +26,7 @@ export class PipelineModal {
   }
 
   public open(): void {
+    this.isOpen = true;
     this.element.classList.add('active');
     this.render();
 
@@ -31,11 +37,20 @@ export class PipelineModal {
   }
 
   public close(): void {
+    this.isOpen = false;
     this.element.classList.remove('active');
     if (this.unsubscribeProgress) {
       this.unsubscribeProgress();
       this.unsubscribeProgress = undefined;
     }
+  }
+
+  private initGlobalKeys(): void {
+    window.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && this.isOpen) {
+        this.close();
+      }
+    });
   }
 
   private updateProgressUI(progress: PipelineProgress): void {
@@ -82,11 +97,11 @@ export class PipelineModal {
             </svg>
             Ingestion & Reconciliation Pipeline Console
           </div>
-          <button class="drawer-close-btn" id="pipeline-close" style="position: static; width: 28px; height: 28px;">✕</button>
+          <button class="drawer-close-btn" id="pipeline-close" style="position: static; width: 28px; height: 28px;" aria-label="Close pipeline console" title="Close pipeline console (Escape)">✕</button>
         </div>
 
         <div class="modal-body">
-          <div class="source-ids-grid" style="grid-template-columns: repeat(4, 1fr);">
+          <div class="source-ids-grid" style="grid-template-columns: repeat(4, 1fr);" role="region" aria-label="Graph statistics">
             <div class="source-card">
               <div class="source-card-label">Total Graph Vertices</div>
               <div class="source-card-val">${stats.totalNodes} Nodes</div>
@@ -108,16 +123,16 @@ export class PipelineModal {
           <div>
             <div class="section-label">Pipeline Execution Status</div>
             <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px;">
-              <span id="pipeline-status-text" style="font-family: var(--font-mono); color: var(--accent-primary);">Idle / Ready</span>
+              <span id="pipeline-status-text" style="font-family: var(--font-mono); color: var(--accent-primary);" role="status">Idle / Ready</span>
             </div>
-            <div class="pipeline-progress-bar-bg">
+            <div class="pipeline-progress-bar-bg" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Pipeline sync progress">
               <div class="pipeline-progress-bar-fill" style="width: 0%;"></div>
             </div>
           </div>
 
           <div>
             <div class="section-label">Live Ingestion & Reconciliation Logs</div>
-            <div class="terminal-window">
+            <div class="terminal-window" role="log" aria-label="ETL execution logs" aria-live="polite">
               <div class="log-line log-info">
                 <span>[${new Date().toLocaleTimeString()}] Pipeline operator initialized. Ready to sync Open Tree of Life, TimeTree, WFO, MycoBank, and GBIF.</span>
               </div>
@@ -125,18 +140,18 @@ export class PipelineModal {
           </div>
 
           <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-            <button class="btn-primary" id="btn-run-sync" style="flex: 1; justify-content: center;">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <button class="btn-primary" id="btn-run-sync" style="flex: 1; justify-content: center;" title="Trigger Full ETL Pipeline Sync" aria-label="Trigger Full ETL Pipeline Sync">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
               </svg>
               Trigger Full ETL Pipeline Sync
             </button>
 
-            <button class="btn-toggle" id="btn-export-json" style="padding: 8px 14px;">
+            <button class="btn-toggle" id="btn-export-json" style="padding: 8px 14px;" title="Export graph database as JSON" aria-label="Export JSON">
               Export JSON
             </button>
 
-            <button class="btn-toggle" id="btn-export-newick" style="padding: 8px 14px;">
+            <button class="btn-toggle" id="btn-export-newick" style="padding: 8px 14px;" title="Export phylogenetic tree in Newick format (.nwk)" aria-label="Export Newick format">
               Export Newick (.nwk)
             </button>
           </div>

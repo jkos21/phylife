@@ -159,7 +159,7 @@ export const SEED_DATA: SeedDataPayload = {
       common_name: 'Ecdysozoa & Spiralia Split',
       divergence_mya: 560,
       confidence_interval: [540, 590],
-      geological_era: 'Paleozoic',
+      geological_era: 'Proterozoic',
       evolutionary_milestone: 'Blastopore becomes mouth; divergence into molting animals (Arthropoda) and lophotrochozoans (Mollusca).'
     },
     {
@@ -168,7 +168,7 @@ export const SEED_DATA: SeedDataPayload = {
       common_name: 'Echinoderm & Chordate Split',
       divergence_mya: 560,
       confidence_interval: [540, 580],
-      geological_era: 'Paleozoic',
+      geological_era: 'Proterozoic',
       evolutionary_milestone: 'Blastopore becomes anus, radial cleavage, and enterocoelous coelom formation.'
     },
     {
@@ -700,6 +700,7 @@ export const SEED_DATA: SeedDataPayload = {
       thumbnail_url: 'https://images.unsplash.com/photo-1549608276-5786777e6587?w=500&auto=format&fit=crop&q=60',
       description: 'Flightless Columbiform bird endemic to Mauritius, driven to extinction in the 17th century following human discovery and introduced invasive mammals.',
       temporal_range: 'Pleistocene - 1662 AD (Extinct)',
+      traits: ['Flightless insular adaptation', 'Robust hooked bill', 'Extinction benchmark species'],
       ott_id: 'ott_61280'
     },
     {

@@ -1,3 +1,4 @@
+declare const process: any;
 import { PhyGraphStore } from '../src/graph/PhyGraphStore.ts';
 import { SEED_DATA } from '../src/pipeline/seedData.ts';
 

@@ -8,6 +8,9 @@ import { SearchModal } from './ui/SearchModal.ts';
 import { NodeInspector } from './ui/NodeInspector.ts';
 import { MRCAExplorer } from './ui/MRCAExplorer.ts';
 import { PipelineModal } from './ui/PipelineModal.ts';
+import { UserPreferencesModal } from './ui/UserPreferencesModal.ts';
+import { RecentChangesModal } from './ui/RecentChangesModal.ts';
+import { userPreferences } from './services/userPreferences.ts';
 import type { MRCAResult } from './graph/types.ts';
 
 class PhyLifeApp {
@@ -20,6 +23,8 @@ class PhyLifeApp {
   private nodeInspector!: NodeInspector;
   private mrcaExplorer!: MRCAExplorer;
   private pipelineModal!: PipelineModal;
+  private preferencesModal!: UserPreferencesModal;
+  private recentChangesModal!: RecentChangesModal;
 
   constructor() {
     this.appElement = document.getElementById('app')!;
@@ -43,6 +48,13 @@ class PhyLifeApp {
 
     // 3. Mount Canvas Engine
     this.setupRenderer();
+
+    // 4. Listen to preference updates
+    userPreferences.subscribe(prefs => {
+      this.renderer.setOptions({
+        highlightRecentDeltas: prefs.highlightRecentDeltas
+      });
+    });
   }
 
   private setupUI(): void {
@@ -59,6 +71,11 @@ class PhyLifeApp {
       nodeId => {
         this.nodeInspector.close();
         this.mrcaExplorer.open('tax_homo_sapiens', nodeId);
+      },
+      _cladeId => {
+        // Clade expanded: recompute tree layout & update stats
+        this.renderer.recomputeLayout();
+        this.navbar.updateStats(graphStore.getAllNodes().length);
       }
     );
 
@@ -77,11 +94,35 @@ class PhyLifeApp {
       this.navbar.updateStats(graphStore.getAllNodes().length);
     });
 
+    this.preferencesModal = new UserPreferencesModal(() => {
+      this.renderer.setOptions({
+        highlightRecentDeltas: userPreferences.isHighlightRecentDeltas()
+      });
+    });
+
+    this.recentChangesModal = new RecentChangesModal(
+      graphStore,
+      nodeId => {
+        const node = graphStore.getNode(nodeId);
+        if (node) {
+          this.renderer.panToNode(nodeId);
+          this.renderer.setOptions({ selectedNodeId: nodeId });
+          this.nodeInspector.inspect(node);
+        }
+      },
+      () => {
+        this.renderer.recomputeLayout();
+        this.navbar.updateStats(graphStore.getAllNodes().length);
+      }
+    );
+
     // 2. Navigation Bar
     this.navbar = new Navbar({
       onSearchClick: () => this.searchModal.open(),
       onMRCAClick: () => this.mrcaExplorer.open(),
       onPipelineClick: () => this.pipelineModal.open(),
+      onPreferencesClick: () => this.preferencesModal.open(),
+      onRecentChangesClick: () => this.recentChangesModal.open(),
       onLayoutChange: mode => this.renderer.setLayoutMode(mode),
       onResetView: () => this.renderer.resetCamera()
     });
@@ -143,7 +184,7 @@ class PhyLifeApp {
 
     // 5. Timeline Bar
     this.timelineBar = new TimelineBar((_mya: number) => {
-      // Zoom & focus to timescale or re-render
+      // Timeline scrubber interaction
     });
     viewportContainer.appendChild(this.timelineBar.getElement());
 
@@ -153,7 +194,11 @@ class PhyLifeApp {
       onZoomOut: () => this.renderer.zoomOut(),
       onReset: () => this.renderer.resetCamera(),
       onToggleRings: show => this.renderer.setOptions({ showGeologicalRings: show }),
-      onToggleLabels: show => this.renderer.setOptions({ showLabels: show })
+      onToggleLabels: show => this.renderer.setOptions({ showLabels: show }),
+      onToggleDeltas: show => {
+        userPreferences.setHighlightRecentDeltas(show);
+        this.renderer.setOptions({ highlightRecentDeltas: show });
+      }
     });
     viewportContainer.appendChild(this.treeControls.getElement());
 
@@ -165,11 +210,16 @@ class PhyLifeApp {
     document.body.appendChild(this.searchModal.getElement());
     document.body.appendChild(this.mrcaExplorer.getElement());
     document.body.appendChild(this.pipelineModal.getElement());
+    document.body.appendChild(this.preferencesModal.getElement());
+    document.body.appendChild(this.recentChangesModal.getElement());
   }
 
   private setupRenderer(): void {
     const canvas = document.getElementById('tree-canvas') as HTMLCanvasElement;
     this.renderer = new TreeCanvasRenderer(canvas, graphStore);
+    this.renderer.setOptions({
+      highlightRecentDeltas: userPreferences.isHighlightRecentDeltas()
+    });
 
     this.renderer.setCallbacks(
       node => {

@@ -7,13 +7,18 @@ export class MRCAExplorer {
   private taxonAId: string = 'tax_homo_sapiens';
   private taxonBId: string = 'tax_panthera_leo';
   private onHighlightPathCallback?: (result: MRCAResult) => void;
+  private isOpen = false;
 
   constructor(store: PhyGraphStore, onHighlightPath?: (result: MRCAResult) => void) {
     this.store = store;
     this.onHighlightPathCallback = onHighlightPath;
     this.element = document.createElement('div');
     this.element.className = 'modal-backdrop';
+    this.element.setAttribute('role', 'dialog');
+    this.element.setAttribute('aria-modal', 'true');
+    this.element.setAttribute('aria-label', 'Most Recent Common Ancestor (MRCA) Explorer');
     this.render();
+    this.initGlobalKeys();
   }
 
   public getElement(): HTMLElement {
@@ -23,12 +28,22 @@ export class MRCAExplorer {
   public open(presetTaxonAId?: string, presetTaxonBId?: string): void {
     if (presetTaxonAId) this.taxonAId = presetTaxonAId;
     if (presetTaxonBId) this.taxonBId = presetTaxonBId;
+    this.isOpen = true;
     this.element.classList.add('active');
     this.render();
   }
 
   public close(): void {
+    this.isOpen = false;
     this.element.classList.remove('active');
+  }
+
+  private initGlobalKeys(): void {
+    window.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && this.isOpen) {
+        this.close();
+      }
+    });
   }
 
   private render(): void {
@@ -39,12 +54,12 @@ export class MRCAExplorer {
       <div class="mrca-modal">
         <div class="modal-header">
           <div class="modal-title">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #f43f5e;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #f43f5e;" aria-hidden="true">
               <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
             </svg>
             Most Recent Common Ancestor (MRCA) Explorer
           </div>
-          <button class="drawer-close-btn" id="mrca-close" style="position: static; width: 28px; height: 28px;">✕</button>
+          <button class="drawer-close-btn" id="mrca-close" style="position: static; width: 28px; height: 28px;" aria-label="Close MRCA Explorer" title="Close MRCA Explorer (Escape)">✕</button>
         </div>
 
         <div class="modal-body">
@@ -54,17 +69,17 @@ export class MRCAExplorer {
 
           <div class="mrca-picker-row">
             <div class="mrca-select-box">
-              <label class="section-label">Species A</label>
-              <select class="mrca-select" id="select-species-a">
+              <label class="section-label" for="select-species-a">Species A</label>
+              <select class="mrca-select" id="select-species-a" aria-label="Select first comparison species">
                 ${allTaxa.map(t => `<option value="${t.id}" ${t.id === this.taxonAId ? 'selected' : ''}>${t.common_name ? `${t.common_name} (${t.scientific_name})` : t.scientific_name}</option>`).join('')}
               </select>
             </div>
 
-            <div class="mrca-vs-badge">VS</div>
+            <div class="mrca-vs-badge" aria-hidden="true">VS</div>
 
             <div class="mrca-select-box">
-              <label class="section-label">Species B</label>
-              <select class="mrca-select" id="select-species-b">
+              <label class="section-label" for="select-species-b">Species B</label>
+              <select class="mrca-select" id="select-species-b" aria-label="Select second comparison species">
                 ${allTaxa.map(t => `<option value="${t.id}" ${t.id === this.taxonBId ? 'selected' : ''}>${t.common_name ? `${t.common_name} (${t.scientific_name})` : t.scientific_name}</option>`).join('')}
               </select>
             </div>
@@ -110,8 +125,8 @@ export class MRCAExplorer {
                 </div>
               </div>
 
-              <button class="btn-primary" id="btn-highlight-mrca" style="background: linear-gradient(135deg, #f43f5e, #e11d48); justify-content: center; margin-top: 6px;">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <button class="btn-primary" id="btn-highlight-mrca" style="background: linear-gradient(135deg, #f43f5e, #e11d48); justify-content: center; margin-top: 6px;" title="Trace Bioluminescent Divergence Path on Tree" aria-label="Trace Bioluminescent Divergence Path on Tree">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
                 </svg>
                 Trace Bioluminescent Divergence Path on Tree

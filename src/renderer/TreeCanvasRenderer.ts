@@ -331,7 +331,9 @@ export class TreeCanvasRenderer {
     const height = rect.height;
 
     // Get theme background color from document body or CSS variable
-    const themeBg = getComputedStyle(document.body).getPropertyValue('--bg-primary').trim() || '#0f172a';
+    const themeBg = (typeof getComputedStyle !== 'undefined' && typeof document !== 'undefined' && document.body)
+      ? (getComputedStyle(document.body).getPropertyValue('--bg-primary').trim() || '#0f172a')
+      : '#0f172a';
     this.ctx.fillStyle = themeBg;
     this.ctx.fillRect(0, 0, width, height);
 
@@ -482,19 +484,34 @@ export class TreeCanvasRenderer {
       const isSelected = this.options.selectedNodeId === node.id;
       const isHovered = this.options.hoveredNodeId === node.id;
       const isMRCA = node.isMRCANode;
+      const isDelta = (node.isRecentlyUpdated || node.deltaStatus === 'new' || node.deltaStatus === 'modified') && (this.options.highlightRecentDeltas !== false);
 
       let radius = node.radius;
       if (isSelected || isHovered) radius += 3;
       if (isMRCA) radius += 4;
+      if (isDelta && !isMRCA && !isSelected) radius += 1.5;
 
-      // Draw Node Outer Halo / Glow
-      if (isMRCA || isSelected || isHovered) {
+      // Draw Node Outer Halo / Glow (MRCA, Hover, or Delta Updates)
+      if (isMRCA || isSelected || isHovered || isDelta) {
         this.ctx.save();
         this.ctx.beginPath();
-        this.ctx.arc(node.x, node.y, radius + (isMRCA ? 6 : 4), 0, Math.PI * 2);
-        this.ctx.fillStyle = isMRCA ? 'rgba(244, 63, 94, 0.35)' : 'rgba(255, 255, 255, 0.25)';
-        this.ctx.shadowBlur = 10;
-        this.ctx.shadowColor = isMRCA ? '#f43f5e' : node.color;
+        this.ctx.arc(node.x, node.y, radius + (isMRCA ? 6 : (isDelta ? 5 : 4)), 0, Math.PI * 2);
+        
+        if (isMRCA) {
+          this.ctx.fillStyle = 'rgba(244, 63, 94, 0.35)';
+          this.ctx.shadowBlur = 10;
+          this.ctx.shadowColor = '#f43f5e';
+        } else if (isDelta) {
+          const deltaPulse = 0.5 + 0.5 * Math.sin(this.mrcaPulsePhase * 1.5);
+          this.ctx.fillStyle = node.deltaStatus === 'new' ? `rgba(16, 185, 129, ${0.25 + deltaPulse * 0.25})` : `rgba(56, 189, 248, ${0.25 + deltaPulse * 0.25})`;
+          this.ctx.shadowBlur = 12;
+          this.ctx.shadowColor = node.deltaStatus === 'new' ? '#10b981' : '#38bdf8';
+        } else {
+          this.ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+          this.ctx.shadowBlur = 10;
+          this.ctx.shadowColor = node.color;
+        }
+
         this.ctx.fill();
         this.ctx.restore();
       }
@@ -502,11 +519,24 @@ export class TreeCanvasRenderer {
       // Draw Node Circle
       this.ctx.beginPath();
       this.ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
-      this.ctx.fillStyle = isMRCA ? '#f43f5e' : node.color;
-      this.ctx.strokeStyle = '#ffffff';
-      this.ctx.lineWidth = 1.5;
+      this.ctx.fillStyle = isMRCA ? '#f43f5e' : (isDelta && !isSelected ? (node.deltaStatus === 'new' ? '#10b981' : '#38bdf8') : node.color);
+      this.ctx.strokeStyle = isDelta ? '#ffffff' : '#ffffff';
+      this.ctx.lineWidth = isDelta ? 2 : 1.5;
       this.ctx.fill();
       this.ctx.stroke();
+
+      // Delta sparkle badge
+      if (isDelta && (isMediumZoom || isHovered || isSelected)) {
+        this.ctx.save();
+        this.ctx.beginPath();
+        this.ctx.arc(node.x - radius + 2, node.y - radius + 2, 3.5, 0, Math.PI * 2);
+        this.ctx.fillStyle = node.deltaStatus === 'new' ? '#10b981' : '#38bdf8';
+        this.ctx.strokeStyle = '#ffffff';
+        this.ctx.lineWidth = 1;
+        this.ctx.fill();
+        this.ctx.stroke();
+        this.ctx.restore();
+      }
 
       // Extinction skull/marker badge
       if (node.isExtinct && this.options.showExtinctBadges && (isMediumZoom || isHovered || isSelected)) {

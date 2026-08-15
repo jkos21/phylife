@@ -5,6 +5,8 @@ export interface NavbarCallbacks {
   onSearchClick: () => void;
   onMRCAClick: () => void;
   onPipelineClick: () => void;
+  onPreferencesClick: () => void;
+  onRecentChangesClick: () => void;
   onLayoutChange: (mode: LayoutMode) => void;
   onResetView: () => void;
 }
@@ -44,18 +46,24 @@ export class Navbar {
     if (radialBtn && dendroBtn) {
       if (mode === 'radial') {
         radialBtn.classList.add('active');
+        radialBtn.setAttribute('aria-pressed', 'true');
         dendroBtn.classList.remove('active');
+        dendroBtn.setAttribute('aria-pressed', 'false');
       } else {
         dendroBtn.classList.add('active');
+        dendroBtn.setAttribute('aria-pressed', 'true');
         radialBtn.classList.remove('active');
+        radialBtn.setAttribute('aria-pressed', 'false');
       }
     }
   }
 
   private render(): void {
+    this.element.setAttribute('role', 'banner');
+
     this.element.innerHTML = `
-      <div class="nav-brand" id="nav-brand-btn">
-        <div class="brand-icon">🧬</div>
+      <div class="nav-brand" id="nav-brand-btn" role="button" tabindex="0" aria-label="PhyLife Tree of Life Engine, reset view to origin" title="Reset Viewport to Origin">
+        <div class="brand-icon" aria-hidden="true">🧬</div>
         <div class="brand-title">
           PhyLife
           <span class="brand-badge">Tree of Life</span>
@@ -63,8 +71,8 @@ export class Navbar {
       </div>
 
       <div class="nav-center">
-        <button class="nav-search-btn" id="nav-search-trigger" title="Search taxa and clades (Cmd+K)">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <button class="nav-search-btn" id="nav-search-trigger" aria-label="Search taxa and clades (Press Cmd+K or Ctrl+K)" title="Search taxa and clades (Cmd+K)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
@@ -72,9 +80,9 @@ export class Navbar {
           <span class="kbd-shortcut">⌘K</span>
         </button>
 
-        <div class="btn-group">
-          <button class="btn-toggle active" id="btn-layout-radial" title="Radial Geological Phylogram">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <div class="btn-group" role="group" aria-label="Layout modes">
+          <button class="btn-toggle active" id="btn-layout-radial" role="button" aria-pressed="true" aria-label="Radial Geological Phylogram layout" title="Radial Geological Phylogram">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <circle cx="12" cy="12" r="10"></circle>
               <circle cx="12" cy="12" r="4"></circle>
               <line x1="12" y1="2" x2="12" y2="6"></line>
@@ -84,8 +92,8 @@ export class Navbar {
             </svg>
             Radial
           </button>
-          <button class="btn-toggle" id="btn-layout-dendro" title="Hierarchical Dendrogram">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <button class="btn-toggle" id="btn-layout-dendro" role="button" aria-pressed="false" aria-label="Hierarchical Dendrogram layout" title="Hierarchical Dendrogram">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <line x1="6" y1="3" x2="6" y2="15"></line>
               <circle cx="18" cy="6" r="3"></circle>
               <circle cx="6" cy="18" r="3"></circle>
@@ -97,34 +105,58 @@ export class Navbar {
       </div>
 
       <div class="nav-actions">
-        <button class="btn-primary" id="btn-mrca-trigger" title="Explore Most Recent Common Ancestor">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
-          </svg>
-          MRCA Finder
+        <button class="btn-secondary" id="btn-recent-trigger" aria-label="View Recent Taxonomic Updates & Delta Changes" title="View Recent Taxonomic Updates & Delta Changes" style="padding: 6px 10px; font-size: 12.5px; display: flex; align-items: center; gap: 6px;">
+          <span aria-hidden="true">✨</span>
+          <span class="nav-action-label">Recent Updates</span>
         </button>
 
-        <button class="btn-icon" id="btn-pipeline-trigger" title="Ingestion Pipeline & Graph Admin">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <button class="btn-secondary" id="btn-prefs-trigger" aria-label="Science Communicator & Creator Preferences" title="Science Communicator & Creator Preferences" style="padding: 6px 10px; font-size: 12.5px; display: flex; align-items: center; gap: 6px;">
+          <span aria-hidden="true">🎙️</span>
+          <span class="nav-action-label">Creators</span>
+        </button>
+
+        <button class="btn-primary" id="btn-mrca-trigger" aria-label="Explore Most Recent Common Ancestor" title="Explore Most Recent Common Ancestor">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
+          </svg>
+          MRCA
+        </button>
+
+        <button class="btn-icon" id="btn-pipeline-trigger" aria-label="Ingestion Pipeline & Graph Admin Console" title="Ingestion Pipeline & Graph Admin">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
           </svg>
         </button>
 
-        <select class="mrca-select" id="theme-selector" style="width: auto; padding: 6px 10px; font-size: 12px;" title="Select UI Theme">
-          <option value="modern-dark">Modern Dark</option>
-          <option value="bioluminescent">Bioluminescent</option>
-          <option value="academic-light">Academic Light</option>
+        <select class="mrca-select" id="theme-selector" style="width: auto; padding: 6px 8px; font-size: 12px;" aria-label="Select UI Theme" title="Select UI Theme">
+          <option value="modern-dark">Dark</option>
+          <option value="bioluminescent">Bio</option>
+          <option value="academic-light">Light</option>
         </select>
       </div>
     `;
 
     // Event listeners
-    this.element.querySelector('#nav-brand-btn')?.addEventListener('click', () => {
+    const brandBtn = this.element.querySelector('#nav-brand-btn');
+    brandBtn?.addEventListener('click', () => {
       this.callbacks.onResetView();
+    });
+    brandBtn?.addEventListener('keydown', e => {
+      if ((e as KeyboardEvent).key === 'Enter') {
+        this.callbacks.onResetView();
+      }
     });
 
     this.element.querySelector('#nav-search-trigger')?.addEventListener('click', () => {
       this.callbacks.onSearchClick();
+    });
+
+    this.element.querySelector('#btn-recent-trigger')?.addEventListener('click', () => {
+      this.callbacks.onRecentChangesClick();
+    });
+
+    this.element.querySelector('#btn-prefs-trigger')?.addEventListener('click', () => {
+      this.callbacks.onPreferencesClick();
     });
 
     this.element.querySelector('#btn-mrca-trigger')?.addEventListener('click', () => {

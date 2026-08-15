@@ -114,6 +114,8 @@ export function computeDendrogramLayout(
       isMRCAPath,
       isMRCANode,
       isExtinct,
+      isRecentlyUpdated: !!node.is_recently_updated,
+      deltaStatus: node.delta_status,
       thumbnailUrl: isTaxonNode(node) ? node.thumbnail_url : undefined,
       divergenceMya: isDivergenceNode(node) ? node.divergence_mya : 0,
       geologicalEra: isDivergenceNode(node) ? node.geological_era : 'Cenozoic',

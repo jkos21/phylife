@@ -9,7 +9,10 @@
     "preview": "vite preview",
     "pipeline:sync": "node --experimental-strip-types scripts/sync.ts",
     "pipeline:seed": "node --experimental-strip-types scripts/seed.ts",
-    "pipeline:stats": "node --experimental-strip-types scripts/stats.ts"
+    "pipeline:stats": "node --experimental-strip-types scripts/stats.ts",
+    "test:backend": "npx tsx scripts/test-backend-integrations.ts",
+    "test:walkthrough": "npx tsx scripts/test-ui-walkthrough.ts",
+    "test": "npx tsx scripts/test-backend-integrations.ts && npx tsx scripts/test-ui-walkthrough.ts"
   },
   "dependencies": {
     "lucide": "^0.475.0"

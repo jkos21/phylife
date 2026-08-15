@@ -20,6 +20,8 @@ export interface RenderNode {
   isMRCAPath: boolean;
   isMRCANode: boolean;
   isExtinct: boolean;
+  isRecentlyUpdated?: boolean;
+  deltaStatus?: 'new' | 'modified' | 'synced';
   thumbnailUrl?: string;
   divergenceMya?: number;
   geologicalEra?: GeologicalEra;
@@ -63,6 +65,7 @@ export interface RendererOptions {
   showGeologicalRings: boolean;
   showExtinctBadges: boolean;
   showThumbnails: boolean;
+  highlightRecentDeltas?: boolean;
   timeCutoffMya?: number; // If set, only render branches active at or before this time
   activeMRCAIds?: Set<string>;
   hoveredNodeId?: string | null;

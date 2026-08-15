@@ -24,9 +24,14 @@ export class TimelineBar {
     this.currentMya = mya;
     const slider = this.element.querySelector('.timeline-slider') as HTMLInputElement;
     const valText = this.element.querySelector('#timeline-active-val');
-    if (slider) slider.value = String(mya);
+    const eraText = mya === 0 ? 'Present Day (0 Ma)' : `${mya.toLocaleString()} Ma (${this.getEraName(mya)})`;
+    if (slider) {
+      slider.value = String(mya);
+      slider.setAttribute('aria-valuenow', String(mya));
+      slider.setAttribute('aria-valuetext', eraText);
+    }
     if (valText) {
-      valText.textContent = mya === 0 ? 'Present Day (0 Ma)' : `${mya.toLocaleString()} Ma (${this.getEraName(mya)})`;
+      valText.textContent = eraText;
     }
   }
 
@@ -40,23 +45,37 @@ export class TimelineBar {
   }
 
   private render(): void {
+    this.element.setAttribute('role', 'region');
+    this.element.setAttribute('aria-label', 'Geological Chronogram and Divergence Timeline');
+
     this.element.innerHTML = `
       <div class="timeline-header">
         <div class="timeline-title">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="12" cy="12" r="10"></circle>
             <polyline points="12 6 12 12 16 14"></polyline>
           </svg>
           Geological Chronogram & Divergence Timeline
         </div>
-        <div class="timeline-value" id="timeline-active-val">Present Day (0 Ma)</div>
+        <div class="timeline-value" id="timeline-active-val" role="status" aria-live="polite">Present Day (0 Ma)</div>
       </div>
 
       <div class="timeline-slider-track">
-        <input type="range" class="timeline-slider" min="0" max="4200" step="10" value="0" title="Scrub Geological Time (4,200 Ma to 0 Ma)">
+        <input type="range" 
+               class="timeline-slider" 
+               min="0" 
+               max="4200" 
+               step="10" 
+               value="0" 
+               aria-label="Scrub Geological Time (4,200 Ma to 0 Ma)"
+               aria-valuemin="0"
+               aria-valuemax="4200"
+               aria-valuenow="0"
+               aria-valuetext="Present Day (0 Ma)"
+               title="Scrub Geological Time (4,200 Ma to 0 Ma)">
       </div>
 
-      <div class="timeline-eras-labels">
+      <div class="timeline-eras-labels" aria-hidden="true">
         <span style="color: #ef4444;" title="LUCA & Origin of Life">4.2 Ga (LUCA)</span>
         <span style="color: #f59e0b;" title="Archean (Photosynthesis & Bacteria)">2.5 Ga (Archean)</span>
         <span style="color: #3b82f6;" title="Eukaryogenesis & Multicellularity">541 Ma (Proterozoic)</span>

@@ -568,6 +568,40 @@ export class PhyGraphStore {
 
     return `${buildSubtree(startNodeId)};`;
   }
+
+  /**
+   * Exports graph topology to standard GraphML XML format.
+   */
+  public exportGraphML(): string {
+    const nodesXML = Array.from(this.nodes.values()).map(n => {
+      const name = isTaxonNode(n) ? n.scientific_name : n.name;
+      const rank = isTaxonNode(n) ? n.rank : 'clade';
+      const kingdom = n.kingdom || '';
+      return `    <node id="${n.id}">
+      <data key="name">${name}</data>
+      <data key="rank">${rank}</data>
+      <data key="kingdom">${kingdom}</data>
+    </node>`;
+    }).join('\n');
+
+    const edgesXML = Array.from(this.edges.values()).map(e => {
+      return `    <edge id="${e.id}" source="${e.source_id}" target="${e.target_id}">
+      <data key="branch_length_mya">${e.branch_length_mya}</data>
+    </edge>`;
+    }).join('\n');
+
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns">
+  <key id="name" for="node" attr.name="name" attr.type="string"/>
+  <key id="rank" for="node" attr.name="rank" attr.type="string"/>
+  <key id="kingdom" for="node" attr.name="kingdom" attr.type="string"/>
+  <key id="branch_length_mya" for="edge" attr.name="branch_length_mya" attr.type="double"/>
+  <graph id="TreeOfLife" edgedefault="directed">
+${nodesXML}
+${edgesXML}
+  </graph>
+</graphml>`;
+  }
 }
 
 // Global singleton instance

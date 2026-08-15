@@ -19,7 +19,8 @@ export class TimeTreeClient {
     const b = taxonB.toLowerCase();
 
     // Check known landmark divergences
-    if ((a.includes('homo') && b.includes('pan')) || (b.includes('homo') && a.includes('pan'))) {
+    if ((a.includes('homo') && (b.includes('pan troglodytes') || b.includes('chimp') || b === 'pan')) ||
+        (b.includes('homo') && (a.includes('pan troglodytes') || a.includes('chimp') || a === 'pan'))) {
       return {
         taxon_a: taxonA,
         taxon_b: taxonB,
