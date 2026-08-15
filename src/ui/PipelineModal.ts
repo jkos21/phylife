@@ -120,6 +120,17 @@ export class PipelineModal {
             </div>
           </div>
 
+          <div class="source-card" style="margin-bottom: 12px; border-left: 3px solid var(--accent-primary);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+              <span style="font-weight: 600; font-size: 13px; color: var(--text-primary);">🗄️ Backend Persisted Graph Store</span>
+              <span class="rank-badge" style="background: rgba(14, 165, 233, 0.15); color: var(--accent-primary);">Manual Refresh Mode</span>
+            </div>
+            <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
+              Primary storage target: <code style="font-family: var(--font-mono); color: var(--accent-primary);">public/data/phylogeny_graph.json</code><br>
+              Status: Verified persisted snapshot drives initial application state for all users without hardcoded TS dependencies. CLI refresh: <code style="font-family: var(--font-mono); color: var(--text-primary);">npm run graph:refresh</code>.
+            </div>
+          </div>
+
           <div>
             <div class="section-label">Pipeline Execution Status</div>
             <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px;">
@@ -134,13 +145,13 @@ export class PipelineModal {
             <div class="section-label">Live Ingestion & Reconciliation Logs</div>
             <div class="terminal-window" role="log" aria-label="ETL execution logs" aria-live="polite">
               <div class="log-line log-info">
-                <span>[${new Date().toLocaleTimeString()}] Pipeline operator initialized. Ready to sync Open Tree of Life, TimeTree, WFO, MycoBank, and GBIF.</span>
+                <span>[${new Date().toLocaleTimeString()}] Pipeline operator initialized. Ready to reconcile Open Tree of Life, TimeTree, WFO, MycoBank, and GBIF.</span>
               </div>
             </div>
           </div>
 
           <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-            <button class="btn-primary" id="btn-run-sync" style="flex: 1; justify-content: center;" title="Trigger Full ETL Pipeline Sync" aria-label="Trigger Full ETL Pipeline Sync">
+            <button class="btn-primary" id="btn-run-sync" style="flex: 1; justify-content: center;" title="Trigger Full ETL Pipeline Sync & Persist to Graph Store" aria-label="Trigger Full ETL Pipeline Sync">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
               </svg>
@@ -148,7 +159,7 @@ export class PipelineModal {
             </button>
 
             <button class="btn-toggle" id="btn-export-json" style="padding: 8px 14px;" title="Export graph database as JSON" aria-label="Export JSON">
-              Export JSON
+              Export Persisted JSON
             </button>
 
             <button class="btn-toggle" id="btn-export-newick" style="padding: 8px 14px;" title="Export phylogenetic tree in Newick format (.nwk)" aria-label="Export Newick format">
