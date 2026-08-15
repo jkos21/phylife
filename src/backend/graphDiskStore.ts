@@ -33,7 +33,8 @@ export function createPersistedGraphDocument(
   divergences: DivergenceNode[],
   edges: BranchEdge[],
   synonyms: SynonymEdge[] = [],
-  version: string = '1.3.0-persisted-kg'
+  version: string = '1.3.0-persisted-kg',
+  timestamp: string = '2026-08-15T19:00:00.000Z'
 ): PersistedKnowledgeGraphDocument {
   const domainBreakdown: Record<string, number> = {};
   for (const t of taxa) {
@@ -43,7 +44,7 @@ export function createPersistedGraphDocument(
   const metadata: PersistedGraphMetadata = {
     version,
     schemaVersion: '2.0.0',
-    generatedAt: new Date().toISOString(),
+    generatedAt: timestamp,
     description: 'PhyLife Canonical Phylogenetic Knowledge Graph persisted snapshot.',
     sources: [
       { name: 'Open Tree of Life (OToL v3)', description: 'Synthetic tree topology and OTT identifiers' },
