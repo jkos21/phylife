@@ -32,12 +32,10 @@ async function runTests() {
   console.log('================================================================\n');
 
   const publicJsonPath = path.join(rootDir, 'public', 'data', 'phylogeny_graph.json');
-  const backendJsonPath = path.join(rootDir, 'data', 'phylogeny_graph.json');
 
   // Test 1: Disk file existence
   console.log('🔷 Test Group 1: Disk File Verification');
-  assert(fs.existsSync(publicJsonPath), 'Public JSON exists', publicJsonPath);
-  assert(fs.existsSync(backendJsonPath), 'Backend master JSON exists', backendJsonPath);
+  assert(fs.existsSync(publicJsonPath), 'Persisted Knowledge Graph JSON exists', publicJsonPath);
 
   const rawPublic = fs.readFileSync(publicJsonPath, 'utf-8');
   const doc: PersistedKnowledgeGraphDocument = JSON.parse(rawPublic);

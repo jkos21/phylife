@@ -9,9 +9,7 @@ const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 
 const targetPublicDir = path.join(rootDir, 'public', 'data');
-const targetBackendDir = path.join(rootDir, 'data');
 const publicFile = path.join(targetPublicDir, 'phylogeny_graph.json');
-const backendFile = path.join(targetBackendDir, 'phylogeny_graph.json');
 
 async function seedDisk() {
   console.log('====================================================');
@@ -35,17 +33,14 @@ async function seedDisk() {
   console.log(`- Total Edges: ${graphDoc.metadata.metrics.totalEdges}`);
   console.log(`- Domains:`, graphDoc.metadata.metrics.domainBreakdown);
 
-  // Ensure directories exist
+  // Ensure public data directory exists
   fs.mkdirSync(targetPublicDir, { recursive: true });
-  fs.mkdirSync(targetBackendDir, { recursive: true });
 
   const serialized = JSON.stringify(graphDoc, null, 2);
   fs.writeFileSync(publicFile, serialized, 'utf-8');
-  fs.writeFileSync(backendFile, serialized, 'utf-8');
 
   console.log(`\n💾 Successfully persisted graph to:`);
   console.log(`  -> ${publicFile} (${(Buffer.byteLength(serialized) / 1024).toFixed(1)} KB)`);
-  console.log(`  -> ${backendFile} (${(Buffer.byteLength(serialized) / 1024).toFixed(1)} KB)`);
 }
 
 seedDisk().catch(err => {

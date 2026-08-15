@@ -11,9 +11,7 @@ const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 
 const targetPublicDir = path.join(rootDir, 'public', 'data');
-const targetBackendDir = path.join(rootDir, 'data');
 const publicFile = path.join(targetPublicDir, 'phylogeny_graph.json');
-const backendFile = path.join(targetBackendDir, 'phylogeny_graph.json');
 
 async function refreshGraph() {
   console.log('====================================================');
@@ -53,7 +51,7 @@ async function refreshGraph() {
   const timestamp = new Date().toISOString();
   const version = `1.3.0-persisted-kg-${timestamp.split('T')[0]}`;
 
-  const graphDoc = createPersistedGraphDocument(taxa, divergences, edges, synonyms, version);
+  const graphDoc = createPersistedGraphDocument(taxa, divergences, edges, synonyms, version, timestamp);
   const validation = validateGraphIntegrity(graphDoc);
 
   if (!validation.isValid) {
@@ -64,13 +62,11 @@ async function refreshGraph() {
     process.exit(1);
   }
 
-  // Ensure directories exist
+  // Ensure public data directory exists
   fs.mkdirSync(targetPublicDir, { recursive: true });
-  fs.mkdirSync(targetBackendDir, { recursive: true });
 
   const serialized = JSON.stringify(graphDoc, null, 2);
   fs.writeFileSync(publicFile, serialized, 'utf-8');
-  fs.writeFileSync(backendFile, serialized, 'utf-8');
 
   console.log('\n====================================================');
   console.log('🎉 REFRESH & DISK PERSISTENCE SUCCESSFUL');
@@ -80,9 +76,7 @@ async function refreshGraph() {
   console.log(`- Total Edges: ${graphDoc.metadata.metrics.totalEdges}`);
   console.log(`- Taxa Count: ${graphDoc.metadata.metrics.totalTaxa}`);
   console.log(`- Divergences: ${graphDoc.metadata.metrics.totalDivergences}`);
-  console.log(`- Output Files:`);
-  console.log(`  -> ${publicFile}`);
-  console.log(`  -> ${backendFile}`);
+  console.log(`- Output File: ${publicFile}`);
 }
 
 refreshGraph().catch(err => {
