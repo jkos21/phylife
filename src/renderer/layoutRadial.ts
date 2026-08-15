@@ -20,6 +20,12 @@ export const GEOLOGICAL_ERAS_TIMELINE: { era: GeologicalEra; startMya: number; e
   { era: 'Cenozoic', startMya: 66, endMya: 0, color: 'rgba(6, 182, 212, 0.08)', label: 'Cenozoic (66 Ma - Present)' }
 ];
 
+export function myaToRadius(mya: number, maxRadius: number = 750): number {
+  const clamped = Math.max(0, Math.min(4200, mya));
+  const normalized = 1 - Math.sqrt(clamped / 4200);
+  return 40 + normalized * (maxRadius - 40);
+}
+
 export function computeRadialLayout(
   store: PhyGraphStore,
   options: RendererOptions,
@@ -61,11 +67,7 @@ export function computeRadialLayout(
 
   // Function to map divergence time (Ma) to radial distance
   // Nonlinear scaling (square root) gives more breathing room to recent speciation events
-  const myaToRadius = (mya: number): number => {
-    const clamped = Math.max(0, Math.min(4200, mya));
-    const normalized = 1 - Math.sqrt(clamped / 4200);
-    return 40 + normalized * (maxRadius - 40);
-  };
+  const rScale = (mya: number): number => myaToRadius(mya, maxRadius);
 
   const renderNodesMap = new Map<string, RenderNode>();
   const renderEdges: RenderEdge[] = [];
@@ -83,7 +85,7 @@ export function computeRadialLayout(
       mya = 0; // Leaf taxa are at present (0 Ma)
     }
 
-    const r = myaToRadius(mya);
+    const r = rScale(mya);
     let angle: number;
 
     if (isLeaf) {
@@ -193,8 +195,8 @@ export function computeRadialLayout(
 
   // 3. Compute Geological Era rings
   const rings: GeologicalRing[] = GEOLOGICAL_ERAS_TIMELINE.map(eraInfo => {
-    const innerR = myaToRadius(eraInfo.startMya);
-    const outerR = myaToRadius(eraInfo.endMya);
+    const innerR = rScale(eraInfo.startMya);
+    const outerR = rScale(eraInfo.endMya);
     return {
       era: eraInfo.era,
       startMya: eraInfo.startMya,

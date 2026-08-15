@@ -7,8 +7,8 @@ import type {
   RendererOptions,
   LayoutMode
 } from './types.ts';
-import { computeRadialLayout } from './layoutRadial.ts';
-import { computeDendrogramLayout } from './layoutDendrogram.ts';
+import { computeRadialLayout, myaToRadius } from './layoutRadial.ts';
+import { computeDendrogramLayout, myaToX } from './layoutDendrogram.ts';
 
 export class TreeCanvasRenderer {
   private canvas: HTMLCanvasElement;
@@ -351,33 +351,66 @@ export class TreeCanvasRenderer {
     // 2. Draw Branch Edges
     this.drawEdges();
 
-    // 3. Draw Nodes (with dynamic Level of Detail)
+    // 3. Draw Nodes (with dynamic Level of Detail and Time Slicing)
     this.drawNodes();
+
+    // 4. Draw Chronogram Isochrone Horizon (if time cutoff is active)
+    if (this.options.timeCutoffMya !== undefined && this.options.timeCutoffMya > 0) {
+      this.drawIsochroneHorizon(this.options.timeCutoffMya);
+    }
 
     this.ctx.restore();
   }
 
+  public getEraForMya(mya: number): string {
+    if (mya >= 4000) return 'Hadean';
+    if (mya >= 2500) return 'Archean';
+    if (mya >= 541) return 'Proterozoic';
+    if (mya >= 252) return 'Paleozoic';
+    if (mya >= 66) return 'Mesozoic';
+    return 'Cenozoic';
+  }
+
+  public getActiveLineagesAtTime(mya: number): number {
+    if (mya <= 0) {
+      return this.nodes.filter(n => n.isLeaf).length;
+    }
+    let activeCount = 0;
+    for (const edge of this.edges) {
+      const srcMya = edge.source.divergenceMya ?? 0;
+      const tgtMya = edge.target.divergenceMya ?? 0;
+      if (srcMya >= mya && tgtMya < mya) {
+        activeCount++;
+      }
+    }
+    return Math.max(activeCount, 1);
+  }
+
   private drawGeologicalRings(): void {
+    const cutoff = this.options.timeCutoffMya ?? 0;
+
     if (this.options.layoutMode === 'radial') {
       for (const ring of this.rings) {
+        const isEraActive = cutoff > 0 && cutoff <= ring.startMya && cutoff >= ring.endMya;
+
         this.ctx.beginPath();
         this.ctx.arc(0, 0, ring.outerRadius, 0, Math.PI * 2);
-        this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
-        this.ctx.lineWidth = 1 / this.camera.zoom;
+        this.ctx.strokeStyle = isEraActive ? 'rgba(56, 189, 248, 0.4)' : 'rgba(255, 255, 255, 0.06)';
+        this.ctx.lineWidth = (isEraActive ? 1.8 : 1) / this.camera.zoom;
         this.ctx.stroke();
 
         // Era background band
         this.ctx.beginPath();
         this.ctx.arc(0, 0, ring.outerRadius, 0, Math.PI * 2);
         this.ctx.arc(0, 0, ring.innerRadius, Math.PI * 2, 0, true);
-        this.ctx.fillStyle = ring.color;
+        this.ctx.fillStyle = isEraActive ? 'rgba(56, 189, 248, 0.16)' : ring.color;
         this.ctx.fill();
 
         // Ring Label
         if (this.camera.zoom > 0.4) {
           this.ctx.save();
-          this.ctx.fillStyle = 'rgba(148, 163, 184, 0.45)';
-          this.ctx.font = `600 ${Math.max(10, 12 / this.camera.zoom)}px 'Inter', sans-serif`;
+          this.ctx.fillStyle = isEraActive ? '#38bdf8' : 'rgba(148, 163, 184, 0.45)';
+          this.ctx.font = `${isEraActive ? '700' : '600'} ${Math.max(10, 12 / this.camera.zoom)}px 'Inter', sans-serif`;
           this.ctx.textAlign = 'center';
           this.ctx.fillText(ring.label, 0, -ring.outerRadius + 18 / this.camera.zoom);
           this.ctx.restore();
@@ -386,12 +419,14 @@ export class TreeCanvasRenderer {
     } else {
       // Dendrogram vertical bands
       for (const band of this.rings) {
+        const isEraActive = cutoff > 0 && cutoff <= band.startMya && cutoff >= band.endMya;
         const bandWidth = band.outerRadius - band.innerRadius;
-        this.ctx.fillStyle = band.color;
+
+        this.ctx.fillStyle = isEraActive ? 'rgba(56, 189, 248, 0.16)' : band.color;
         this.ctx.fillRect(band.innerRadius, -2000, bandWidth, 4000);
 
-        this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
-        this.ctx.lineWidth = 1 / this.camera.zoom;
+        this.ctx.strokeStyle = isEraActive ? 'rgba(56, 189, 248, 0.4)' : 'rgba(255, 255, 255, 0.06)';
+        this.ctx.lineWidth = (isEraActive ? 1.8 : 1) / this.camera.zoom;
         this.ctx.beginPath();
         this.ctx.moveTo(band.outerRadius, -2000);
         this.ctx.lineTo(band.outerRadius, 2000);
@@ -399,36 +434,228 @@ export class TreeCanvasRenderer {
 
         // Band Label
         this.ctx.save();
-        this.ctx.fillStyle = 'rgba(148, 163, 184, 0.45)';
-        this.ctx.font = `600 ${Math.max(11, 13 / this.camera.zoom)}px 'Inter', sans-serif`;
+        this.ctx.fillStyle = isEraActive ? '#38bdf8' : 'rgba(148, 163, 184, 0.45)';
+        this.ctx.font = `${isEraActive ? '700' : '600'} ${Math.max(11, 13 / this.camera.zoom)}px 'Inter', sans-serif`;
         this.ctx.fillText(band.label, band.innerRadius + 8, -600);
         this.ctx.restore();
       }
     }
   }
 
+  private drawIsochroneHorizon(cutoff: number): void {
+    const pulse = 0.5 + 0.5 * Math.sin(this.mrcaPulsePhase * 2);
+    const eraName = this.getEraForMya(cutoff);
+    const eraText = cutoff === 0 ? 'Present Day (0 Ma)' : `${cutoff.toLocaleString()} Ma • ${eraName}`;
+
+    this.ctx.save();
+
+    if (this.options.layoutMode === 'radial') {
+      const rIso = myaToRadius(cutoff, 750);
+
+      // Glowing outer halo
+      this.ctx.beginPath();
+      this.ctx.arc(0, 0, rIso, 0, Math.PI * 2);
+      this.ctx.strokeStyle = `rgba(56, 189, 248, ${0.4 + pulse * 0.35})`;
+      this.ctx.lineWidth = Math.max(2, 2.5 / this.camera.zoom);
+      this.ctx.shadowColor = '#38bdf8';
+      this.ctx.shadowBlur = 14;
+      this.ctx.setLineDash([8 / this.camera.zoom, 6 / this.camera.zoom]);
+      this.ctx.stroke();
+
+      // Solid hairline core
+      this.ctx.beginPath();
+      this.ctx.arc(0, 0, rIso, 0, Math.PI * 2);
+      this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+      this.ctx.lineWidth = Math.max(1, 1.2 / this.camera.zoom);
+      this.ctx.setLineDash([]);
+      this.ctx.shadowBlur = 0;
+      this.ctx.stroke();
+
+      // Isochrone Pill Badge at top
+      if (this.camera.zoom > 0.3) {
+        this.drawIsochroneBadge(0, -rIso, eraText);
+      }
+    } else {
+      // Dendrogram vertical isochrone line
+      const xIso = myaToX(cutoff, 1400);
+
+      // Glowing line
+      this.ctx.beginPath();
+      this.ctx.moveTo(xIso, -2000);
+      this.ctx.lineTo(xIso, 2000);
+      this.ctx.strokeStyle = `rgba(56, 189, 248, ${0.5 + pulse * 0.35})`;
+      this.ctx.lineWidth = Math.max(2, 2.5 / this.camera.zoom);
+      this.ctx.shadowColor = '#38bdf8';
+      this.ctx.shadowBlur = 14;
+      this.ctx.setLineDash([8 / this.camera.zoom, 6 / this.camera.zoom]);
+      this.ctx.stroke();
+
+      // Solid core
+      this.ctx.beginPath();
+      this.ctx.moveTo(xIso, -2000);
+      this.ctx.lineTo(xIso, 2000);
+      this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+      this.ctx.lineWidth = Math.max(1, 1.2 / this.camera.zoom);
+      this.ctx.setLineDash([]);
+      this.ctx.shadowBlur = 0;
+      this.ctx.stroke();
+
+      // Isochrone Pill Badge at top
+      if (this.camera.zoom > 0.3) {
+        this.drawIsochroneBadge(xIso, -680, eraText);
+      }
+    }
+
+    this.ctx.restore();
+  }
+
+  private drawIsochroneBadge(x: number, y: number, text: string): void {
+    const fontSize = Math.max(10, 11 / this.camera.zoom);
+    this.ctx.font = `700 ${fontSize}px 'Inter', sans-serif`;
+    const textMetrics = this.ctx.measureText(text);
+    const paddingX = 10 / this.camera.zoom;
+    const paddingY = 5 / this.camera.zoom;
+    const badgeW = textMetrics.width + paddingX * 2;
+    const badgeH = fontSize + paddingY * 2;
+    const rx = x - badgeW / 2;
+    const ry = y - badgeH / 2;
+
+    this.ctx.save();
+    this.ctx.fillStyle = '#0284c7';
+    this.ctx.strokeStyle = '#38bdf8';
+    this.ctx.lineWidth = 1.5 / this.camera.zoom;
+    this.ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
+    this.ctx.shadowBlur = 8;
+
+    // Draw rounded rect
+    const r = 4 / this.camera.zoom;
+    this.ctx.beginPath();
+    this.ctx.roundRect(rx, ry, badgeW, badgeH, r);
+    this.ctx.fill();
+    this.ctx.stroke();
+
+    this.ctx.fillStyle = '#ffffff';
+    this.ctx.textAlign = 'center';
+    this.ctx.textBaseline = 'middle';
+    this.ctx.shadowBlur = 0;
+    this.ctx.fillText(text, x, y);
+    this.ctx.restore();
+  }
+
   private drawEdges(): void {
+    const cutoff = this.options.timeCutoffMya ?? 0;
+    const isTimeScrubbing = cutoff > 0;
+    const isRadial = this.options.layoutMode === 'radial';
+    const rIso = isRadial ? myaToRadius(cutoff, 750) : 0;
+    const xIso = !isRadial ? myaToX(cutoff, 1400) : 0;
+
     // 1. Draw regular edges
     for (const edge of this.edges) {
-      if (edge.isMRCAPath) continue; // Draw MRCA paths in second glowing pass
+      if (edge.isMRCAPath) continue; // Draw MRCA paths in second pass
 
-      this.ctx.beginPath();
-      this.ctx.moveTo(edge.pathPoints[0].x, edge.pathPoints[0].y);
+      const srcMya = edge.source.divergenceMya ?? 0;
+      const tgtMya = edge.target.divergenceMya ?? 0;
 
-      if (this.options.layoutMode === 'radial') {
-        const p1 = edge.pathPoints[1];
-        const p2 = edge.pathPoints[2];
-        this.ctx.quadraticCurveTo(p1.x, p1.y, p2.x, p2.y);
+      if (!isTimeScrubbing) {
+        // Normal mode (0 Ma / Present Day): all edges active
+        this.ctx.beginPath();
+        this.ctx.moveTo(edge.pathPoints[0].x, edge.pathPoints[0].y);
+
+        if (isRadial) {
+          this.ctx.quadraticCurveTo(edge.pathPoints[1].x, edge.pathPoints[1].y, edge.pathPoints[2].x, edge.pathPoints[2].y);
+        } else {
+          this.ctx.lineTo(edge.pathPoints[1].x, edge.pathPoints[1].y);
+          this.ctx.lineTo(edge.pathPoints[2].x, edge.pathPoints[2].y);
+        }
+
+        this.ctx.strokeStyle = 'rgba(148, 163, 184, 0.35)';
+        this.ctx.lineWidth = Math.max(1.2, 1.6 / this.camera.zoom);
+        this.ctx.stroke();
       } else {
-        const p1 = edge.pathPoints[1];
-        const p2 = edge.pathPoints[2];
-        this.ctx.lineTo(p1.x, p1.y);
-        this.ctx.lineTo(p2.x, p2.y);
-      }
+        // Time scrubbing mode
+        if (srcMya < cutoff) {
+          // Future edge (not diverged yet): ghosted
+          this.ctx.beginPath();
+          this.ctx.moveTo(edge.pathPoints[0].x, edge.pathPoints[0].y);
+          if (isRadial) {
+            this.ctx.quadraticCurveTo(edge.pathPoints[1].x, edge.pathPoints[1].y, edge.pathPoints[2].x, edge.pathPoints[2].y);
+          } else {
+            this.ctx.lineTo(edge.pathPoints[1].x, edge.pathPoints[1].y);
+            this.ctx.lineTo(edge.pathPoints[2].x, edge.pathPoints[2].y);
+          }
+          this.ctx.strokeStyle = 'rgba(148, 163, 184, 0.08)';
+          this.ctx.lineWidth = Math.max(0.8, 1.0 / this.camera.zoom);
+          this.ctx.stroke();
+        } else if (srcMya >= cutoff && tgtMya >= cutoff) {
+          // Past edge (already fully diverged): active
+          this.ctx.beginPath();
+          this.ctx.moveTo(edge.pathPoints[0].x, edge.pathPoints[0].y);
+          if (isRadial) {
+            this.ctx.quadraticCurveTo(edge.pathPoints[1].x, edge.pathPoints[1].y, edge.pathPoints[2].x, edge.pathPoints[2].y);
+          } else {
+            this.ctx.lineTo(edge.pathPoints[1].x, edge.pathPoints[1].y);
+            this.ctx.lineTo(edge.pathPoints[2].x, edge.pathPoints[2].y);
+          }
+          this.ctx.strokeStyle = 'rgba(148, 163, 184, 0.55)';
+          this.ctx.lineWidth = Math.max(1.4, 1.8 / this.camera.zoom);
+          this.ctx.stroke();
+        } else {
+          // Crossing edge (actively living lineage at epoch cutoff!)
+          if (isRadial) {
+            const tgtAngle = edge.target.angle || 0;
+            const isoX = rIso * Math.cos(tgtAngle);
+            const isoY = rIso * Math.sin(tgtAngle);
 
-      this.ctx.strokeStyle = 'rgba(148, 163, 184, 0.35)';
-      this.ctx.lineWidth = Math.max(1.2, 1.6 / this.camera.zoom);
-      this.ctx.stroke();
+            // Active segment up to horizon
+            this.ctx.beginPath();
+            this.ctx.moveTo(edge.pathPoints[0].x, edge.pathPoints[0].y);
+            this.ctx.quadraticCurveTo(edge.pathPoints[1].x, edge.pathPoints[1].y, isoX, isoY);
+            this.ctx.strokeStyle = edge.source.color || '#38bdf8';
+            this.ctx.lineWidth = Math.max(1.8, 2.2 / this.camera.zoom);
+            this.ctx.stroke();
+
+            // Ghosted remaining segment to child
+            this.ctx.save();
+            this.ctx.beginPath();
+            this.ctx.moveTo(isoX, isoY);
+            this.ctx.lineTo(edge.pathPoints[2].x, edge.pathPoints[2].y);
+            this.ctx.strokeStyle = 'rgba(148, 163, 184, 0.12)';
+            this.ctx.setLineDash([4 / this.camera.zoom, 4 / this.camera.zoom]);
+            this.ctx.lineWidth = Math.max(0.8, 1.0 / this.camera.zoom);
+            this.ctx.stroke();
+            this.ctx.restore();
+
+            // Extant Horizon Node dot
+            this.drawHorizonDot(isoX, isoY, edge.source.color);
+          } else {
+            const isoX = xIso;
+            const isoY = edge.target.y;
+
+            // Active segment up to horizon
+            this.ctx.beginPath();
+            this.ctx.moveTo(edge.pathPoints[0].x, edge.pathPoints[0].y);
+            this.ctx.lineTo(edge.pathPoints[1].x, edge.pathPoints[1].y);
+            this.ctx.lineTo(isoX, isoY);
+            this.ctx.strokeStyle = edge.source.color || '#38bdf8';
+            this.ctx.lineWidth = Math.max(1.8, 2.2 / this.camera.zoom);
+            this.ctx.stroke();
+
+            // Ghosted remaining segment
+            this.ctx.save();
+            this.ctx.beginPath();
+            this.ctx.moveTo(isoX, isoY);
+            this.ctx.lineTo(edge.pathPoints[2].x, edge.pathPoints[2].y);
+            this.ctx.strokeStyle = 'rgba(148, 163, 184, 0.12)';
+            this.ctx.setLineDash([4 / this.camera.zoom, 4 / this.camera.zoom]);
+            this.ctx.lineWidth = Math.max(0.8, 1.0 / this.camera.zoom);
+            this.ctx.stroke();
+            this.ctx.restore();
+
+            // Extant Horizon Node dot
+            this.drawHorizonDot(isoX, isoY, edge.source.color);
+          }
+        }
+      }
     }
 
     // 2. Draw MRCA highlighted edges with glowing bioluminescent pulse
@@ -446,31 +673,84 @@ export class TreeCanvasRenderer {
       for (const edge of this.edges) {
         if (!edge.isMRCAPath) continue;
 
-        this.ctx.beginPath();
-        this.ctx.moveTo(edge.pathPoints[0].x, edge.pathPoints[0].y);
+        const srcMya = edge.source.divergenceMya ?? 0;
 
-        if (this.options.layoutMode === 'radial') {
-          const p1 = edge.pathPoints[1];
-          const p2 = edge.pathPoints[2];
-          this.ctx.quadraticCurveTo(p1.x, p1.y, p2.x, p2.y);
+        if (isTimeScrubbing && srcMya < cutoff) {
+          // MRCA edge is in future: faint glow
+          this.ctx.save();
+          this.ctx.shadowBlur = 4;
+          this.ctx.strokeStyle = 'rgba(244, 63, 94, 0.2)';
+          this.ctx.beginPath();
+          this.ctx.moveTo(edge.pathPoints[0].x, edge.pathPoints[0].y);
+          if (isRadial) {
+            this.ctx.quadraticCurveTo(edge.pathPoints[1].x, edge.pathPoints[1].y, edge.pathPoints[2].x, edge.pathPoints[2].y);
+          } else {
+            this.ctx.lineTo(edge.pathPoints[1].x, edge.pathPoints[1].y);
+            this.ctx.lineTo(edge.pathPoints[2].x, edge.pathPoints[2].y);
+          }
+          this.ctx.stroke();
+          this.ctx.restore();
         } else {
-          const p1 = edge.pathPoints[1];
-          const p2 = edge.pathPoints[2];
-          this.ctx.lineTo(p1.x, p1.y);
-          this.ctx.lineTo(p2.x, p2.y);
+          this.ctx.beginPath();
+          this.ctx.moveTo(edge.pathPoints[0].x, edge.pathPoints[0].y);
+
+          if (isRadial) {
+            this.ctx.quadraticCurveTo(edge.pathPoints[1].x, edge.pathPoints[1].y, edge.pathPoints[2].x, edge.pathPoints[2].y);
+          } else {
+            this.ctx.lineTo(edge.pathPoints[1].x, edge.pathPoints[1].y);
+            this.ctx.lineTo(edge.pathPoints[2].x, edge.pathPoints[2].y);
+          }
+          this.ctx.stroke();
         }
-        this.ctx.stroke();
       }
       this.ctx.restore();
     }
+  }
+
+  private drawHorizonDot(x: number, y: number, color: string): void {
+    const r = Math.max(3, 4 / this.camera.zoom);
+    this.ctx.save();
+    this.ctx.beginPath();
+    this.ctx.arc(x, y, r + 2, 0, Math.PI * 2);
+    this.ctx.fillStyle = 'rgba(56, 189, 248, 0.35)';
+    this.ctx.shadowColor = '#38bdf8';
+    this.ctx.shadowBlur = 8;
+    this.ctx.fill();
+
+    this.ctx.beginPath();
+    this.ctx.arc(x, y, r, 0, Math.PI * 2);
+    this.ctx.fillStyle = color || '#38bdf8';
+    this.ctx.strokeStyle = '#ffffff';
+    this.ctx.lineWidth = Math.max(1, 1.2 / this.camera.zoom);
+    this.ctx.fill();
+    this.ctx.stroke();
+    this.ctx.restore();
   }
 
   private drawNodes(): void {
     const zoom = this.camera.zoom;
     const isHighZoom = zoom >= 1.2;
     const isMediumZoom = zoom >= 0.5;
+    const cutoff = this.options.timeCutoffMya ?? 0;
+    const isTimeScrubbing = cutoff > 0;
 
     for (const node of this.nodes) {
+      const nodeMya = node.divergenceMya ?? 0;
+      const isFuture = isTimeScrubbing && nodeMya < cutoff;
+      const isSelected = this.options.selectedNodeId === node.id;
+      const isHovered = this.options.hoveredNodeId === node.id;
+
+      if (isFuture) {
+        if (!isSelected && !isHovered) {
+          // Render faint ghost dot for future nodes
+          this.ctx.beginPath();
+          this.ctx.arc(node.x, node.y, 2 / zoom, 0, Math.PI * 2);
+          this.ctx.fillStyle = 'rgba(148, 163, 184, 0.12)';
+          this.ctx.fill();
+          continue;
+        }
+      }
+
       // Dynamic Level of Detail (LoD)
       if (!isHighZoom && node.lodLevel === 3 && !node.isMRCAPath && !node.isHighlighted) {
         // Draw miniature dot at lower zooms
@@ -481,8 +761,6 @@ export class TreeCanvasRenderer {
         continue;
       }
 
-      const isSelected = this.options.selectedNodeId === node.id;
-      const isHovered = this.options.hoveredNodeId === node.id;
       const isMRCA = node.isMRCANode;
       const isDelta = (node.isRecentlyUpdated || node.deltaStatus === 'new' || node.deltaStatus === 'modified') && (this.options.highlightRecentDeltas !== false);
 
@@ -550,17 +828,20 @@ export class TreeCanvasRenderer {
 
       // Draw Text Labels
       if (this.options.showLabels) {
-        const shouldShowLabel =
-          isSelected ||
-          isHovered ||
-          node.isMRCAPath ||
-          node.isMRCANode ||
-          (isHighZoom) ||
-          (isMediumZoom && node.lodLevel <= 2) ||
-          (node.lodLevel <= 1);
+        const isPriority = isSelected || isHovered || node.isMRCAPath || node.isMRCANode;
+        let shouldShowLabel = isPriority;
+
+        if (!shouldShowLabel) {
+          if (node.isLeaf) {
+            shouldShowLabel = isHighZoom || (isMediumZoom && node.lodLevel <= 2) || (zoom >= 0.7 && node.lodLevel <= 1);
+          } else {
+            // Internal divergence nodes: show when zoomed in or if major root at medium zoom
+            shouldShowLabel = isHighZoom || (isMediumZoom && node.lodLevel === 0);
+          }
+        }
 
         if (shouldShowLabel) {
-          this.drawNodeLabel(node, radius, isSelected || isHovered || isMRCA);
+          this.drawNodeLabel(node, radius, isPriority);
         }
       }
     }
@@ -571,13 +852,14 @@ export class TreeCanvasRenderer {
     this.ctx.save();
 
     let fontSize = isPriority ? 13 : (node.isLeaf ? 11 : 12);
-    if (node.lodLevel === 0) fontSize = 15;
+    if (node.lodLevel === 0) fontSize = 14;
 
     this.ctx.font = `${isPriority || node.lodLevel <= 1 ? '700' : '500'} ${fontSize}px 'Inter', sans-serif`;
 
     if (isRadial) {
       const angle = node.angle || 0;
       const isRightSide = Math.cos(angle) >= 0;
+      const distFromCenter = Math.hypot(node.x, node.y);
 
       this.ctx.translate(node.x, node.y);
 
@@ -592,8 +874,18 @@ export class TreeCanvasRenderer {
           this.ctx.translate(radius + 8, 4);
         }
       } else {
-        this.ctx.textAlign = 'center';
-        this.ctx.translate(0, -radius - 6);
+        // Internal divergence node
+        if (distFromCenter < 10) {
+          // LUCA root at center: display above
+          this.ctx.textAlign = 'center';
+          this.ctx.translate(0, -radius - 8);
+        } else {
+          // Radiate label outward along node's branch angle to prevent overlap
+          const cos = Math.cos(angle);
+          const sin = Math.sin(angle);
+          this.ctx.textAlign = isRightSide ? 'left' : 'right';
+          this.ctx.translate(cos * (radius + 8), sin * (radius + 8) + 3);
+        }
       }
     } else {
       // Dendrogram labels
@@ -608,10 +900,10 @@ export class TreeCanvasRenderer {
     }
 
     // Label Text Shadow for readability
-    this.ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
-    this.ctx.shadowBlur = 4;
+    this.ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
+    this.ctx.shadowBlur = 5;
 
-    this.ctx.fillStyle = isPriority ? '#ffffff' : (node.isMRCAPath ? '#fda4af' : '#e2e8f0');
+    this.ctx.fillStyle = isPriority ? '#ffffff' : (node.isMRCAPath ? '#fda4af' : (node.isLeaf ? '#e2e8f0' : '#cbd5e1'));
     this.ctx.fillText(node.label, 0, 0);
 
     // Subtitle (Common Name or Divergence Age)

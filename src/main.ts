@@ -183,8 +183,12 @@ class PhyLifeApp {
     viewportContainer.appendChild(legend);
 
     // 5. Timeline Bar
-    this.timelineBar = new TimelineBar((_mya: number) => {
-      // Timeline scrubber interaction
+    this.timelineBar = new TimelineBar((mya: number) => {
+      if (this.renderer) {
+        this.renderer.setOptions({ timeCutoffMya: mya });
+        const activeLineages = this.renderer.getActiveLineagesAtTime(mya);
+        this.timelineBar.updateActiveLineages(activeLineages);
+      }
     });
     viewportContainer.appendChild(this.timelineBar.getElement());
 
@@ -218,8 +222,12 @@ class PhyLifeApp {
     const canvas = document.getElementById('tree-canvas') as HTMLCanvasElement;
     this.renderer = new TreeCanvasRenderer(canvas, graphStore);
     this.renderer.setOptions({
-      highlightRecentDeltas: userPreferences.isHighlightRecentDeltas()
+      highlightRecentDeltas: userPreferences.isHighlightRecentDeltas(),
+      timeCutoffMya: this.timelineBar.getMya()
     });
+
+    const initialLineages = this.renderer.getActiveLineagesAtTime(this.timelineBar.getMya());
+    this.timelineBar.updateActiveLineages(initialLineages);
 
     this.renderer.setCallbacks(
       node => {

@@ -3,6 +3,12 @@ import { isTaxonNode, isDivergenceNode } from '../graph/types.ts';
 import type { RenderNode, RenderEdge, GeologicalRing, RendererOptions } from './types.ts';
 import { DOMAIN_COLORS, GEOLOGICAL_ERAS_TIMELINE } from './layoutRadial.ts';
 
+export function myaToX(mya: number, treeWidth: number = 1400): number {
+  const clamped = Math.max(0, Math.min(4200, mya));
+  const normalized = 1 - Math.sqrt(clamped / 4200);
+  return -treeWidth / 2 + normalized * treeWidth;
+}
+
 export function computeDendrogramLayout(
   store: PhyGraphStore,
   options: RendererOptions,
@@ -41,11 +47,7 @@ export function computeDendrogramLayout(
     leafYMap.set(id, index * leafSpacing - (leafIds.length * leafSpacing) / 2);
   });
 
-  const myaToX = (mya: number): number => {
-    const clamped = Math.max(0, Math.min(4200, mya));
-    const normalized = 1 - Math.sqrt(clamped / 4200);
-    return -treeWidth / 2 + normalized * treeWidth;
-  };
+  const xScale = (mya: number): number => myaToX(mya, treeWidth);
 
   const renderNodesMap = new Map<string, RenderNode>();
   const renderEdges: RenderEdge[] = [];
@@ -60,7 +62,7 @@ export function computeDendrogramLayout(
       mya = node.divergence_mya;
     }
 
-    const x = myaToX(mya);
+    const x = xScale(mya);
     let y: number;
 
     if (isLeaf) {
@@ -157,8 +159,8 @@ export function computeDendrogramLayout(
 
   // Linear Geological Era bands
   const rings: GeologicalRing[] = GEOLOGICAL_ERAS_TIMELINE.map(eraInfo => {
-    const startX = myaToX(eraInfo.startMya);
-    const endX = myaToX(eraInfo.endMya);
+    const startX = xScale(eraInfo.startMya);
+    const endX = xScale(eraInfo.endMya);
     return {
       era: eraInfo.era,
       startMya: eraInfo.startMya,

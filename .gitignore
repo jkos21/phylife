@@ -47,3 +47,7 @@ dist-ssr/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Agent workspaces
+.agent/
+.agents/
