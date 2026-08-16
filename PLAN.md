@@ -1,44 +1,58 @@
-# 🧬 PhyLife Project Roadmap & Architecture Plan
+# 🧬 PhyLife Project Roadmap & Implementation Plan
 
-## ✅ Completed Milestones
-
-1. **🌳 Dual Canvas Phylogenetic Engine (Radial & Dendrogram)**:
-   - Deep-zoom interactive canvas with dynamic Level of Detail (LoD) thresholding.
-   - Smooth pan, zoom, fit-to-bounds, and MRCA path glowing camera navigation.
-
-2. **⏳ Geological Chronogram & Divergence Timeline**:
-   - Time-calibrated isochrone horizons (concentric circular rings in Radial, vertical line in Dendrogram).
-   - Extant Horizon Nodes representing lineages alive at any epoch $T$.
-   - Automated evolution time-travel playback engine (Play/Pause/Speed 1x-2x-4x) spanning 4.2 Ga to Present Day.
-   - Clickable era preset chips and quadratic slider scale matching geological time bands.
-
-3. **💾 Persisted Backend Knowledge Graph**:
-   - Single consolidated knowledge graph snapshot at `public/data/phylogeny_graph.json`.
-   - `GraphDataLoader` asynchronous loading with bundled fallback.
-   - Deterministic build artifact generation (`npm run graph:seed`) and automated reconciliation (`npm run graph:refresh`).
-
-4. **🔬 Creator Personalization & Educational Media Packages**:
-   - Dynamic video and podcast prioritization based on user favorite science communicators (Sir David Attenborough, PBS Eons, Radiolab, etc.).
-   - Deep search query generator for Wikipedia, YouTube, and Spotify podcasts.
-
-5. **🌱 2026 Phylogenomic Delta Sync & On-Demand Clade Expansion**:
-   - Subtree grafting engine for on-demand expansion (Feliformia, Dinosauria).
-   - Automated reconciliation of 2026 Asgardarchaeota / Lokiarchaeum and Denisovan genomic studies.
-
-6. **🧪 End-to-End Test Suite**:
-   - 154 automated test assertions covering backend API resilience, graph topological integrity, and full UI interaction walkthroughs.
+> **Status**: Core phylogenetic engine, high-resolution species drill-down, embedded SQLite Knowledge Graph, clean-start seeding, and single canonical W3C JSON-LD format are **100% Complete & Verified**.
 
 ---
 
-## 🚀 Next Roadmap Horizons
+## 🎯 Active & Upcoming Roadmap Items
 
-1. **🧬 Interactive Trait Evolution & Synapomorphy Layer**:
-   - Add a visual synapomorphy overlay showing where major evolutionary innovations appeared along branches (e.g., Amniotic egg, Endosymbiosis, Chloroplast capture, Myelin sheath, Bipedalism, Flight).
-2. **🗺️ Paleogeographic Continental Drift Map Sync**:
-   - Synchronize an interactive mini paleogeographic globe/map with the timeline scrubber so selecting 250 Ma (Permian) or 66 Ma (Cretaceous) shows Earth's tectonic plate positions (Pangaea, Gondwana, Laurasia) and fossil discovery localities.
-3. **🌳 WebGL / Multi-Resolution Clade Aggregation**:
-   - Dynamic Level-of-Detail (LOD) aggregation so when zooming out to billions of years, dense clades automatically collapse into labeled superfamily "bubbles", expanding fluidly on camera zoom.
-4. **🌐 Live Cloud Delta Sync Worker / Edge Caching**:
-   - Lightweight GitHub Actions / Cloudflare Worker cron job that watches Open Tree of Life and TimeTree releases, publishing automated monthly delta JSON patches.
-5. **📱 PWA & Offline Service Worker**:
-   - Add Service Worker caching and Web App Manifest for complete offline PWA capability in field biology and academic settings.
+### 1. 🌐 Live External API Dynamic Enrichment & SQLite KG Caching
+- **Goal**: Allow users to query and discover unlisted species and clades in real-time.
+- **Components**:
+  - Live fetcher services connecting to **GBIF Backbone Taxonomy**, **Open Tree of Life API v3**, **TimeTree 5**, and **Wikimedia/Wikispecies API**.
+  - Dynamic graph grafting: automatically attaches new taxa to their respective family/genus divergence node in `PhyGraphStore`.
+  - Persistence caching: writes newly discovered taxa and provenance directly to SQLite `kg_cache` and `kg_audit_log` tables.
+
+---
+
+### 2. 🔍 In-App SQL / SPARQL Knowledge Graph Query Explorer
+- **Goal**: Provide an interactive in-browser query console to explore the Knowledge Graph directly.
+- **Components**:
+  - Interactive query terminal modal (`#btn-kg-query`) with pre-built SQL and SPARQL query templates:
+    - *Filter by extinction / geological era*: `SELECT * FROM kg_nodes WHERE extinct = 1 AND divergence_mya > 65;`
+    - *Query Darwin Core RDF triples*: `SELECT subject_id, predicate, object_value FROM kg_triples WHERE predicate = 'phylife:hasTrait';`
+    - *Lineage inspection*: Recursive parent-child traversal queries.
+  - Formatted tabular result viewer with instant export (CSV, JSON, Turtle).
+
+---
+
+### 3. ⚖️ Clade Comparison & Evolutionary Trait Matrix
+- **Goal**: Side-by-side comparative cladistics between any two clades (e.g. *Theropoda* vs *Sauropodomorpha*, or *Cetacea* vs *Artiodactyla*).
+- **Components**:
+  - Comparative Clade Inspector modal.
+  - Evolutionary Trait Heatmap: highlights shared synapomorphies vs divergent derived traits.
+  - Chronogram comparison: divergence age comparison, species richness metrics, and mass extinction survival rates.
+
+---
+
+### 4. 🧬 Synapomorphy & Evolutionary Innovation Canvas Overlay
+- **Goal**: Visually render major evolutionary innovations directly along tree branches.
+- **Components**:
+  - Innovation badges placed along branches (e.g., *Amniotic egg*, *Endosymbiosis*, *Chloroplast capture*, *Myelin sheath*, *Bipedalism*, *Powered flight*, *Echolocation*).
+  - Hover tooltips detailing anatomical and genomic milestones.
+
+---
+
+### 5. 🗺️ Paleogeographic Continental Drift Map Sync
+- **Goal**: Synchronize an interactive paleogeographic map/globe with the timeline scrubber.
+- **Components**:
+  - Mini paleogeographic map widget synchronized with the chronogram slider.
+  - Scrubbing to 250 Ma (Permian) or 66 Ma (Cretaceous) renders continental configurations (*Pangaea*, *Gondwana*, *Laurasia*) alongside fossil locality markers.
+
+---
+
+### 6. 🚀 GitHub Actions CI & Remote Push
+- **Goal**: Automate continuous integration for backend tests, graph integrity checks, and production builds.
+- **Components**:
+  - GitHub Actions workflow (`.github/workflows/ci.yml`) running `npm test` and `npm run build` on push and PR.
+  - Push current 9 local commits to `origin/main`.
