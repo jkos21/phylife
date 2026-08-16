@@ -8,21 +8,26 @@ Built on a local in-memory property graph with $O(\text{depth})$ pathfinding, dy
 
 ## 📸 Key Features
 
-- **🌐 Deep-Zoom Canvas Visualizer**:
+- **🌐 Deep-Zoom Canvas Visualizer & Clade Focus Mode**:
   - **Radial Geological Phylogram**: Concentric geological timescale rings (Hadean, Archean, Proterozoic, Paleozoic, Mesozoic, Cenozoic) with domain-coded bezier branches.
   - **Hierarchical Dendrogram**: Rectangular phylogram with time-calibrated linear bands and clean branch slicing.
+  - **🎯 Clade Focus Mode**: Re-roots and isolates the canvas onto any intermediate clade (e.g. *Tyrannosauroidea*, *Dinosauria*, *Felidae*, *Cetacea*) utilizing the full 360° canvas space with interactive glassmorphic breadcrumbs.
   - **Dynamic Level of Detail (LoD)**: Automatic Level of Detail filtering from domain crowns down to terminal species.
+- **🦁 High-Resolution Species Drill-Down & Paleontological Lineages**:
+  - Dense coverage of 134 nodes across all 6 kingdoms, featuring 10 Tyrannosauroid species (*T. rex*, *Tarbosaurus*, *Albertosaurus*, *Yutyrannus*, *Guanlong*, etc.), Dromaeosaur raptors, Sauropods, Horned/Armored dinosaurs, Whales, Big Cats & Sabertooths, Early Hominins, Sharks, and Paleozoic Megafauna.
+  - Dedicated **"🦁 Species / Member Taxa"** tab in Node Inspector with live filtering, morphological trait badges, and one-click navigation.
 - **⏳ Interactive Geological Chronogram & Divergence Timeline**:
   - **Real-Time Isochrone Horizons**: Renders a glowing isochrone ring (Radial) or vertical line (Dendrogram) slicing branches at epoch $T$.
   - **Extant Horizon Nodes**: Renders glowing intersection dots showing lineages alive on Earth at any scrubbed timestamp.
   - **Evolution Time-Travel Playback**: Play/Pause/Speed (1x, 2x, 4x) automated playback watching the Tree of Life radiate across 4.2 billion years.
   - **Clickable Era Presets**: One-click jump to major planetary milestones (4.2 Ga LUCA, 2.5 Ga Great Oxidation, 541 Ma Cambrian, 252 Ma Great Dying, 66 Ma K-Pg Extinction, 0 Ma Present).
   - **Nonlinear Sqrt Scaling**: Calibrated slider mapping providing high-resolution control for Phanerozoic and Cenozoic eras.
-- **⚡ Persisted Property Graph Engine (`PhyGraphStore` & `GraphDataLoader`)**:
-  - Embedded local property graph with indexed adjacency maps and full-text inverted search.
-  - Asynchronous loading from persisted W3C Knowledge Graph snapshot (`public/data/phylife_kg.jsonld`) with automatic bundled fallback.
+- **⚡ Native SQLite Knowledge Graph & W3C JSON-LD (`PhyGraphStore` & `sqliteGraphEngine`)**:
+  - **Embedded SQLite KG Database**: Locally runnable ACID-compliant database (`data/phylife_kg.sqlite`) storing nodes, edges, 1,172 RDF triples (Darwin Core & Schema.org vocabularies), and an auditable change log.
+  - **Clean Starts Over Migrations**: Deterministically dropped and reconstructed via `seedKnowledgeGraphDatabase({ cleanStart: true })` (`npm run graph:seed`).
+  - **Single Canonical W3C JSON-LD Format**: Persisted at `public/data/phylife_kg.jsonld` to serve both as the semantic metadata standard and the web client payload with zero redundant storage.
   - $O(\text{depth})$ Lowest Common Ancestor (**MRCA**) calculation.
-  - Export to **JSON**, **GraphML**, and standard **Newick (`.nwk`)** format.
+  - Export to **JSON-LD**, **GraphML**, and standard **Newick (`.nwk`)** format.
 - **✨ Animated MRCA Explorer**:
   - Compare any two species across all 6 kingdoms (e.g. *Homo sapiens* vs *Panthera leo*, *Canis lupus* vs *Amanita muscaria*, or *Arabidopsis thaliana* vs *Escherichia coli*).
   - Traces bioluminescent glowing divergence paths on the tree with evolutionary milestones and divergence ages (Ma).
@@ -39,6 +44,7 @@ Built on a local in-memory property graph with $O(\text{depth})$ pathfinding, dy
   - **Modern Dark (Default)**: Sleek, clean, functional presentation in dark slate.
   - **Bioluminescent Deep Sea**: Obsidian black background with cybernetic glowing neon branches.
   - **Academic Slate Light**: Clean high-contrast theme for academic and scientific review.
+
 
 ---
 
@@ -108,17 +114,30 @@ npm run pipeline:sync
 ```
   [ External Data Sources ]
   • Open Tree of Life (OToL v3) ─┐
-  • TimeTree (Chronograms)      ─┼──► [ 6-Step ETL Pipeline Engine ]
+  • TimeTree 5 (Chronograms)    ─┼──► [ 6-Step ETL Pipeline Engine ]
   • World Flora / MycoBank      ─┤      (CLI: npm run pipeline:sync / In-App Console)
   • GBIF / Wikimedia Commons    ─┘                   │
                                                      ▼
-                                         [ Local Graph Database ]
-                                              (PhyGraphStore)
-                                                     │
-                                                     ▼
-                                         [ High-Performance Canvas ]
-                                        (Radial & Dendrogram Phylograms)
+                                    [ Clean-Start Seeding Engine ]
+                                        (npm run graph:seed)
+                                        ┌────────────┴────────────┐
+                                        ▼                         ▼
+                          [ Native SQLite KG Database ]  [ W3C JSON-LD Document ]
+                           (data/phylife_kg.sqlite)      (public/data/phylife_kg.jsonld)
+                           • 1,172 RDF Triples           • Zero Redundant Metadata
+                           • kg_nodes, kg_edges, audit   • Darwin Core & Schema.org
+                                                                  │
+                                                                  ▼
+                                                      [ PhyGraphStore Engine ]
+                                                      (In-Memory Adjacency & Search)
+                                                                  │
+                                                                  ▼
+                                                      [ High-Performance Canvas ]
+                                                     • Radial & Dendrogram Layouts
+                                                     • 360° Clade Focus & Breadcrumbs
+                                                     • Animated MRCA Glow Paths
 ```
+
 
 ---
 
