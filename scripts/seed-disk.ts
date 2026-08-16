@@ -1,31 +1,15 @@
-declare const process: any;
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { getInitialPersistedGraph, validateGraphIntegrity } from '../src/backend/graphDiskStore.ts';
+import { statSync } from 'node:fs';
+import { seedKnowledgeGraphDatabase } from '../src/backend/sqliteGraphEngine.ts';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const rootDir = path.resolve(__dirname, '..');
 
-const targetPublicDir = path.join(rootDir, 'public', 'data');
-const publicFile = path.join(targetPublicDir, 'phylogeny_graph.json');
 
 async function seedDisk() {
   console.log('====================================================');
-  console.log('  PhyLife: Persisting Knowledge Graph to Disk');
+  console.log('  PhyLife: Clean-Start Knowledge Graph Seeding');
   console.log('====================================================\n');
 
-  const graphDoc = getInitialPersistedGraph();
-  const validation = validateGraphIntegrity(graphDoc);
-
-  if (!validation.isValid) {
-    console.error('❌ Graph integrity validation failed:');
-    for (const err of validation.errors) {
-      console.error(`  - ${err}`);
-    }
-    process.exit(1);
-  }
+  const result = seedKnowledgeGraphDatabase({ cleanStart: true });
+  const { graphDoc, sqliteStats, jsonldPath } = result;
 
   console.log('✅ Graph integrity check passed.');
   console.log(`- Version: ${graphDoc.version}`);
@@ -33,17 +17,15 @@ async function seedDisk() {
   console.log(`- Total Edges: ${graphDoc.metadata.metrics.totalEdges}`);
   console.log(`- Domains:`, graphDoc.metadata.metrics.domainBreakdown);
 
-  // Ensure public data directory exists
-  fs.mkdirSync(targetPublicDir, { recursive: true });
-
-  const serialized = JSON.stringify(graphDoc, null, 2);
-  fs.writeFileSync(publicFile, serialized, 'utf-8');
-
-  console.log(`\n💾 Successfully persisted graph to:`);
-  console.log(`  -> ${publicFile} (${(Buffer.byteLength(serialized) / 1024).toFixed(1)} KB)`);
+  console.log(`\n💾 Clean start successful (zero redundant storage):`);
+  console.log(`  -> [W3C JSON-LD Metadata]  ${jsonldPath} (${(statSync(jsonldPath).size / 1024).toFixed(1)} KB)`);
+  console.log(`  -> [Native SQLite KG DB]   ${sqliteStats.dbPath} (${(sqliteStats.fileSizeBytes / 1024).toFixed(1)} KB, ${sqliteStats.totalTriples} RDF triples, ${sqliteStats.totalNodes} nodes)`);
 }
+
+
 
 seedDisk().catch(err => {
   console.error('Fatal error seeding disk:', err);
   process.exit(1);
 });
+

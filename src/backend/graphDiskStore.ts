@@ -22,6 +22,8 @@ export interface PersistedGraphMetadata {
 }
 
 export interface PersistedKnowledgeGraphDocument extends GraphSerializedData {
+  '@context'?: any;
+  '@id'?: string;
   metadata: PersistedGraphMetadata;
 }
 
@@ -65,6 +67,14 @@ export function createPersistedGraphDocument(
   };
 
   return {
+    '@context': {
+      '@vocab': 'https://phylife.org/ontology#',
+      'dwc': 'http://rs.tdwg.org/dwc/terms/',
+      'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+      'rdfs': 'http://www.w3.org/2000/01/rdf-schema#',
+      'schema': 'http://schema.org/'
+    },
+    '@id': 'https://phylife.org/kg/tree-of-life',
     version,
     timestamp: metadata.generatedAt,
     root_id: 'div_luca',
@@ -75,6 +85,7 @@ export function createPersistedGraphDocument(
     metadata
   };
 }
+
 
 /**
  * Validates the topological integrity of a persisted graph document.

@@ -35,8 +35,11 @@ export function computeRadialLayout(
   edges: RenderEdge[];
   rings: GeologicalRing[];
 } {
-  const rootId = store.getRootId();
-  const rootNode = store.getNode(rootId);
+  const effectiveRootId = (options.focusedCladeId && store.getNode(options.focusedCladeId))
+    ? options.focusedCladeId
+    : store.getRootId();
+
+  const rootNode = store.getNode(effectiveRootId);
   if (!rootNode) {
     return { nodes: [], edges: [], rings: [] };
   }
@@ -56,7 +59,7 @@ export function computeRadialLayout(
     return sum;
   };
 
-  const totalLeaves = countLeaves(rootId);
+  const totalLeaves = countLeaves(effectiveRootId);
   const angleStep = (Math.PI * 2) / Math.max(totalLeaves, 1);
 
   // Map leafId -> assigned angle
@@ -64,6 +67,7 @@ export function computeRadialLayout(
   leafIds.forEach((id, index) => {
     leafAngleMap.set(id, index * angleStep - Math.PI / 2);
   });
+
 
   // Function to map divergence time (Ma) to radial distance
   // Nonlinear scaling (square root) gives more breathing room to recent speciation events
@@ -159,7 +163,7 @@ export function computeRadialLayout(
     return { angle, r };
   };
 
-  traverse(rootId, 0);
+  traverse(effectiveRootId, 0);
 
   // 2. Build RenderEdges with curved arc control points
   for (const edge of store.getAllEdges()) {

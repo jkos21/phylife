@@ -183,6 +183,32 @@ export interface GraphStatistics {
   rootId: string;
 }
 
+export interface AuditLogEntry {
+  id: string;
+  timestamp: string;
+  action: 'node_added' | 'node_modified' | 'node_expanded' | 'edge_added' | 'synonym_added' | 'live_search_cached' | 'delta_sync';
+  target_id: string;
+  actor: 'system_ingest' | 'pipeline_sync' | 'user_interaction' | 'live_search_enrichment' | 'clade_expansion';
+  details: string;
+  metadata?: Record<string, any>;
+}
+
+export interface ProvenanceRecord {
+  source_name: string;
+  description?: string;
+  url_or_doi?: string;
+  accessed_at: string;
+  confidence_score?: number;
+}
+
+export interface KGCacheEntry {
+  key: string;
+  node: PhyNode;
+  source: string;
+  cached_at: string;
+  expires_at?: string;
+}
+
 export interface GraphSerializedData {
   version: string;
   timestamp: string;
@@ -191,4 +217,6 @@ export interface GraphSerializedData {
   divergences: DivergenceNode[];
   edges: BranchEdge[];
   synonyms?: SynonymEdge[];
+  audit_log?: AuditLogEntry[];
 }
+

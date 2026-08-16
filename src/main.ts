@@ -49,6 +49,8 @@ class PhyLifeApp {
     });
   }
 
+  private cladeFocusBar!: HTMLElement;
+
   private setupUI(): void {
     // 1. Modals & Drawers
     this.nodeInspector = new NodeInspector(
@@ -68,6 +70,9 @@ class PhyLifeApp {
         // Clade expanded: recompute tree layout & update stats
         this.renderer.recomputeLayout();
         this.navbar.updateStats(graphStore.getAllNodes().length);
+      },
+      cladeId => {
+        this.setCladeFocus(cladeId);
       }
     );
 
@@ -116,7 +121,10 @@ class PhyLifeApp {
       onPreferencesClick: () => this.preferencesModal.open(),
       onRecentChangesClick: () => this.recentChangesModal.open(),
       onLayoutChange: mode => this.renderer.setLayoutMode(mode),
-      onResetView: () => this.renderer.resetCamera()
+      onResetView: () => {
+        this.setCladeFocus(null);
+        this.renderer.resetCamera();
+      }
     });
 
     this.navbar.updateStats(graphStore.getAllNodes().length);
@@ -126,9 +134,16 @@ class PhyLifeApp {
     const viewportContainer = document.createElement('main');
     viewportContainer.className = 'viewport-container';
 
+    // 3a. Clade Focus Breadcrumb Bar
+    this.cladeFocusBar = document.createElement('div');
+    this.cladeFocusBar.className = 'clade-focus-bar';
+    this.cladeFocusBar.style.display = 'none';
+    viewportContainer.appendChild(this.cladeFocusBar);
+
     const canvas = document.createElement('canvas');
     canvas.id = 'tree-canvas';
     viewportContainer.appendChild(canvas);
+
 
     // 4. Domain Legend
     const legend = document.createElement('div');
@@ -240,9 +255,67 @@ class PhyLifeApp {
     this.renderer.focusMRCAPath(result.full_path);
     this.nodeInspector.inspect(result.mrca_node);
   }
+
+  public setCladeFocus(cladeId: string | null): void {
+    this.renderer.focusClade(cladeId);
+
+    if (!cladeId) {
+      this.cladeFocusBar.style.display = 'none';
+      this.cladeFocusBar.innerHTML = '';
+      return;
+    }
+
+    const node = graphStore.getNode(cladeId);
+    if (!node) {
+      this.cladeFocusBar.style.display = 'none';
+      return;
+    }
+
+    const lineage = graphStore.getLineage(cladeId);
+    const cladeSpecies = graphStore.getCladeSpecies(cladeId);
+
+    this.cladeFocusBar.style.display = 'flex';
+    this.cladeFocusBar.innerHTML = `
+      <div class="clade-focus-crumbs" role="navigation" aria-label="Clade focus breadcrumbs">
+        <button class="clade-crumb-btn" data-id="" title="Exit Clade Focus (Show Complete Tree)">🌍 Full Tree</button>
+        ${lineage.map((anc, idx) => {
+          const isLast = idx === lineage.length - 1;
+          const name = 'scientific_name' in anc ? (anc.common_name ? `${anc.scientific_name} (${anc.common_name})` : anc.scientific_name) : (anc.common_name || anc.name);
+          return `
+            <span class="clade-crumb-sep">›</span>
+            <button class="clade-crumb-btn ${isLast ? 'active' : ''}" data-id="${anc.id}" ${isLast ? 'aria-current="page"' : ''}>
+              ${name}
+            </button>
+          `;
+        }).join('')}
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span class="badge" style="background: rgba(56, 189, 248, 0.15); color: var(--accent-primary); border-color: rgba(56, 189, 248, 0.3); font-size: 11px;">
+          ${cladeSpecies.length} Species in Subtree
+        </span>
+        <button class="clade-crumb-close" id="btn-exit-clade-focus" title="Exit Clade Focus" aria-label="Exit Clade Focus">
+          ✕ Exit Focus
+        </button>
+      </div>
+    `;
+
+    // Attach breadcrumb click events
+    this.cladeFocusBar.querySelectorAll('.clade-crumb-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-id');
+        this.setCladeFocus(id ? id : null);
+      });
+    });
+
+    this.cladeFocusBar.querySelector('#btn-exit-clade-focus')?.addEventListener('click', () => {
+      this.setCladeFocus(null);
+    });
+  }
 }
 
 // Bootstrap on DOM load
 window.addEventListener('DOMContentLoaded', () => {
   new PhyLifeApp();
 });
+

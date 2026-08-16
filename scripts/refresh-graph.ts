@@ -1,6 +1,6 @@
 declare const process: any;
-import fs from 'node:fs';
-import path from 'node:path';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { PhyGraphStore } from '../src/graph/PhyGraphStore.ts';
 import { pipelineRunner } from '../src/pipeline/pipelineRunner.ts';
@@ -11,9 +11,9 @@ const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 
 const targetPublicDir = path.join(rootDir, 'public', 'data');
-const publicFile = path.join(targetPublicDir, 'phylogeny_graph.json');
 
 async function refreshGraph() {
+
   console.log('====================================================');
   console.log('  PhyLife: Manual Knowledge Graph Refresh & Sync');
   console.log('====================================================\n');
@@ -62,11 +62,22 @@ async function refreshGraph() {
     process.exit(1);
   }
 
-  // Ensure public data directory exists
+  const publicFile = path.join(targetPublicDir, 'phylife_kg.jsonld');
+  const sqliteFile = path.join(rootDir, 'data', 'phylife_kg.sqlite');
+
+  // Ensure directories exist
   fs.mkdirSync(targetPublicDir, { recursive: true });
+  fs.mkdirSync(path.join(rootDir, 'data'), { recursive: true });
 
   const serialized = JSON.stringify(graphDoc, null, 2);
   fs.writeFileSync(publicFile, serialized, 'utf-8');
+
+  // Update SQLite DB
+  const { SQLiteKnowledgeGraph } = await import('../src/backend/sqliteGraphEngine.ts');
+  const sqliteKG = new SQLiteKnowledgeGraph(sqliteFile);
+  sqliteKG.persistGraph(graphDoc);
+  const stats = sqliteKG.getStats();
+  sqliteKG.close();
 
   console.log('\n====================================================');
   console.log('🎉 REFRESH & DISK PERSISTENCE SUCCESSFUL');
@@ -76,8 +87,10 @@ async function refreshGraph() {
   console.log(`- Total Edges: ${graphDoc.metadata.metrics.totalEdges}`);
   console.log(`- Taxa Count: ${graphDoc.metadata.metrics.totalTaxa}`);
   console.log(`- Divergences: ${graphDoc.metadata.metrics.totalDivergences}`);
-  console.log(`- Output File: ${publicFile}`);
+  console.log(`- JSON-LD File: ${publicFile}`);
+  console.log(`- SQLite Database: ${sqliteFile} (${stats.totalTriples} RDF triples)`);
 }
+
 
 refreshGraph().catch(err => {
   console.error('Fatal error during graph refresh:', err);

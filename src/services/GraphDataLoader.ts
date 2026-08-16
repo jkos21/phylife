@@ -50,13 +50,13 @@ export class GraphDataLoader {
 
   /**
    * Loads the initial knowledge graph into the given PhyGraphStore.
-   * Attempts to fetch the persisted disk snapshot at /data/phylogeny_graph.json.
+   * Attempts to fetch the persisted W3C Knowledge Graph snapshot at /data/phylife_kg.jsonld.
    * If unavailable, falls back to the curated bundled SEED_DATA.
    */
   public async loadInitialGraph(store: PhyGraphStore): Promise<GraphLoadStatus> {
     try {
       if (typeof fetch !== 'undefined' && typeof window !== 'undefined') {
-        const response = await fetch('/data/phylogeny_graph.json');
+        const response = await fetch('/data/phylife_kg.jsonld');
         if (response.ok) {
           const doc: PersistedKnowledgeGraphDocument = await response.json();
           store.importJSON({
@@ -82,8 +82,9 @@ export class GraphDataLoader {
         }
       }
     } catch (err) {
-      console.warn('Could not fetch persisted knowledge graph from /data/phylogeny_graph.json. Falling back to bundled seed data.', err);
+      console.warn('Could not fetch persisted knowledge graph from /data/phylife_kg.jsonld. Falling back to bundled seed data.', err);
     }
+
 
     // Fallback: Bundled SEED_DATA
     store.importJSON({

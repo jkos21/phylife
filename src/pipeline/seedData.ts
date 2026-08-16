@@ -163,6 +163,15 @@ export const SEED_DATA: SeedDataPayload = {
       evolutionary_milestone: 'Blastopore becomes mouth; divergence into molting animals (Arthropoda) and lophotrochozoans (Mollusca).'
     },
     {
+      id: 'div_stem_arthropoda',
+      name: 'Panarthropoda & Radiodonta Radiation',
+      common_name: 'Origin of Arthropods & Anomalocaridids',
+      divergence_mya: 525,
+      confidence_interval: [515, 540],
+      geological_era: 'Paleozoic',
+      evolutionary_milestone: 'Segmented exoskeletons, compound eyes, and specialized predatory appendages.'
+    },
+    {
       id: 'div_deuterostomia',
       name: 'Deuterostomia Radiation',
       common_name: 'Echinoderm & Chordate Split',
@@ -190,6 +199,15 @@ export const SEED_DATA: SeedDataPayload = {
       evolutionary_milestone: 'Hinged jaws modified from gill arches and paired pelvic/pectoral fins.'
     },
     {
+      id: 'div_selachimorpha',
+      name: 'Chondrichthyes (Sharks & Rays)',
+      common_name: 'Evolution of Apex Cartilaginous Fishes',
+      divergence_mya: 420,
+      confidence_interval: [400, 440],
+      geological_era: 'Paleozoic',
+      evolutionary_milestone: 'Cartilaginous skeleton, placoid dermal denticles, and ampullae of Lorenzini electroreceptors.'
+    },
+    {
       id: 'div_tetrapoda',
       name: 'Tetrapoda Land Transition',
       common_name: 'Transition from Sarcopterygii to Tetrapods',
@@ -208,6 +226,17 @@ export const SEED_DATA: SeedDataPayload = {
       evolutionary_milestone: 'Amniotic egg with waterproof membranes (amnion, chorion, allantois) for dry-land incubation.'
     },
     {
+      id: 'div_synapsida_stem',
+      name: 'Synapsida (Stem Mammals / Pelycosaurs)',
+      common_name: 'Sail-backed Synapsids & Therapsids',
+      divergence_mya: 295,
+      confidence_interval: [285, 305],
+      geological_era: 'Paleozoic',
+      evolutionary_milestone: 'Single lower temporal fenestra and differentiated dentition.'
+    },
+
+    // --- Sauropsida, Dinosaurs, Pterosaurs, Marine Reptiles & Birds ---
+    {
       id: 'div_dinosauria_aves',
       name: 'Archosauria & Dinosauria Radiation',
       common_name: 'Origin of Dinosaurs and Birds',
@@ -216,6 +245,89 @@ export const SEED_DATA: SeedDataPayload = {
       geological_era: 'Mesozoic',
       evolutionary_milestone: 'Erect gait, bipedal agility, proto-feathers, and efficient unidirectional air-sac respiration.'
     },
+    {
+      id: 'div_marine_reptiles',
+      name: 'Mesozoic Marine Reptiles (Mosasaurs, Plesiosaurs, Ichthyosaurs)',
+      common_name: 'Secondary Marine Invasion of Reptiles',
+      divergence_mya: 240,
+      confidence_interval: [230, 250],
+      geological_era: 'Mesozoic',
+      evolutionary_milestone: 'Hydrodynamic flippers, viviparity, and specialized macro-predatory jaws.'
+    },
+    {
+      id: 'div_pterosauria',
+      name: 'Pterosauria (Winged Reptiles)',
+      common_name: 'First Vertebrates to Evolve Powered Flight',
+      divergence_mya: 228,
+      confidence_interval: [220, 235],
+      geological_era: 'Mesozoic',
+      evolutionary_milestone: 'Wing membranes supported by elongated fourth digit and hollow pneumatic bones.'
+    },
+    {
+      id: 'div_theropoda',
+      name: 'Theropoda (Bipedal Carnivorous Dinosaurs & Birds)',
+      common_name: 'Theropod Dinosaurs',
+      divergence_mya: 231,
+      confidence_interval: [225, 238],
+      geological_era: 'Mesozoic',
+      evolutionary_milestone: 'Hollow thin-walled bones, three-toed pes with sickle claws, and filamentous plumage.'
+    },
+    {
+      id: 'div_tyrannosauroidea',
+      name: 'Tyrannosauroidea (Tyrant Dinosaurs)',
+      common_name: 'Tyrannosaurs & Apex Apex Predators',
+      divergence_mya: 165,
+      confidence_interval: [155, 175],
+      geological_era: 'Mesozoic',
+      evolutionary_milestone: 'Fused nasal bones, massive crushing jaws with incisiform premaxillary teeth, and reduced forelimbs.'
+    },
+    {
+      id: 'div_dromaeosauridae',
+      name: 'Dromaeosauridae (Raptor Dinosaurs)',
+      common_name: 'Feathered Sickle-clawed Raptors',
+      divergence_mya: 145,
+      confidence_interval: [135, 155],
+      geological_era: 'Mesozoic',
+      evolutionary_milestone: 'Hyper-extensible second toe with giant sickle claw, ossified tail rods, and pennaceous wing feathers.'
+    },
+    {
+      id: 'div_spinosauridae_carnosauria',
+      name: 'Spinosauridae & Allosauroidea',
+      common_name: 'Giant Sail-backed & Apex Carnosaurs',
+      divergence_mya: 155,
+      confidence_interval: [145, 165],
+      geological_era: 'Mesozoic',
+      evolutionary_milestone: 'Elongated conical crocodile-like snouts, neural spine sails, and semi-aquatic adaptations.'
+    },
+    {
+      id: 'div_sauropodomorpha',
+      name: 'Sauropodomorpha (Long-necked Giants)',
+      common_name: 'Colossal Herbivorous Dinosaurs',
+      divergence_mya: 228,
+      confidence_interval: [220, 235],
+      geological_era: 'Mesozoic',
+      evolutionary_milestone: 'Elongated cervical vertebrae, pillar-like columnar limbs, and immense gigantism (up to 70+ tonnes).'
+    },
+    {
+      id: 'div_ornithischia',
+      name: 'Ornithischia (Beaked, Armored & Horned Dinosaurs)',
+      common_name: 'Ceratopsians, Ankylosaurs & Stegosaurs',
+      divergence_mya: 228,
+      confidence_interval: [220, 235],
+      geological_era: 'Mesozoic',
+      evolutionary_milestone: 'Predentary bone forming cropping beak, backward-pointing pubis, and defensive dermal armor/horns.'
+    },
+    {
+      id: 'div_avialae_birds',
+      name: 'Avialae & Crown Neornithes',
+      common_name: 'Avian Dinosaurs & Modern Birds',
+      divergence_mya: 150,
+      confidence_interval: [145, 155],
+      geological_era: 'Mesozoic',
+      evolutionary_milestone: 'Powered aerodynamic flight, pygostyle tail fusion, furcula (wishbone), and toothless keratinous beaks.'
+    },
+
+    // --- Mammalia & Cenozoic Radiations ---
     {
       id: 'div_mammalia_crown',
       name: 'Mammalia Crown Radiation',
@@ -227,8 +339,8 @@ export const SEED_DATA: SeedDataPayload = {
     },
     {
       id: 'div_placentalia_orders',
-      name: 'Boreoeutheria & Euarchontoglires Split',
-      common_name: 'Primate/Rodent & Carnivore/Ungulate Split',
+      name: 'Boreoeutheria & Placental Mammals',
+      common_name: 'Placental Mammalian Diversification',
       divergence_mya: 95,
       confidence_interval: [88, 102],
       geological_era: 'Mesozoic',
@@ -236,7 +348,7 @@ export const SEED_DATA: SeedDataPayload = {
     },
     {
       id: 'div_carnivora_feliformia_caniformia',
-      name: 'Carnivora Split (Feliformia vs Caniformia)',
+      name: 'Carnivora (Cats, Dogs, Bears & Pinnipeds)',
       common_name: 'Cat-line and Dog-line Divergence',
       divergence_mya: 55,
       confidence_interval: [51, 59],
@@ -244,13 +356,58 @@ export const SEED_DATA: SeedDataPayload = {
       evolutionary_milestone: 'Specialized carnassial shear teeth (P4/M1) for hyper-carnivorous diet.'
     },
     {
+      id: 'div_felidae',
+      name: 'Felidae & Machairodontinae (Cats & Sabertooths)',
+      common_name: 'Pantherines, Felines and Saber-toothed Predators',
+      divergence_mya: 25,
+      confidence_interval: [22, 28],
+      geological_era: 'Cenozoic',
+      evolutionary_milestone: 'Retractile claws, binocular ambush vision, and elongated maxillary canines.'
+    },
+    {
+      id: 'div_canidae_ursidae',
+      name: 'Canidae & Ursidae (Dogs, Wolves & Bears)',
+      common_name: 'Caniform Carnivores',
+      divergence_mya: 42,
+      confidence_interval: [38, 46],
+      geological_era: 'Cenozoic',
+      evolutionary_milestone: 'Endurance cursorial hunting limbs and exceptional olfactory acuity.'
+    },
+    {
+      id: 'div_cetacea',
+      name: 'Cetacea (Whales & Dolphins)',
+      common_name: 'Marine Mammal Evolution from Artiodactyls',
+      divergence_mya: 52,
+      confidence_interval: [48, 56],
+      geological_era: 'Cenozoic',
+      evolutionary_milestone: 'Secondary marine adaptation with blowhole migration, loss of hindlimbs, echolocation, and baleen filtration.'
+    },
+    {
+      id: 'div_proboscidea',
+      name: 'Proboscidea (Elephants & Mammoths)',
+      common_name: 'Trunked Mega-Herbivores',
+      divergence_mya: 35,
+      confidence_interval: [30, 40],
+      geological_era: 'Cenozoic',
+      evolutionary_milestone: 'Prehensile muscular proboscis (trunk), columnar graviportal limbs, and elongated ivory incisor tusks.'
+    },
+    {
       id: 'div_hominidae_crown',
-      name: 'Hominidae (Great Apes)',
+      name: 'Hominidae (Great Apes & Humans)',
       common_name: 'Chimpanzee - Human Last Common Ancestor (CHLCA)',
       divergence_mya: 6.8,
       confidence_interval: [6.0, 7.6],
       geological_era: 'Cenozoic',
       evolutionary_milestone: 'Bipedal adaptation, enlarged neocortex, tool use, and complex vocal communication.'
+    },
+    {
+      id: 'div_hominini',
+      name: 'Hominini Lineage (Australopiths & Genus Homo)',
+      common_name: 'Human Evolutionary Branch',
+      divergence_mya: 4.2,
+      confidence_interval: [3.8, 4.6],
+      geological_era: 'Cenozoic',
+      evolutionary_milestone: 'Obligate bipedalism, stone tool manufacture (Oldowan/Acheulean), fire control, and brain encephalization.'
     }
   ],
 
@@ -265,51 +422,56 @@ export const SEED_DATA: SeedDataPayload = {
       rank: 'phylum',
       kingdom: 'Archaea',
       extinct: false,
-      description: 'Major archaeal group including methanogens producing atmospheric methane and extreme halophiles living in salt saturations.',
-      ott_id: 'ott_52410',
-      gbif_key: '141'
+      thumbnail_url: 'https://images.unsplash.com/photo-1576086213369-97a306d36557?w=500&auto=format&fit=crop&q=60',
+      description: 'Major archaeal lineage encompassing methane producers and extreme salt-tolerant organisms.',
+      temporal_range: '3.5 Ga - Present',
+      traits: ['Ether-linked isoprenoid membrane lipids', 'Methanogenesis pathways', 'High osmolarity tolerance'],
+      ott_id: 'ott_102931',
+      gbif_key: '144'
     },
     {
       id: 'tax_methanocaldococcus',
       scientific_name: 'Methanocaldococcus jannaschii',
-      common_name: 'Deep Sea Hydrothermal Methanogen',
+      common_name: 'Hydrothermal Vent Methanogen',
       rank: 'species',
       kingdom: 'Archaea',
       extinct: false,
-      thumbnail_url: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=500&auto=format&fit=crop&q=60',
-      description: 'Extremophile archaeon isolated from a 2,600-meter-deep hydrothermal vent chimney ("white smoker") on the East Pacific Rise.',
-      temporal_range: 'Extant (Ancestral lineage >3.5 Ga)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=500&auto=format&fit=crop&q=60',
+      description: 'Extremely thermophilic methanogenic archaeon isolated from a deep-sea hydrothermal chimney at 2,600 meters depth.',
+      temporal_range: 'Extant',
       habitat: 'Deep-sea hydrothermal vents (85°C)',
-      traits: ['Methanogenesis', 'Hyperthermophile', 'Chemolithoautotroph'],
-      ott_id: 'ott_81230',
-      gbif_key: '3228389'
+      traits: ['Strict autotroph', 'Hydrogen-oxidizing methanogen', 'Thermostable enzymes'],
+      ott_id: 'ott_401923',
+      gbif_key: '1000182'
     },
     {
       id: 'tax_halobacterium',
       scientific_name: 'Halobacterium salinarum',
-      common_name: 'Purple Membrane Halophile',
+      common_name: 'Extreme Halophilic Archaeon',
       rank: 'species',
       kingdom: 'Archaea',
       extinct: false,
-      thumbnail_url: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&auto=format&fit=crop&q=60',
-      description: 'Extremely halophilic marine archaeon that synthesizes bacteriorhodopsin to harness light energy without chlorophyll.',
+      thumbnail_url: 'https://images.unsplash.com/photo-1507668077129-56e32842fceb?w=500&auto=format&fit=crop&q=60',
+      description: 'Aerobic haloarchaeon that blooms in hypersaline salt lakes, utilizing bacteriorhodopsin light-driven proton pumps.',
       temporal_range: 'Extant',
-      habitat: 'Hypersaline salt lakes & salterns',
-      traits: ['Bacteriorhodopsin proton pump', 'Extreme halophile'],
-      ott_id: 'ott_67119'
+      habitat: 'Salt evaporation pans, Dead Sea, Great Salt Lake',
+      traits: ['Bacteriorhodopsin phototrophy', 'High-salt cytoplasmic adaptation', 'Purple membrane patches'],
+      ott_id: 'ott_20912',
+      gbif_key: '1000215'
     },
     {
       id: 'tax_lokiarchaeum',
       scientific_name: 'Lokiarchaeum ossiferum',
-      common_name: 'Asgard Archaea (Eukaryote Relative)',
+      common_name: 'Asgard Archaea (Eukaryote Ancestor)',
       rank: 'species',
       kingdom: 'Archaea',
       extinct: false,
-      description: 'Asgard archaeon closely related to the ancestral host lineage that engulfed the alphaproteobacterial ancestor of mitochondria.',
-      temporal_range: 'Extant',
-      habitat: 'Deep marine Arctic sediments (Loki\'s Castle)',
-      traits: ['Actin-like cytoskeleton', 'Membrane protrusion vesicles', 'Syntrophic metabolism'],
-      ott_id: 'ott_598124'
+      thumbnail_url: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&auto=format&fit=crop&q=60',
+      description: 'Cultivated Asgard archaeon with complex tentacle-like protrusions and actin-like cytoskeleton, bridging prokaryotes and eukaryotes.',
+      temporal_range: 'Extant (Deep-sea sediment relic)',
+      habitat: 'Arctic hydrothermal marine sediments (Loki\'s Castle)',
+      traits: ['Eukaryotic signature proteins (ESPs)', 'Complex branching appendages', 'Actin cytoskeleton homology'],
+      ott_id: 'ott_991823'
     },
 
     // ==========================================
@@ -318,56 +480,62 @@ export const SEED_DATA: SeedDataPayload = {
     {
       id: 'tax_cyanobacteria',
       scientific_name: 'Cyanobacteria',
-      common_name: 'Blue-Green Algae & Oxygen Generators',
+      common_name: 'Blue-Green Algae (Oxygen Producers)',
       rank: 'phylum',
       kingdom: 'Bacteria',
       extinct: false,
-      thumbnail_url: 'https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?w=500&auto=format&fit=crop&q=60',
-      description: 'Photosynthetic prokaryotes that triggered the Great Oxidation Event ~2.4 billion years ago, forever transforming Earth\'s atmosphere.',
-      temporal_range: '3.5 Ga - Present',
-      traits: ['Oxygenic photosynthesis', 'Thylakoid membranes', 'Nitrogen fixation'],
-      ott_id: 'ott_34190'
+      thumbnail_url: 'https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=500&auto=format&fit=crop&q=60',
+      description: 'Pioneered oxygenic photosynthesis over 2.4 billion years ago, driving the Great Oxidation Event and creating modern Earth atmosphere.',
+      temporal_range: '2.7 Ga - Present',
+      traits: ['Oxygenic photosynthesis (Photosystems I & II)', 'Chlorophyll a synthesis', 'Ancestors of plant chloroplasts'],
+      ott_id: 'ott_52910',
+      gbif_key: '68'
     },
     {
       id: 'tax_microcystis',
       scientific_name: 'Microcystis aeruginosa',
-      common_name: 'Bloom-forming Cyanobacterium',
+      common_name: 'Freshwater Cyanobacterium',
       rank: 'species',
       kingdom: 'Bacteria',
       extinct: false,
-      description: 'Colonial freshwater cyanobacterium producing gas vesicles to regulate buoyancy in the water column.',
+      thumbnail_url: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=500&auto=format&fit=crop&q=60',
+      description: 'Colony-forming freshwater cyanobacterium known for producing gas vesicles for buoyancy and microcystin peptides.',
       temporal_range: 'Extant',
-      ott_id: 'ott_119832'
+      ott_id: 'ott_108291',
+      gbif_key: '3216853'
     },
     {
       id: 'tax_escherichia_coli',
       scientific_name: 'Escherichia coli',
-      common_name: 'E. coli bacterium',
+      common_name: 'E. coli Model Bacterium',
       rank: 'species',
       kingdom: 'Bacteria',
       extinct: false,
       thumbnail_url: 'https://images.unsplash.com/photo-1583912267670-6575ad4736f8?w=500&auto=format&fit=crop&q=60',
-      description: 'Gram-negative, facultatively anaerobic, rod-shaped coliform bacterium ubiquitous in vertebrate gut microbiomes and molecular genetics.',
+      description: 'Gram-negative rod-shaped gammaproteobacterium essential to mammalian gut microbiota and the premier model organism in molecular biology.',
       temporal_range: 'Extant',
-      habitat: 'Gastrointestinal tract of endothermic animals',
-      traits: ['Model organism', 'Peritrichous flagella', 'Lactose fermentation'],
-      ott_id: 'ott_474934',
-      gbif_key: '2504847'
+      habitat: 'Lower intestine of warm-blooded organisms',
+      traits: ['Facultative anaerobe', 'Rapid 20-minute binary fission', 'Plasmid horizontal gene transfer model'],
+      ott_id: 'ott_562',
+      gbif_key: '2435098'
     },
     {
       id: 'tax_streptomyces',
       scientific_name: 'Streptomyces coelicolor',
-      common_name: 'Soil Antibiotic Actinobacterium',
+      common_name: 'Soil Actinobacterium (Antibiotic Producer)',
       rank: 'species',
       kingdom: 'Bacteria',
       extinct: false,
-      description: 'Filamentous soil bacterium known for complex morphological differentiation and production of clinical antibiotics and geosmin (scent of rain).',
+      thumbnail_url: 'https://images.unsplash.com/photo-1530026405186-ed1f139313f8?w=500&auto=format&fit=crop&q=60',
+      description: 'Gram-positive filamentous soil bacterium renowned for complex mycelial development and producing over two-thirds of natural antibiotics.',
       temporal_range: 'Extant',
-      ott_id: 'ott_82049'
+      traits: ['Secondary metabolite / antibiotic synthesis', 'Complex mycelial life cycle', 'High G+C content linear chromosome'],
+      ott_id: 'ott_718290',
+      gbif_key: '3224749'
     },
 
     // ==========================================
-    // DOMAIN / KINGDOM: PROTISTA
+    // DOMAIN: PROTISTA
     // ==========================================
     {
       id: 'tax_dictyostelium',
@@ -376,64 +544,70 @@ export const SEED_DATA: SeedDataPayload = {
       rank: 'species',
       kingdom: 'Protista',
       extinct: false,
-      thumbnail_url: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=500&auto=format&fit=crop&q=60',
-      description: 'Soil-living amoeba that transitions from single-celled individuals to a multicellular slug and fruiting body in response to starvation via cAMP signaling.',
+      thumbnail_url: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&auto=format&fit=crop&q=60',
+      description: 'Soil-living amoeba that undergoes facultative multicellular development, transitioning from solitary cells to fruiting slugs upon starvation.',
       temporal_range: 'Extant',
-      traits: ['Facultative multicellularity', 'cAMP chemotaxis', 'Spore formation'],
-      ott_id: 'ott_319084'
+      traits: ['cAMP-directed chemotactic aggregation', 'Altruistic stalk cell differentiation', 'Model for cell differentiation'],
+      ott_id: 'ott_319082',
+      gbif_key: '3213192'
     },
     {
       id: 'tax_paramecium',
       scientific_name: 'Paramecium aurelia',
-      common_name: 'Slipper Ciliate',
+      common_name: 'Ciliated Protozoan',
       rank: 'species',
       kingdom: 'Protista',
       extinct: false,
-      description: 'Single-celled ciliate covered with thousands of coordinated cilia for locomotion and oral groove feeding.',
+      thumbnail_url: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&auto=format&fit=crop&q=60',
+      description: 'Single-celled ciliated freshwater protist with pellicular surface cilia, contractile vacuoles, and nuclear dualism (macro/micronuclei).',
       temporal_range: 'Extant',
-      ott_id: 'ott_718290'
+      traits: ['Coordinated ciliary propulsion', 'Nuclear dualism', 'Trichocyst defensive discharge'],
+      ott_id: 'ott_58190',
+      gbif_key: '3204365'
     },
 
     // ==========================================
-    // KINGDOM: VIRIDIPLANTAE (PLANTAE)
+    // KINGDOM: VIRIDIPLANTAE (PLANTS)
     // ==========================================
     {
       id: 'tax_chlorophyta',
       scientific_name: 'Chlamydomonas reinhardtii',
-      common_name: 'Green Microalga',
+      common_name: 'Unicellular Green Alga',
       rank: 'species',
       kingdom: 'Viridiplantae',
       extinct: false,
-      thumbnail_url: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=500&auto=format&fit=crop&q=60',
-      description: 'Single-celled green alga with two anterior flagella, an eyespot for phototaxis, and a large cup-shaped chloroplast.',
+      thumbnail_url: 'https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=500&auto=format&fit=crop&q=60',
+      description: 'Biflagellated single-celled green alga containing a cup-shaped chloroplast and eyespot for phototaxis.',
       temporal_range: 'Extant',
-      ott_id: 'ott_49812'
+      ott_id: 'ott_90182'
     },
     {
       id: 'tax_sphagnum',
       scientific_name: 'Sphagnum magellanicum',
-      common_name: 'Magellanic Peat Moss',
+      common_name: 'Magellanic Peat Moss (Bryophyte)',
       rank: 'species',
       kingdom: 'Viridiplantae',
       extinct: false,
-      thumbnail_url: 'https://images.unsplash.com/photo-1500485035595-cbe6f645feb1?w=500&auto=format&fit=crop&q=60',
-      description: 'Dominant peat-forming bryophyte capable of storing up to 26 times its dry weight in water, vital for global carbon sequestration.',
+      thumbnail_url: 'https://images.unsplash.com/photo-1448375240586-882707db888b?w=500&auto=format&fit=crop&q=60',
+      description: 'Non-vascular bryophyte capable of retaining up to 26 times its dry weight in water, dominating high-latitude carbon-sink peat bogs.',
       temporal_range: 'Extant',
-      ott_id: 'ott_20918',
-      wfo_id: 'wfo-0000508119'
+      traits: ['Hygroscopic dead hyaline cells', 'Acidifying cation exchange', 'Massive global carbon storage'],
+      ott_id: 'ott_12903',
+      gbif_key: '2669041'
     },
     {
       id: 'tax_cooksonia',
       scientific_name: 'Cooksonia caledonica',
-      common_name: 'Early Vascular Pioneer (Extinct)',
+      common_name: 'Earliest Land Vascular Plant (Extinct)',
       rank: 'species',
       kingdom: 'Viridiplantae',
       extinct: true,
       extinction_era: 'Silurian - Early Devonian (433 - 393 Ma)',
-      description: 'One of the earliest known land plants with fossilized vascular tissue, featuring simple dichotomous branching and terminal sporangia.',
+      thumbnail_url: 'https://images.unsplash.com/photo-1448375240586-882707db888b?w=500&auto=format&fit=crop&q=60',
+      description: 'Primitive leafless dichotomously branching vascular land plant bearing terminal sporangia, representing the earliest upright land flora.',
       temporal_range: '433 - 393 Ma (Extinct)',
-      traits: ['Primitive vascular xylem', 'Dichotomous branching', 'No leaves or true roots'],
-      ott_id: 'ott_991823'
+      traits: ['Dichotomous branching', 'Terminal sporangia', 'Simple central tracheids'],
+      ott_id: 'ott_918234'
     },
     {
       id: 'tax_ginkgo',
@@ -442,53 +616,52 @@ export const SEED_DATA: SeedDataPayload = {
       rank: 'species',
       kingdom: 'Viridiplantae',
       extinct: false,
-      thumbnail_url: 'https://images.unsplash.com/photo-1508873696983-2df5293cb32b?w=500&auto=format&fit=crop&q=60',
-      description: 'Sole surviving species of the ancient Ginkgoales order dating back over 270 million years, with distinctive fan-shaped leaves and motile sperm.',
-      temporal_range: '270 Ma - Present',
-      traits: ['Living fossil', 'Fan-shaped dichotomous venation', 'Dioecious'],
-      ott_id: 'ott_23789',
-      wfo_id: 'wfo-0000702581'
+      thumbnail_url: 'https://images.unsplash.com/photo-1508873696983-2df5293cb32f?w=500&auto=format&fit=crop&q=60',
+      description: 'Sole surviving member of the order Ginkgoales, virtually unchanged since the Jurassic period (~170 Ma) with fan-shaped leaves and motile sperm.',
+      temporal_range: 'Early Jurassic - Present (Living Fossil)',
+      traits: ['Fan-shaped dichotomous venation', 'Dioecious with motile sperm cells', 'Exceptional pollution and pathogen resistance'],
+      ott_id: 'ott_70192',
+      gbif_key: '2687885'
     },
     {
       id: 'tax_sequoiadendron',
       scientific_name: 'Sequoiadendron giganteum',
-      common_name: 'Giant Sequoia',
+      common_name: 'Giant Sequoia (Gymnosperm)',
       rank: 'species',
       kingdom: 'Viridiplantae',
       extinct: false,
-      thumbnail_url: 'https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=500&auto=format&fit=crop&q=60',
-      description: 'The world\'s most massive single tree species, native to the western Sierra Nevada mountains, with fire-resistant fibrous bark.',
+      thumbnail_url: 'https://images.unsplash.com/photo-1448375240586-882707db888b?w=500&auto=format&fit=crop&q=60',
+      description: 'Massive coniferous gymnosperm native to California Sierra Nevada, holding the record for the largest single trees by volume on Earth.',
       temporal_range: 'Extant',
-      ott_id: 'ott_591820',
-      wfo_id: 'wfo-0000742111'
+      ott_id: 'ott_40192'
     },
     {
       id: 'tax_arabidopsis',
       scientific_name: 'Arabidopsis thaliana',
-      common_name: 'Thale Cress (Model Plant)',
+      common_name: 'Thale Cress (Model Angiosperm)',
       rank: 'species',
       kingdom: 'Viridiplantae',
       extinct: false,
-      thumbnail_url: 'https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=500&auto=format&fit=crop&q=60',
-      description: 'Small flowering plant in the mustard family (Brassicaceae), the premier model organism for plant biology and genomics with first sequenced plant genome.',
+      thumbnail_url: 'https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=500&auto=format&fit=crop&q=60',
+      description: 'Small flowering mustard plant with a compact 135 Mb genome, serving as the universal reference organism for plant genetics and development.',
       temporal_range: 'Extant',
-      traits: ['Compact 135 Mb genome', '6-week life cycle', 'Flowering dicot model'],
-      ott_id: 'ott_39019',
-      wfo_id: 'wfo-0000547118',
-      gbif_key: '3042602'
+      traits: ['Rapid 6-week life cycle', 'Compact sequenced genome', 'Self-pollinating flowers'],
+      ott_id: 'ott_3702',
+      gbif_key: '3042578'
     },
     {
       id: 'tax_oryza_sativa',
       scientific_name: 'Oryza sativa',
-      common_name: 'Asian Rice',
+      common_name: 'Asian Rice (Monocot Angiosperm)',
       rank: 'species',
       kingdom: 'Viridiplantae',
       extinct: false,
       thumbnail_url: 'https://images.unsplash.com/photo-1536304993881-ff6e9eefa2a6?w=500&auto=format&fit=crop&q=60',
-      description: 'Primary staple cereal grain consumed by over half the human population, domesticated in the Yangtze river valley ~10,000 years ago.',
-      temporal_range: 'Extant',
-      ott_id: 'ott_40192',
-      wfo_id: 'wfo-0000881920'
+      description: 'Cereal grass domesticated in China 9,000 years ago that provides the primary staple dietary caloric intake for more than half of the human population.',
+      temporal_range: 'Holocene Domesticated - Present',
+      traits: ['Paddy-adapted submerged aerenchyma', 'C3 photosynthetic grass', 'Global staple crop'],
+      ott_id: 'ott_4530',
+      gbif_key: '2703487'
     },
 
     // ==========================================
@@ -501,39 +674,39 @@ export const SEED_DATA: SeedDataPayload = {
       rank: 'species',
       kingdom: 'Fungi',
       extinct: false,
-      thumbnail_url: 'https://images.unsplash.com/photo-1584727638096-042c45049ebe?w=500&auto=format&fit=crop&q=60',
-      description: 'Single-celled budding ascomycete yeast central to bread leavening, beer fermentation, and eukaryote cellular genetics.',
+      thumbnail_url: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&auto=format&fit=crop&q=60',
+      description: 'Single-celled budding ascomycete fungus driving ethanol and CO2 fermentation in bread and brewing, and the foremost eukaryotic model organism.',
       temporal_range: 'Extant',
-      traits: ['Ethanol fermentation', 'Budding division', 'First sequenced eukaryote (1996)'],
-      ott_id: 'ott_541902',
-      mycobank_id: 'MB145942'
+      ott_id: 'ott_4932',
+      gbif_key: '2599480'
     },
     {
       id: 'tax_penicillium',
       scientific_name: 'Penicillium chrysogenum',
-      common_name: 'Penicillin Mold',
+      common_name: 'Penicillin-Producing Mold',
       rank: 'species',
       kingdom: 'Fungi',
       extinct: false,
-      description: 'Filamentous ascomycete mold that produces the beta-lactam antibiotic penicillin, revolutionizing 20th-century medicine.',
+      thumbnail_url: 'https://images.unsplash.com/photo-1530026405186-ed1f139313f8?w=500&auto=format&fit=crop&q=60',
+      description: 'Filamentous ascomycete fungus discovered by Alexander Fleming in 1928, responsible for the initial commercial biosynthesis of penicillin antibiotics.',
       temporal_range: 'Extant',
-      ott_id: 'ott_84291',
-      mycobank_id: 'MB211902'
+      traits: ['Beta-lactam penicillin biosynthesis', 'Conidiophore brush spore structures', 'Saprophytic soil degradation'],
+      ott_id: 'ott_5076',
+      gbif_key: '2560481'
     },
     {
       id: 'tax_amanita_muscaria',
       scientific_name: 'Amanita muscaria',
-      common_name: 'Fly Agaric',
+      common_name: 'Fly Agaric (Basidiomycete)',
       rank: 'species',
       kingdom: 'Fungi',
       extinct: false,
-      thumbnail_url: 'https://images.unsplash.com/photo-1543883441-26c7104b2075?w=500&auto=format&fit=crop&q=60',
-      description: 'Iconic mycorrhizal mushroom with bright red cap and white warts, forming symbiotic associations with birch and conifer trees.',
+      thumbnail_url: 'https://images.unsplash.com/photo-1509114397022-ed747cca3f65?w=500&auto=format&fit=crop&q=60',
+      description: 'Iconic scarlet-capped mushroom with white warts forming ectomycorrhizal symbioses with birch and pine trees.',
       temporal_range: 'Extant',
-      traits: ['Ectomycorrhizal symbiont', 'Ibotenic acid & muscimol', 'Basidiomycete cap'],
-      ott_id: 'ott_61829',
-      mycobank_id: 'MB142901',
-      gbif_key: '5240325'
+      traits: ['Ectomycorrhizal root sheath symbiosis', 'Muscimol & ibotenic acid synthesis', 'Classic basidiocarp fruiting body'],
+      ott_id: 'ott_41950',
+      gbif_key: '5240248'
     },
     {
       id: 'tax_cantharellus',
@@ -542,85 +715,161 @@ export const SEED_DATA: SeedDataPayload = {
       rank: 'species',
       kingdom: 'Fungi',
       extinct: false,
-      thumbnail_url: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=500&auto=format&fit=crop&q=60',
-      description: 'Prized edible funnel-shaped forest mushroom with fragrant apricot scent and gill-like ridges.',
+      thumbnail_url: 'https://images.unsplash.com/photo-1509114397022-ed747cca3f65?w=500&auto=format&fit=crop&q=60',
+      description: 'Prized edible funnel-shaped mycorrhizal basidiomycete possessing gill-like gill folds and rich apricot aroma.',
       temporal_range: 'Extant',
-      ott_id: 'ott_41298',
-      mycobank_id: 'MB167820'
+      ott_id: 'ott_36058',
+      gbif_key: '5249567'
     },
 
     // ==========================================
     // KINGDOM: METAZOA (ANIMALS)
     // ==========================================
-    // Basal Non-Bilaterians
+
+    // --- Basal Metazoans & Cnidarians ---
     {
       id: 'tax_euspongia',
       scientific_name: 'Spongia officinalis',
-      common_name: 'Greek Bath Sponge',
+      common_name: 'Bath Sponge (Porifera)',
       rank: 'species',
       kingdom: 'Metazoa',
       extinct: false,
       thumbnail_url: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=500&auto=format&fit=crop&q=60',
-      description: 'Basal multicellular marine sponge lacking true tissues or symmetry, filtering water through a network of choanocytes.',
-      temporal_range: 'Extant',
-      ott_id: 'ott_10928'
+      description: 'Basal marine sponge lacking true tissues, filtering water through spongin fibers and choanocyte collar cells.',
+      temporal_range: 'Cryogenian - Present',
+      traits: ['Spongin fiber skeleton', 'Choanocyte flagellar water pumping', 'Totipotent archaeocytes'],
+      ott_id: 'ott_10291',
+      gbif_key: '2247447'
     },
     {
       id: 'tax_aurelia',
       scientific_name: 'Aurelia aurita',
-      common_name: 'Moon Jellyfish',
+      common_name: 'Moon Jellyfish (Cnidaria)',
       rank: 'species',
       kingdom: 'Metazoa',
       extinct: false,
-      thumbnail_url: 'https://images.unsplash.com/photo-1544551763-77ef2d0cf96c?w=500&auto=format&fit=crop&q=60',
-      description: 'Translucent cnidarian medusa with four horseshoe-shaped gonads, exhibiting radial symmetry and stinging nematocysts.',
-      temporal_range: 'Extant',
-      ott_id: 'ott_59182'
+      thumbnail_url: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=500&auto=format&fit=crop&q=60',
+      description: 'Translucent diploblastic scyphozoan jellyfish featuring radial symmetry, rhopalia sensory pits, and cnidocyte stinging capsules.',
+      temporal_range: 'Ediacaran - Present',
+      traits: ['Cnidocyte nematocyst harpoons', 'Diffuse synaptic nerve net', 'Metagenesis (polyp to medusa)'],
+      ott_id: 'ott_61902',
+      gbif_key: '2268800'
     },
 
-    // Protostomes: Arthropods & Mollusks
+    // --- Protostomes, Paleozoic Megafauna & Arthropods ---
     {
-      id: 'tax_trilobite',
-      scientific_name: 'Paradoxides davidis',
-      common_name: 'Giant Middle Cambrian Trilobite (Extinct)',
+      id: 'tax_anomalocaris',
+      scientific_name: 'Anomalocaris canadensis',
+      common_name: 'Anomalocaris (Cambrian Apex Predator)',
       rank: 'species',
       kingdom: 'Metazoa',
       extinct: true,
-      extinction_era: 'Cambrian - Permian (505 Ma)',
-      thumbnail_url: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=500&auto=format&fit=crop&q=60',
-      description: 'Extinct marine arthropod with three-lobed calcified exoskeleton and compound holochroal calcite-lens eyes.',
-      temporal_range: '521 - 252 Ma (Extinct)',
-      traits: ['Calcite crystal compound eyes', 'Tri-lobed exoskeleton', 'Biramous appendages'],
-      ott_id: 'ott_881920'
+      extinction_era: 'Middle Cambrian (~508 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=500&auto=format&fit=crop&q=60',
+      description: 'Meter-long Burgess Shale stem-arthropod with giant compound eyes, spiny frontal grasping appendages, and circular pineapple-ring mouth.',
+      temporal_range: '514 - 505 Ma (Extinct)',
+      traits: ['Giant acute compound eyes (16,000 lenses)', 'Segmented spiny frontal claws', 'Lateral swimming lobes'],
+      ott_id: 'ott_981204'
+    },
+    {
+      id: 'tax_opabinia',
+      scientific_name: 'Opabinia regalis',
+      common_name: 'Opabinia (Five-eyed Stem Arthropod)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Middle Cambrian (~505 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=500&auto=format&fit=crop&q=60',
+      description: 'Enigmatic Burgess Shale soft-bodied stem arthropod bearing five stalked compound eyes and a flexible frontal clawed proboscis.',
+      temporal_range: '505 Ma (Extinct)',
+      traits: ['Five stalked eyes', 'Frontal grasping proboscis', 'Lateral swimming flaps'],
+      ott_id: 'ott_981205'
+    },
+    {
+      id: 'tax_trilobite',
+      scientific_name: 'Paradoxides davidis',
+      common_name: 'Giant Cambrian Trilobite (Extinct)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Middle Cambrian (~505 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500&auto=format&fit=crop&q=60',
+      description: 'Iconic 35 cm long Cambrian marine trilobite arthropod with calcite crystal compound eyes and multi-segmented dorsal exoskeleton.',
+      temporal_range: '505 - 500 Ma (Extinct)',
+      traits: ['Calcite crystal compound eyes', 'Three-lobed calcified dorsal shield', 'Multiple biramous swimming appendages'],
+      ott_id: 'ott_81920'
+    },
+    {
+      id: 'tax_jaekelopterus',
+      scientific_name: 'Jaekelopterus rhenaniae',
+      common_name: 'Giant Sea Scorpion (2.5 Meter Eurypterid)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Early Devonian (393 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=500&auto=format&fit=crop&q=60',
+      description: 'The largest known arthropod ever discovered, reaching 2.5 meters in length with formidable 46 cm cheliceral pincers.',
+      temporal_range: '400 - 393 Ma (Extinct)',
+      traits: ['Enormous 2.5m body length', 'Enlarged cheliceral strike pincers', 'Aquatic paddle appendages'],
+      ott_id: 'ott_981206'
+    },
+    {
+      id: 'tax_meganeura',
+      scientific_name: 'Meganeura monyi',
+      common_name: 'Giant Carboniferous Griffinfly (75 cm Wingspan)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Late Carboniferous (~305 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?w=500&auto=format&fit=crop&q=60',
+      description: 'Giant predatory dragonfly-like insect with a 75 cm wingspan that thrived in the hyper-oxygenated (35% O2) atmosphere of Carboniferous coal swamps.',
+      temporal_range: '305 - 299 Ma (Extinct)',
+      traits: ['75 cm wingspan', 'High-speed aerial pursuit predator', 'Adapted to 35% atmospheric oxygen'],
+      ott_id: 'ott_981207'
     },
     {
       id: 'tax_drosophila',
       scientific_name: 'Drosophila melanogaster',
-      common_name: 'Common Fruit Fly',
+      common_name: 'Fruit Fly (Model Organism)',
       rank: 'species',
       kingdom: 'Metazoa',
       extinct: false,
       thumbnail_url: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?w=500&auto=format&fit=crop&q=60',
-      description: 'Standard model organism for developmental genetics, neurobiology, and chromosome mechanics since Thomas Hunt Morgan (1910).',
+      description: 'Dipteran insect that is the cornerstone model organism for genetics, chromosome inheritance, and embryological Hox gene patterning.',
       temporal_range: 'Extant',
-      ott_id: 'ott_401920',
-      gbif_key: '5053495'
+      ott_id: 'ott_7227',
+      gbif_key: '5053073'
     },
     {
       id: 'tax_octopus',
       scientific_name: 'Octopus vulgaris',
-      common_name: 'Common Octopus',
+      common_name: 'Common Octopus (Mollusca)',
       rank: 'species',
       kingdom: 'Metazoa',
       extinct: false,
       thumbnail_url: 'https://images.unsplash.com/photo-1545671913-b89ac1b4ac10?w=500&auto=format&fit=crop&q=60',
-      description: 'Highly intelligent coleoid cephalopod with complex decentralized nervous system, eight suction-armed limbs, and rapid chromatophore camouflage.',
+      description: 'Cephalopod mollusc demonstrating extraordinary decentralized intelligence, chromatophore skin camouflage, and flexible tentacular manipulation.',
       temporal_range: 'Extant',
-      ott_id: 'ott_39182',
-      gbif_key: '2289456'
+      traits: ['Decentralized 500-million neuron nervous system', 'Dynamic chromatophore camouflage', 'Independent sensory-motor arm autonomy'],
+      ott_id: 'ott_6645',
+      gbif_key: '2289297'
     },
 
-    // Deuterostomes: Fishes & Amphibians
+    // --- Fishes & Sharks ---
+    {
+      id: 'tax_megalodon',
+      scientific_name: 'Otodus megalodon',
+      common_name: 'Megalodon (Giant Extinct Apex Shark)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Pliocene Extinction (~3.6 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1560275619-4662e36fa65c?w=500&auto=format&fit=crop&q=60',
+      description: 'Colossal 16-meter lamniform shark with 18 cm serrated teeth exerting over 180,000 Newtons of bite force on marine mammals and whales.',
+      temporal_range: '23 - 3.6 Ma (Extinct)',
+      traits: ['16-meter body length', 'Serrated 18 cm cutting teeth', 'Cosmopolitan cetacean hunter'],
+      ott_id: 'ott_981208'
+    },
     {
       id: 'tax_carcharodon',
       scientific_name: 'Carcharodon carcharias',
@@ -629,10 +878,24 @@ export const SEED_DATA: SeedDataPayload = {
       kingdom: 'Metazoa',
       extinct: false,
       thumbnail_url: 'https://images.unsplash.com/photo-1560275619-4662e36fa65c?w=500&auto=format&fit=crop&q=60',
-      description: 'Apex marine predator possessing a cartilaginous skeleton, electroreceptive ampullae of Lorenzini, and serrated triangular teeth.',
-      temporal_range: '16 Ma - Present',
-      ott_id: 'ott_28190',
+      description: 'Apex lamnid shark of temperate coastal waters, utilizing regional endothermy and ampullae of Lorenzini electroreceptors to hunt seals and tuna.',
+      temporal_range: 'Miocene - Present',
+      traits: ['Regional endothermic rete mirabile', 'Triangular serrated teeth', 'Telescopic breaching attack speed'],
+      ott_id: 'ott_13902',
       gbif_key: '2420701'
+    },
+    {
+      id: 'tax_rhincodon',
+      scientific_name: 'Rhincodon typus',
+      common_name: 'Whale Shark (Largest Living Fish)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: false,
+      thumbnail_url: 'https://images.unsplash.com/photo-1560275619-4662e36fa65c?w=500&auto=format&fit=crop&q=60',
+      description: 'Docile filter-feeding carpet shark growing up to 18 meters, filtering plankton and small nekton through specialized gill filter pads.',
+      temporal_range: 'Extant (Endangered)',
+      ott_id: 'ott_13903',
+      gbif_key: '2420702'
     },
     {
       id: 'tax_danio',
@@ -661,21 +924,423 @@ export const SEED_DATA: SeedDataPayload = {
       gbif_key: '2431980'
     },
 
-    // Sauropsids: Dinosaurs, Birds & Reptiles
+    // --- Stem Synapsids ---
+    {
+      id: 'tax_dimetrodon',
+      scientific_name: 'Dimetrodon grandis',
+      common_name: 'Dimetrodon (Permian Sail-backed Synapsid)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Early Permian (272 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500&auto=format&fit=crop&q=60',
+      description: 'Apex Permian synapsid closely related to the mammalian stem lineage, featuring a prominent neural spine dorsal sail for thermoregulation.',
+      temporal_range: '295 - 272 Ma (Extinct)',
+      traits: ['Vascular neural spine sail', 'Two measures of differentiated teeth (synapsid precursor)', 'Sprawling robust terrestrial gait'],
+      ott_id: 'ott_981209'
+    },
+
+    // ==========================================
+    // SAUROPSIDA: DINOSAURS & EXTINCT ARCHOSAURS
+    // ==========================================
+
+    // --- Tyrannosauroids (Dense Clade Drill-Down) ---
     {
       id: 'tax_tyrannosaurus',
       scientific_name: 'Tyrannosaurus rex',
-      common_name: 'T-Rex (King of Tyrant Lizards)',
+      common_name: 'T-Rex (King of Tyrant Dinosaurs)',
       rank: 'species',
       kingdom: 'Metazoa',
       extinct: true,
       extinction_era: 'Late Cretaceous K-Pg Extinction (66 Ma)',
       thumbnail_url: 'https://images.unsplash.com/photo-1570481662006-a3a1374699e8?w=500&auto=format&fit=crop&q=60',
-      description: 'Massive bipedal theropod dinosaur with crushing bite force exceeding 35,000 Newtons, stereoscopic depth perception, and acute olfactory lobes.',
+      description: 'Massive 12-meter bipedal theropod dinosaur with crushing bone-shearing bite force exceeding 35,000 N, binocular vision, and acute olfaction.',
       temporal_range: '68 - 66 Ma (Extinct)',
-      traits: ['Crushing bone-cracking bite', 'Bipedal theropod', 'Binocular vision'],
+      habitat: 'Floodplains and subtropical forests of Laramidia (North America)',
+      traits: ['35,000 N bone-crushing bite', 'Binocular 55-degree depth vision', 'Fused rugose nasal bridge'],
       ott_id: 'ott_819201'
     },
+    {
+      id: 'tax_tarbosaurus',
+      scientific_name: 'Tarbosaurus bataar',
+      common_name: 'Tarbosaurus (Asian Giant Tyrannosaurid)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Late Cretaceous (70 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1570481662006-a3a1374699e8?w=500&auto=format&fit=crop&q=60',
+      description: 'Apex predator of Late Cretaceous Mongolia (Nemegt Formation), sister taxon to T. rex with rigid locking lower jaw mechanism for hunting sauropods.',
+      temporal_range: '70 - 66 Ma (Extinct)',
+      habitat: 'River channels and floodplains of the Nemegt Basin, Mongolia',
+      traits: ['Rigid locking mandibular symphysis', 'Sauropod specialist predator', 'Extremely reduced two-clawed forelimbs'],
+      ott_id: 'ott_981210'
+    },
+    {
+      id: 'tax_albertosaurus',
+      scientific_name: 'Albertosaurus sarcophagus',
+      common_name: 'Albertosaurus (Slender Fast Pack Tyrannosaur)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Late Cretaceous (71 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1570481662006-a3a1374699e8?w=500&auto=format&fit=crop&q=60',
+      description: 'Agile 9-meter albertosaurine tyrannosaurid from Alberta, Canada, with long cursorial leg proportions and mass bonebed evidence of pack hunting.',
+      temporal_range: '71 - 68 Ma (Extinct)',
+      habitat: 'Horseshoe Canyon coastal plains, Alberta',
+      traits: ['High cursorial running speed (30+ km/h)', 'Pack hunting bonebed association', 'Slender albertosaurine skull'],
+      ott_id: 'ott_981211'
+    },
+    {
+      id: 'tax_gorgosaurus',
+      scientific_name: 'Gorgosaurus libratus',
+      common_name: 'Gorgosaurus (Fierce Lizard)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Late Cretaceous (76.6 - 75.1 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1570481662006-a3a1374699e8?w=500&auto=format&fit=crop&q=60',
+      description: 'Laramidian tyrannosaurid known from numerous pristine fossils in Dinosaur Provincial Park with preserved juvenile stomach contents.',
+      temporal_range: '76.6 - 75.1 Ma (Extinct)',
+      traits: ['Juvenile prey niche partitioning', 'Elongated lower leg elements', 'Serrated recurved teeth'],
+      ott_id: 'ott_981212'
+    },
+    {
+      id: 'tax_daspletosaurus',
+      scientific_name: 'Daspletosaurus torosus',
+      common_name: 'Daspletosaurus (Heavy-Built Tyrannosaur)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Late Cretaceous (77 - 74 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1570481662006-a3a1374699e8?w=500&auto=format&fit=crop&q=60',
+      description: 'Robust, thick-skulled tyrannosaurine that coexisted with Gorgosaurus, specializing in armored ceratopsian and hadrosaur prey.',
+      temporal_range: '77 - 74 Ma (Extinct)',
+      traits: ['Heavy bone-crushing skull', 'Ceratopsian hunter specialist', 'Large postorbital horns'],
+      ott_id: 'ott_981213'
+    },
+    {
+      id: 'tax_yutyrannus',
+      scientific_name: 'Yutyrannus huali',
+      common_name: 'Yutyrannus (Feathered Tyrant Giant)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Early Cretaceous (125 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1570481662006-a3a1374699e8?w=500&auto=format&fit=crop&q=60',
+      description: '9-meter 1.4-tonne early tyrannosauroid from Liaoning, China, preserving extensive direct fossil proof of dense filamentous plumage.',
+      temporal_range: '125 Ma (Extinct)',
+      habitat: 'Volcanic temperate forests of the Yixian Formation, China',
+      traits: ['Dense filamentous feather coat (20 cm)', 'Three-fingered functional manus', 'Mid-line cranial crest'],
+      ott_id: 'ott_981214'
+    },
+    {
+      id: 'tax_dilong',
+      scientific_name: 'Dilong paradoxus',
+      common_name: 'Dilong (Emperor Dragon)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Early Cretaceous (126 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1570481662006-a3a1374699e8?w=500&auto=format&fit=crop&q=60',
+      description: 'Small 1.6-meter basal tyrannosauroid from the Yixian Formation possessing proto-feathers and three-fingered hands.',
+      temporal_range: '126 Ma (Extinct)',
+      traits: ['Proto-feather filament coat', 'Basal small-bodied morphology', 'Three grasping digits'],
+      ott_id: 'ott_981215'
+    },
+    {
+      id: 'tax_guanlong',
+      scientific_name: 'Guanlong wucaii',
+      common_name: 'Guanlong (Crested Primitive Tyrannosauroid)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Late Jurassic (160 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1570481662006-a3a1374699e8?w=500&auto=format&fit=crop&q=60',
+      description: '3-meter proceratosaurid tyrannosauroid from the Shishugou Formation bearing a delicate, hollow pneumatic cranial display crest.',
+      temporal_range: '160 Ma (Extinct)',
+      traits: ['Hollow display nasal crest', 'Three-clawed predatory forelimbs', 'Early Jurassic tyrannosauroid ancestor'],
+      ott_id: 'ott_981216'
+    },
+    {
+      id: 'tax_nanuqsaurus',
+      scientific_name: 'Nanuqsaurus hoglundi',
+      common_name: 'Nanuqsaurus (Arctic Dwarf Tyrannosaur)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Late Cretaceous (69 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1570481662006-a3a1374699e8?w=500&auto=format&fit=crop&q=60',
+      description: 'Diminutive 5-meter tyrannosaurid adapted to polar dark winters and seasonal resource scarcity in the Prince Creek Formation of Alaska.',
+      temporal_range: '69 - 68 Ma (Extinct)',
+      traits: ['Insular/polar dwarfism adaptation', 'Thick insulating feather coat', 'Expanded olfactory acuity'],
+      ott_id: 'ott_981217'
+    },
+    {
+      id: 'tax_alioramus',
+      scientific_name: 'Alioramus remotus',
+      common_name: 'Alioramus (Long-Snouted Tyrannosaurid)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Late Cretaceous (70 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1570481662006-a3a1374699e8?w=500&auto=format&fit=crop&q=60',
+      description: 'Slender, long-snouted alioramin tyrannosaurid with a row of five bony hornlets along the top of its snout, built for catching fast agile prey.',
+      temporal_range: '70 Ma (Extinct)',
+      traits: ['Elongated narrow snout with 76+ teeth', 'Five nasal cranial hornlets', 'Lightweight gracile pursuit build'],
+      ott_id: 'ott_981218'
+    },
+
+    // --- Dromaeosauridae (Raptors) ---
+    {
+      id: 'tax_velociraptor',
+      scientific_name: 'Velociraptor mongoliensis',
+      common_name: 'Velociraptor (Swift Desert Hunter)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Late Cretaceous (75 - 71 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500&auto=format&fit=crop&q=60',
+      description: 'Turkey-sized feathered dromaeosaurid armed with an 8 cm hyper-extensible sickle claw on each foot, quill knobs on ulna for flight feathers, and pack coordination.',
+      temporal_range: '75 - 71 Ma (Extinct)',
+      habitat: 'Sand dunes and arid oasis of the Djadochta Formation, Gobi Desert',
+      traits: ['8 cm killing sickle claw', 'Ulnar quill knobs for flight-grade plumage', 'Stiffened rod-like balancing tail'],
+      ott_id: 'ott_981219'
+    },
+    {
+      id: 'tax_deinonychus',
+      scientific_name: 'Deinonychus antirrhopus',
+      common_name: 'Deinonychus (Terrible Claw)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Early Cretaceous (115 - 108 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500&auto=format&fit=crop&q=60',
+      description: '3.4-meter dromaeosaur whose 1969 discovery sparked the "Dinosaur Renaissance" by demonstrating high metabolism, active agility, and bird ancestry.',
+      temporal_range: '115 - 108 Ma (Extinct)',
+      traits: ['13 cm sickle claw', 'Triggered the Dinosaur Renaissance', 'Pack hunting of Tenontosaurus'],
+      ott_id: 'ott_981220'
+    },
+    {
+      id: 'tax_utahraptor',
+      scientific_name: 'Utahraptor ostrommaysi',
+      common_name: 'Utahraptor (Colossal 7-Meter Apex Raptor)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Early Cretaceous (135 - 130 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500&auto=format&fit=crop&q=60',
+      description: 'The largest known dromaeosaurid, measuring 7 meters and weighing 500 kg, armed with a devastating 24 cm sickle claw built for disemboweling iguanodonts.',
+      temporal_range: '135 - 130 Ma (Extinct)',
+      traits: ['Massive 7-meter body length', '24 cm sickle foot claw', 'Heavy-boned muscular predator'],
+      ott_id: 'ott_981221'
+    },
+    {
+      id: 'tax_microraptor',
+      scientific_name: 'Microraptor gui',
+      common_name: 'Microraptor (Four-Winged Gliding Raptor)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Early Cretaceous (120 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500&auto=format&fit=crop&q=60',
+      description: 'Small arboreal dromaeosaur with iridescent black plumage and aerodynamic flight feathers on all four limbs, demonstrating early biplane gliding.',
+      temporal_range: '120 Ma (Extinct)',
+      traits: ['Four-winged biplane plumage', 'Iridescent glossy black melanosomes', 'Arboreal glider'],
+      ott_id: 'ott_981222'
+    },
+
+    // --- Spinosauridae & Carnosauria ---
+    {
+      id: 'tax_spinosaurus',
+      scientific_name: 'Spinosaurus aegyptiacus',
+      common_name: 'Spinosaurus (Semi-Aquatic River Giant)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Late Cretaceous (99 - 93.5 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500&auto=format&fit=crop&q=60',
+      description: '14-meter semi-aquatic theropod with a 1.8-meter dorsal sail, paddle-like finned tail, dense osteosclerotic bones, and crocodile-like fish-snagging snout.',
+      temporal_range: '99 - 93.5 Ma (Extinct)',
+      habitat: 'Vast river and mangrove systems of the Kem Kem Group, North Africa',
+      traits: ['1.8-meter dorsal sail', 'Fin-like paddle propulsion tail', 'Osteosclerotic bone ballast for diving'],
+      ott_id: 'ott_981223'
+    },
+    {
+      id: 'tax_allosaurus',
+      scientific_name: 'Allosaurus fragilis',
+      common_name: 'Allosaurus (Jurassic Apex Carnosaur)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Late Jurassic (155 - 145 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500&auto=format&fit=crop&q=60',
+      description: 'The dominant apex theropod of the Morrison Formation, hunting with wide 92-degree jaw gape, slashing axe-like bite mechanics, and three large hand claws.',
+      temporal_range: '155 - 145 Ma (Extinct)',
+      traits: ['Hatchet-like slashing jaw strike', 'Three-clawed muscular grasping arms', 'Lacrimal cranial brow crests'],
+      ott_id: 'ott_981224'
+    },
+    {
+      id: 'tax_carnotaurus',
+      scientific_name: 'Carnotaurus sastrei',
+      common_name: 'Carnotaurus (Meat-Eating Bull)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Late Cretaceous (72 - 69.9 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500&auto=format&fit=crop&q=60',
+      description: 'Abelisaurid theropod with thick frontal brow horns, vestigial four-fingered forelimbs, and massive caudofemoralis leg muscles built for rapid sprinting.',
+      temporal_range: '72 - 69.9 Ma (Extinct)',
+      traits: ['Frontal brow horns', 'Vestigial four-fingered forelimbs', 'Fast sprint stride'],
+      ott_id: 'ott_981225'
+    },
+
+    // --- Sauropodomorpha (Long-Necked Giants) ---
+    {
+      id: 'tax_brachiosaurus',
+      scientific_name: 'Brachiosaurus altithorax',
+      common_name: 'Brachiosaurus (High-Browsing Giraffe Titan)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Late Jurassic (154 - 150 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500&auto=format&fit=crop&q=60',
+      description: 'Enormous 22-meter sauropod whose longer forelimbs gave it an inclined posture to browse tree crowns over 12 meters high in the Morrison Formation.',
+      temporal_range: '154 - 150 Ma (Extinct)',
+      traits: ['Longer forelimbs than hindlimbs', 'High-browsing cranial crest', 'Pneumatized cervical vertebrae'],
+      ott_id: 'ott_981226'
+    },
+    {
+      id: 'tax_diplodocus',
+      scientific_name: 'Diplodocus carnegii',
+      common_name: 'Diplodocus (Whip-Tailed Long-Neck)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Late Jurassic (154 - 152 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500&auto=format&fit=crop&q=60',
+      description: '27-meter diplodocid sauropod characterized by an extremely elongated neck, peg-like raking teeth, and a whiplash tail capable of supersonic cracks.',
+      temporal_range: '154 - 152 Ma (Extinct)',
+      traits: ['Whiplash defensive tail', 'Peg-like raking teeth', 'Horizontal low-to-medium browsing'],
+      ott_id: 'ott_981227'
+    },
+    {
+      id: 'tax_argentinosaurus',
+      scientific_name: 'Argentinosaurus huinculensis',
+      common_name: 'Argentinosaurus (Colossal 70-Tonne Titanosaur)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Late Cretaceous (96 - 92 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500&auto=format&fit=crop&q=60',
+      description: 'One of the heaviest and longest land animals ever to exist, estimated at 35 meters in length and weighing between 70 to 80 tonnes.',
+      temporal_range: '96 - 92 Ma (Extinct)',
+      traits: ['70-80 tonne colossal body mass', 'Giant 1.5-meter vertebrae', 'Massive columnar weight-bearing limbs'],
+      ott_id: 'ott_981228'
+    },
+
+    // --- Ornithischia (Horned & Armored Dinosaurs) ---
+    {
+      id: 'tax_triceratops',
+      scientific_name: 'Triceratops horridus',
+      common_name: 'Triceratops (Three-Horned Herbivore)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Late Cretaceous K-Pg Extinction (66 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500&auto=format&fit=crop&q=60',
+      description: 'Iconic 9-meter chasmosaurine ceratopsian bearing two 1-meter brow horns, a nasal horn, and a solid bone neck frill to defend against T. rex.',
+      temporal_range: '68 - 66 Ma (Extinct)',
+      traits: ['Three defensive cranial horns', 'Solid bone neck frill', 'Shearing dental batteries'],
+      ott_id: 'ott_981229'
+    },
+    {
+      id: 'tax_ankylosaurus',
+      scientific_name: 'Ankylosaurus magniventris',
+      common_name: 'Ankylosaurus (Armored Tank with Tail Club)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Late Cretaceous K-Pg Extinction (66 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500&auto=format&fit=crop&q=60',
+      description: 'Heavily armored herbivore protected by fused osteoderm plates, armored eyelids, and a heavy terminal bone tail club capable of shattering theropod bones.',
+      temporal_range: '68 - 66 Ma (Extinct)',
+      traits: ['Terminal bone tail club', 'Fused osteoderm armor plates', 'Wide barrel-shaped gut for fermentation'],
+      ott_id: 'ott_981230'
+    },
+    {
+      id: 'tax_stegosaurus',
+      scientific_name: 'Stegosaurus stenops',
+      common_name: 'Stegosaurus (Plated & Spiked Tail Herbivore)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Late Jurassic (155 - 150 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500&auto=format&fit=crop&q=60',
+      description: '9-meter thyreophoran dinosaur equipped with alternating vascular dorsal plates for thermoregulation/display and four 1-meter tail spikes (thagomizer).',
+      temporal_range: '155 - 150 Ma (Extinct)',
+      traits: ['Alternating dorsal osteoderm plates', 'Four-spiked thagomizer tail weapon', 'Narrow cropping beak'],
+      ott_id: 'ott_981231'
+    },
+    {
+      id: 'tax_parasaurolophus',
+      scientific_name: 'Parasaurolophus walkeri',
+      common_name: 'Parasaurolophus (Crested Resonating Hadrosaur)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Late Cretaceous (76.5 - 73 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500&auto=format&fit=crop&q=60',
+      description: 'Hadrosaurid duck-billed dinosaur famous for a hollow 1.8-meter backward-curving cranial crest functioning as an acoustic resonator for vocal bellowing.',
+      temporal_range: '76.5 - 73 Ma (Extinct)',
+      traits: ['Hollow acoustic resonant crest', 'Grinding dental battery with 1,000+ teeth', 'Facultative bipedal gait'],
+      ott_id: 'ott_981232'
+    },
+
+    // --- Pterosaurs & Marine Reptiles ---
+    {
+      id: 'tax_quetzalcoatlus',
+      scientific_name: 'Quetzalcoatlus northropi',
+      common_name: 'Quetzalcoatlus (Giant 11-Meter Pterosaur)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Late Cretaceous K-Pg Extinction (66 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500&auto=format&fit=crop&q=60',
+      description: 'Giraffe-sized azhdarchid pterosaur with an 11-meter wingspan, capable of long-distance soaring and stalking terrestrial prey on foot like a giant stork.',
+      temporal_range: '68 - 66 Ma (Extinct)',
+      traits: ['11-meter wingspan', 'Giraffe-tall quadrupedal stance', 'Long toothless spearing beak'],
+      ott_id: 'ott_981233'
+    },
+    {
+      id: 'tax_mosasaurus',
+      scientific_name: 'Mosasaurus hoffmannii',
+      common_name: 'Mosasaurus (Apex Cretaceous Sea Monster)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Late Cretaceous K-Pg Extinction (66 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=500&auto=format&fit=crop&q=60',
+      description: '17-meter apex marine squamate with a shark-like tail fin, hydrofoil flippers, and double-hinged jaws armed with pterygoid throat teeth to swallow large prey.',
+      temporal_range: '70 - 66 Ma (Extinct)',
+      traits: ['17-meter body length', 'Pterygoid throat teeth', 'Double-hinged squamate jaw'],
+      ott_id: 'ott_981234'
+    },
+    {
+      id: 'tax_ichthyosaurus',
+      scientific_name: 'Ichthyosaurus communis',
+      common_name: 'Ichthyosaurus (Dolphin-like Marine Reptile)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Early Jurassic (200 - 190 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=500&auto=format&fit=crop&q=60',
+      description: 'Streamlined viviparous marine reptile exhibiting classic convergent evolution with modern dolphins, possessing large sclerotic eye rings for deep hunting.',
+      temporal_range: '200 - 190 Ma (Extinct)',
+      traits: ['Hydrodynamic tuna-like morphology', 'Large sclerotic eye rings', 'Live birth (viviparity)'],
+      ott_id: 'ott_981235'
+    },
+
+    // --- Avialae (Birds) ---
     {
       id: 'tax_archaeopteryx',
       scientific_name: 'Archaeopteryx lithographica',
@@ -684,7 +1349,8 @@ export const SEED_DATA: SeedDataPayload = {
       kingdom: 'Metazoa',
       extinct: true,
       extinction_era: 'Late Jurassic (150 Ma)',
-      description: 'Transitional fossil between non-avian feathered dinosaurs and modern avians, possessing flight feathers, toothed jaws, clawed wing digits, and a bony tail.',
+      thumbnail_url: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500&auto=format&fit=crop&q=60',
+      description: 'Transitional fossil between non-avian feathered theropod dinosaurs and modern avians, possessing flight feathers, toothed jaws, clawed wing digits, and a bony tail.',
       temporal_range: '150.8 - 148.5 Ma (Extinct)',
       traits: ['Asymmetric flight feathers', 'Toothed jaw', 'Long bony tail'],
       ott_id: 'ott_812903'
@@ -729,11 +1395,15 @@ export const SEED_DATA: SeedDataPayload = {
       ott_id: 'ott_78190'
     },
 
-    // Mammals
+    // ==========================================
+    // MAMMALIA & CENOZOIC MAMMALS
+    // ==========================================
+
+    // --- Monotremes ---
     {
       id: 'tax_platypus',
       scientific_name: 'Ornithorhynchus anatinus',
-      common_name: 'Duck-billed Platypus',
+      common_name: 'Duck-billed Platypus (Monotreme)',
       rank: 'species',
       kingdom: 'Metazoa',
       extinct: false,
@@ -744,18 +1414,20 @@ export const SEED_DATA: SeedDataPayload = {
       ott_id: 'ott_19082',
       gbif_key: '2433433'
     },
+
+    // --- Felidae & Machairodontinae (Sabertooths & Big Cats) ---
     {
       id: 'tax_smilodon',
       scientific_name: 'Smilodon fatalis',
-      common_name: 'Sabertooth Cat (Extinct)',
+      common_name: 'Sabertooth Cat (Extinct Pleistocene Apex)',
       rank: 'species',
       kingdom: 'Metazoa',
       extinct: true,
       extinction_era: 'Quaternary Megafaunal Extinction (~10,000 BP)',
       thumbnail_url: 'https://images.unsplash.com/photo-1561731216-c3a4d99437d5?w=500&auto=format&fit=crop&q=60',
-      description: 'Extinct machairodontine saber-toothed felid that roamed North America, armed with 28 cm maxillary canine sabers to subdue Pleistocene megafauna.',
+      description: 'Extinct machairodontine saber-toothed felid that roamed North America, armed with 28 cm maxillary canine sabers and massive forelimbs to subdue megafauna.',
       temporal_range: '1.6 Ma - 10,000 BP (Extinct)',
-      traits: ['Elongated maxillary canines', 'Massive forelimb musculature', 'Pack hunting predator'],
+      traits: ['28 cm maxillary canine sabers', 'Massive forelimb grapple musculature', 'Social pack predator'],
       ott_id: 'ott_901824'
     },
     {
@@ -771,9 +1443,66 @@ export const SEED_DATA: SeedDataPayload = {
       habitat: 'Sub-Saharan African savannas and Gir Forest, India',
       traits: ['Social pride structure', 'Sexual dimorphism (mane)', 'Apex carnivore'],
       ott_id: 'ott_93302',
-      gbif_key: '5219404',
-      source_study_ids: ['ot_1234', 'treebase_987']
+      gbif_key: '5219404'
     },
+    {
+      id: 'tax_panthera_tigris',
+      scientific_name: 'Panthera tigris',
+      common_name: 'Tiger (Largest Extant Felid)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: false,
+      thumbnail_url: 'https://images.unsplash.com/photo-1534188753412-3e26d0d618d6?w=500&auto=format&fit=crop&q=60',
+      description: 'The largest living cat species, weighing up to 300 kg with distinctive vertical black stripes on orange-brown fur and solitary forest ambush hunting.',
+      temporal_range: 'Pleistocene - Present',
+      traits: ['Vertical camouflage stripes', 'Solitary ambush predator', 'Adept swimmer'],
+      ott_id: 'ott_93303',
+      gbif_key: '5219405'
+    },
+    {
+      id: 'tax_acinonyx_jubatus',
+      scientific_name: 'Acinonyx jubatus',
+      common_name: 'Cheetah (Fastest Land Animal)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: false,
+      thumbnail_url: 'https://images.unsplash.com/photo-1547721064-da6cfb341d50?w=600&auto=format&fit=crop&q=80',
+      description: 'Fastest land mammal on Earth, reaching speeds of 110 km/h with semi-retractile claws, flexible lumbar spine, and enlarged respiratory passages.',
+      temporal_range: 'Late Pliocene - Present',
+      traits: ['Semi-retractable traction claws', 'Enlarged respiratory nasal passages', 'Flexible lumbar sprint spine'],
+      ott_id: 'ott_93304',
+      gbif_key: '5219406'
+    },
+    {
+      id: 'tax_panthera_uncia',
+      scientific_name: 'Panthera uncia',
+      common_name: 'Snow Leopard',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: false,
+      thumbnail_url: 'https://images.unsplash.com/photo-1564349683136-77e08dba1ef6?w=600&auto=format&fit=crop&q=80',
+      description: 'High-altitude felid native to mountain ranges of Central and South Asia, adapted to rugged, freezing environments with thick smoke-gray fur.',
+      temporal_range: 'Pleistocene - Present',
+      traits: ['Dense thick woolly fur', 'Wide paws acting as natural snowshoes', 'Long thick tail for balance'],
+      ott_id: 'ott_93305',
+      gbif_key: '5219407'
+    },
+    {
+      id: 'tax_panthera_onca',
+      scientific_name: 'Panthera onca',
+      common_name: 'Jaguar (Apex Neotropical Cat)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: false,
+      thumbnail_url: 'https://images.unsplash.com/photo-1575550959106-5a7defe28b56?w=600&auto=format&fit=crop&q=80',
+      description: 'Largest cat species in the Americas with exceptionally powerful bite force capable of piercing turtle shells and hunting caimans.',
+      temporal_range: 'Early Pleistocene - Present',
+      traits: ['Crushing bite force', 'Rosette camouflage coats', 'Adept swimmer'],
+      ott_id: 'ott_93306',
+      gbif_key: '5219408'
+    },
+
+    // --- Canidae & Ursidae (Dogs, Wolves & Bears) ---
     {
       id: 'tax_canis_lupus',
       scientific_name: 'Canis lupus',
@@ -790,18 +1519,122 @@ export const SEED_DATA: SeedDataPayload = {
       gbif_key: '5219173'
     },
     {
+      id: 'tax_aenocyon_dirus',
+      scientific_name: 'Aenocyon dirus',
+      common_name: 'Dire Wolf (Extinct Megafaunal Hunter)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Late Pleistocene Extinction (~9,500 BP)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1564865878688-9a244444042a?w=500&auto=format&fit=crop&q=60',
+      description: 'Heavy-set extinct hypercarnivorous canid abundant in the La Brea Tar Pits, with massive crushing premolars adapted to subduing bison and horses.',
+      temporal_range: '125,000 - 9,500 BP (Extinct)',
+      traits: ['Heavy bone-cracking dentition', 'Massive robust musculoskeletal frame', 'Cooperative big-game hunter'],
+      ott_id: 'ott_981236'
+    },
+    {
+      id: 'tax_ursus_spelaeus',
+      scientific_name: 'Ursus spelaeus',
+      common_name: 'Cave Bear (Extinct Pleistocene Titan)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Late Pleistocene (~24,000 BP)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?w=500&auto=format&fit=crop&q=60',
+      description: 'Massive herbivorous bear of Ice Age Europe reaching 1,000 kg, famous for communal cave hibernation and interactions with Neanderthals.',
+      temporal_range: '300,000 - 24,000 BP (Extinct)',
+      traits: ['1,000 kg body mass', 'Domed high-vaulted cranium', 'Specialized herbivorous molar grinding surface'],
+      ott_id: 'ott_981237'
+    },
+
+    // --- Cetacea (Whales & Marine Mammals) ---
+    {
+      id: 'tax_pakicetus',
+      scientific_name: 'Pakicetus inachus',
+      common_name: 'Pakicetus (Four-Legged Whale Ancestor)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Early Eocene (~50 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1568430462989-44163eb1752f?w=500&auto=format&fit=crop&q=60',
+      description: 'Four-legged amphibious terrestrial artiodactyl whose specialized involucrum ear bone firmly established the land-to-sea origin of all whales.',
+      temporal_range: '52 - 48 Ma (Extinct)',
+      traits: ['Pachyosteosclerotic tympanic bulla involucrum', 'Four functional cursorial legs', 'Amphibious freshwater predator'],
+      ott_id: 'ott_981238'
+    },
+    {
+      id: 'tax_basilosaurus',
+      scientific_name: 'Basilosaurus cetoides',
+      common_name: 'Basilosaurus (Ancient 18-Meter Eocene Whale)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Late Eocene (40 - 34 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1568430462989-44163eb1752f?w=500&auto=format&fit=crop&q=60',
+      description: 'Elongated 18-meter serpentine early marine whale possessing vestigial hind limbs and heterodont crushing teeth to hunt sharks and smaller whales.',
+      temporal_range: '40 - 34 Ma (Extinct)',
+      traits: ['18-meter elongated serpentine body', 'Vestigial external hind limbs', 'Apex marine Eocene predator'],
+      ott_id: 'ott_981239'
+    },
+    {
       id: 'tax_balaenoptera',
       scientific_name: 'Balaenoptera musculus',
-      common_name: 'Blue Whale',
+      common_name: 'Blue Whale (Largest Animal in History)',
       rank: 'species',
       kingdom: 'Metazoa',
       extinct: false,
       thumbnail_url: 'https://images.unsplash.com/photo-1568430462989-44163eb1752f?w=500&auto=format&fit=crop&q=60',
       description: 'The largest known animal ever to have existed on Earth, reaching lengths of 30 meters and masses over 190 metric tons, feeding on krill via baleen plates.',
       temporal_range: 'Late Pliocene - Present',
+      traits: ['30-meter length / 190-tonne mass', 'Baleen plates for lunge-feeding', 'Lowest frequency infrasonic vocal calls'],
       ott_id: 'ott_31908',
       gbif_key: '2440735'
     },
+    {
+      id: 'tax_orcinus_orca',
+      scientific_name: 'Orcinus orca',
+      common_name: 'Killer Whale / Orca',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: false,
+      thumbnail_url: 'https://images.unsplash.com/photo-1568430462989-44163eb1752f?w=500&auto=format&fit=crop&q=60',
+      description: 'Cosmopolitan apex marine dolphin demonstrating complex matrilineal pod cultures, sophisticated dialect vocalizations, and coordinated hunting.',
+      temporal_range: 'Extant',
+      traits: ['Matrilineal pod culture and dialects', 'Apex marine generalist predator', 'High encephalization quotient'],
+      ott_id: 'ott_31909',
+      gbif_key: '2440736'
+    },
+
+    // --- Proboscidea (Mammoths & Elephants) ---
+    {
+      id: 'tax_mammuthus',
+      scientific_name: 'Mammuthus primigenius',
+      common_name: 'Woolly Mammoth (Extinct Ice Age Giant)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Holocene Extinction (~4,000 BP on Wrangel Island)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?w=500&auto=format&fit=crop&q=60',
+      description: 'Cold-adapted proboscidean with long shaggy coat, 4-meter curved tusks, small ears to prevent frostbite, and specialized antifreeze hemoglobin.',
+      temporal_range: '400,000 - 4,000 BP (Extinct)',
+      traits: ['Antifreeze cold-adapted hemoglobin', '4-meter curved ivory tusks', 'Dense dual-layer fur insulation'],
+      ott_id: 'ott_981240'
+    },
+    {
+      id: 'tax_loxodonta',
+      scientific_name: 'Loxodonta africana',
+      common_name: 'African Bush Elephant',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: false,
+      thumbnail_url: 'https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?w=500&auto=format&fit=crop&q=60',
+      description: 'Largest living terrestrial animal, exhibiting sophisticated social empathy, infrasonic seismic communication, and keystone ecological engineering.',
+      temporal_range: 'Extant',
+      ott_id: 'ott_981241',
+      gbif_key: '2437001'
+    },
+
+    // --- Rodents ---
     {
       id: 'tax_mus_musculus',
       scientific_name: 'Mus musculus',
@@ -815,6 +1648,78 @@ export const SEED_DATA: SeedDataPayload = {
       ott_id: 'ott_52109',
       gbif_key: '2438763'
     },
+
+    // --- Primates & Hominini (Human Evolution Lineage) ---
+    {
+      id: 'tax_australopithecus',
+      scientific_name: 'Australopithecus afarensis',
+      common_name: 'Australopithecus ("Lucy" - 3.2 Ma)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Pliocene (~2.9 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=500&auto=format&fit=crop&q=60',
+      description: 'Early bipedal hominin famous from the "Lucy" fossil (AL 288-1) and Laetoli footprints, demonstrating committed terrestrial bipedal walking.',
+      temporal_range: '3.9 - 2.9 Ma (Extinct)',
+      traits: ['Habitual terrestrial bipedalism', 'Valgus knee and arched foot', 'Chimpanzee-sized cranial capacity (430 cc)'],
+      ott_id: 'ott_981242'
+    },
+    {
+      id: 'tax_homo_habilis',
+      scientific_name: 'Homo habilis',
+      common_name: 'Homo habilis ("Handy Man" Oldowan Toolmaker)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Early Pleistocene (~1.65 Ma)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=500&auto=format&fit=crop&q=60',
+      description: 'Earliest consensus member of the genus Homo, associated with the Oldowan stone pebble tool industry and expanded braincase (~610 cc).',
+      temporal_range: '2.3 - 1.65 Ma (Extinct)',
+      traits: ['Oldowan stone tool manufacture', 'Expanded cranial volume (610 cc)', 'Precision grip manipulation'],
+      ott_id: 'ott_981243'
+    },
+    {
+      id: 'tax_homo_erectus',
+      scientific_name: 'Homo erectus',
+      common_name: 'Homo erectus (Upright Man / Fire Master)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Pleistocene (~110,000 BP in Java)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=500&auto=format&fit=crop&q=60',
+      description: 'First hominin species to leave Africa, master controlled fire, craft symmetrical Acheulean handaxes, and possess human-like body proportions.',
+      temporal_range: '1.9 Ma - 110,000 BP (Extinct)',
+      traits: ['Controlled use of fire for cooking', 'Acheulean bifacial handaxes', 'First hominin dispersal across Eurasia'],
+      ott_id: 'ott_981244'
+    },
+    {
+      id: 'tax_homo_heidelbergensis',
+      scientific_name: 'Homo heidelbergensis',
+      common_name: 'Heidelberg Man (Ancestor of Neanderthals & Sapiens)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Middle Pleistocene (~200,000 BP)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=500&auto=format&fit=crop&q=60',
+      description: 'Large-brained (1250 cc) archaic human that directly gave rise to Neanderthals in Europe and Homo sapiens in Africa, known for Schöningen wooden spears.',
+      temporal_range: '600,000 - 200,000 BP (Extinct)',
+      traits: ['Schöningen big-game hunting spears', '1250 cc cranial capacity', 'Common ancestor of Sapiens & Neanderthals'],
+      ott_id: 'ott_981245'
+    },
+    {
+      id: 'tax_neanderthal',
+      scientific_name: 'Homo neanderthalensis',
+      common_name: 'Neanderthal (Extinct Archaic Human)',
+      rank: 'species',
+      kingdom: 'Metazoa',
+      extinct: true,
+      extinction_era: 'Late Pleistocene (~40,000 BP)',
+      thumbnail_url: 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=500&auto=format&fit=crop&q=60',
+      description: 'Archaic human species adapted to cold Eurasian climates, skilled in Mousterian stone tools, intentional burial rituals, and interbred with Homo sapiens.',
+      temporal_range: '430,000 - 40,000 BP (Extinct)',
+      traits: ['Mousterian tool industry', 'Occipital bun & robust cold-adapted build', '1-2% Eurasian genomic contribution'],
+      ott_id: 'ott_981902'
+    },
     {
       id: 'tax_pan_troglodytes',
       scientific_name: 'Pan troglodytes',
@@ -827,20 +1732,6 @@ export const SEED_DATA: SeedDataPayload = {
       temporal_range: 'Extant (Endangered)',
       ott_id: 'ott_81290',
       gbif_key: '2436440'
-    },
-    {
-      id: 'tax_neanderthal',
-      scientific_name: 'Homo neanderthalensis',
-      common_name: 'Neanderthal (Extinct)',
-      rank: 'species',
-      kingdom: 'Metazoa',
-      extinct: true,
-      extinction_era: 'Late Pleistocene (~40,000 BP)',
-      thumbnail_url: 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=500&auto=format&fit=crop&q=60',
-      description: 'Archaic human species adapted to cold Eurasian climates, skilled in Mousterian stone tools, intentional burial rituals, and interbred with Homo sapiens.',
-      temporal_range: '430,000 - 40,000 BP (Extinct)',
-      traits: ['Mousterian tool industry', 'Occipital bun & robust build', '1-2% Eurasian genomic contribution'],
-      ott_id: 'ott_981902'
     },
     {
       id: 'tax_homo_sapiens',
@@ -861,7 +1752,9 @@ export const SEED_DATA: SeedDataPayload = {
   ],
 
   edges: [
-    // Tree Roots from LUCA
+    // ==========================================
+    // ROOT BRANCHES (FROM LUCA)
+    // ==========================================
     {
       id: 'edge_luca_bacteria',
       source_id: 'div_luca',
@@ -877,7 +1770,7 @@ export const SEED_DATA: SeedDataPayload = {
       confidence_score: 0.95
     },
 
-    // Archaea branches
+    // --- Archaea Branches ---
     {
       id: 'edge_archaea_euryarchaeota',
       source_id: 'div_archaea_eukarya',
@@ -914,7 +1807,7 @@ export const SEED_DATA: SeedDataPayload = {
       confidence_score: 0.96
     },
 
-    // Bacteria branches
+    // --- Bacteria Branches ---
     {
       id: 'edge_bac_cyano',
       source_id: 'div_bacteria_major',
@@ -944,7 +1837,7 @@ export const SEED_DATA: SeedDataPayload = {
       confidence_score: 0.93
     },
 
-    // Eukaryogenesis splits (Protists, Plants, Opisthokonts)
+    // --- Eukaryogenesis Splits ---
     {
       id: 'edge_euk_dictyo',
       source_id: 'div_eukaryogenesis',
@@ -974,7 +1867,7 @@ export const SEED_DATA: SeedDataPayload = {
       confidence_score: 0.98
     },
 
-    // Viridiplantae (Plants)
+    // --- Viridiplantae (Plants) ---
     {
       id: 'edge_pl_chlorophyta',
       source_id: 'div_archaeplastida',
@@ -1053,7 +1946,7 @@ export const SEED_DATA: SeedDataPayload = {
       confidence_score: 0.95
     },
 
-    // Opisthokonta split (Fungi vs Metazoa)
+    // --- Opisthokonta Split (Fungi vs Animals) ---
     {
       id: 'edge_opistho_fungi',
       source_id: 'div_opisthokonta',
@@ -1069,7 +1962,7 @@ export const SEED_DATA: SeedDataPayload = {
       confidence_score: 0.99
     },
 
-    // Fungi branches
+    // --- Fungi Branches ---
     {
       id: 'edge_fungi_dikarya',
       source_id: 'div_fungi_crown',
@@ -1106,7 +1999,7 @@ export const SEED_DATA: SeedDataPayload = {
       confidence_score: 0.92
     },
 
-    // Metazoa branches
+    // --- Metazoa (Animalia) Branches ---
     {
       id: 'edge_meta_sponge',
       source_id: 'div_metazoa_crown',
@@ -1136,7 +2029,7 @@ export const SEED_DATA: SeedDataPayload = {
       confidence_score: 0.99
     },
 
-    // Bilateria splits
+    // --- Bilateria Splits ---
     {
       id: 'edge_bila_protostomia',
       source_id: 'div_bilateria',
@@ -1152,19 +2045,54 @@ export const SEED_DATA: SeedDataPayload = {
       confidence_score: 0.98
     },
 
-    // Protostomes
+    // --- Protostomes & Arthropods ---
     {
-      id: 'edge_proto_trilobite',
+      id: 'edge_proto_stem_arthro',
       source_id: 'div_protostomia',
+      target_id: 'div_stem_arthropoda',
+      branch_length_mya: 35,
+      confidence_score: 0.96
+    },
+    {
+      id: 'edge_stem_anomalocaris',
+      source_id: 'div_stem_arthropoda',
+      target_id: 'tax_anomalocaris',
+      branch_length_mya: 17,
+      confidence_score: 0.94
+    },
+    {
+      id: 'edge_stem_opabinia',
+      source_id: 'div_stem_arthropoda',
+      target_id: 'tax_opabinia',
+      branch_length_mya: 20,
+      confidence_score: 0.92
+    },
+    {
+      id: 'edge_stem_trilobite',
+      source_id: 'div_stem_arthropoda',
       target_id: 'tax_trilobite',
-      branch_length_mya: 40,
+      branch_length_mya: 20,
       confidence_score: 0.91
     },
     {
-      id: 'edge_proto_drosophila',
-      source_id: 'div_protostomia',
+      id: 'edge_stem_jaekelopterus',
+      source_id: 'div_stem_arthropoda',
+      target_id: 'tax_jaekelopterus',
+      branch_length_mya: 132,
+      confidence_score: 0.90
+    },
+    {
+      id: 'edge_stem_meganeura',
+      source_id: 'div_stem_arthropoda',
+      target_id: 'tax_meganeura',
+      branch_length_mya: 220,
+      confidence_score: 0.93
+    },
+    {
+      id: 'edge_stem_drosophila',
+      source_id: 'div_stem_arthropoda',
       target_id: 'tax_drosophila',
-      branch_length_mya: 560,
+      branch_length_mya: 525,
       confidence_score: 0.99
     },
     {
@@ -1175,7 +2103,7 @@ export const SEED_DATA: SeedDataPayload = {
       confidence_score: 0.96
     },
 
-    // Deuterostomes & Chordates
+    // --- Deuterostomes & Chordates ---
     {
       id: 'edge_deuter_chordata',
       source_id: 'div_deuterostomia',
@@ -1190,12 +2118,35 @@ export const SEED_DATA: SeedDataPayload = {
       branch_length_mya: 70,
       confidence_score: 0.99
     },
+
+    // --- Gnathostomes (Jaws): Sharks & Bony Vertebrates ---
     {
-      id: 'edge_gnatho_shark',
+      id: 'edge_gnatho_selachimorpha',
       source_id: 'div_gnathostomata',
-      target_id: 'tax_carcharodon',
-      branch_length_mya: 465,
+      target_id: 'div_selachimorpha',
+      branch_length_mya: 45,
       confidence_score: 0.97
+    },
+    {
+      id: 'edge_selachi_megalodon',
+      source_id: 'div_selachimorpha',
+      target_id: 'tax_megalodon',
+      branch_length_mya: 397,
+      confidence_score: 0.95
+    },
+    {
+      id: 'edge_selachi_carcharodon',
+      source_id: 'div_selachimorpha',
+      target_id: 'tax_carcharodon',
+      branch_length_mya: 420,
+      confidence_score: 0.98
+    },
+    {
+      id: 'edge_selachi_rhincodon',
+      source_id: 'div_selachimorpha',
+      target_id: 'tax_rhincodon',
+      branch_length_mya: 420,
+      confidence_score: 0.96
     },
     {
       id: 'edge_gnatho_danio',
@@ -1212,7 +2163,7 @@ export const SEED_DATA: SeedDataPayload = {
       confidence_score: 0.99
     },
 
-    // Tetrapods & Amniotes
+    // --- Tetrapods & Amniotes ---
     {
       id: 'edge_tetra_axolotl',
       source_id: 'div_tetrapoda',
@@ -1228,7 +2179,30 @@ export const SEED_DATA: SeedDataPayload = {
       confidence_score: 0.99
     },
 
-    // Sauropsids (Reptiles, Dinosaurs, Birds)
+    // --- Synapsida (Mammal Line) ---
+    {
+      id: 'edge_amnio_synapsida',
+      source_id: 'div_amniota',
+      target_id: 'div_synapsida_stem',
+      branch_length_mya: 25,
+      confidence_score: 0.98
+    },
+    {
+      id: 'edge_synap_dimetrodon',
+      source_id: 'div_synapsida_stem',
+      target_id: 'tax_dimetrodon',
+      branch_length_mya: 23,
+      confidence_score: 0.96
+    },
+    {
+      id: 'edge_synap_mammalia',
+      source_id: 'div_synapsida_stem',
+      target_id: 'div_mammalia_crown',
+      branch_length_mya: 115,
+      confidence_score: 0.99
+    },
+
+    // --- Sauropsida (Reptile/Bird/Dinosaur Line) ---
     {
       id: 'edge_amnio_sauropsida',
       source_id: 'div_amniota',
@@ -1244,42 +2218,296 @@ export const SEED_DATA: SeedDataPayload = {
       confidence_score: 0.95
     },
     {
-      id: 'edge_dino_trex',
+      id: 'edge_sauro_marine_rep',
       source_id: 'div_dinosauria_aves',
-      target_id: 'tax_tyrannosaurus',
-      branch_length_mya: 177,
-      confidence_score: 0.98
+      target_id: 'div_marine_reptiles',
+      branch_length_mya: 5,
+      confidence_score: 0.96
     },
     {
-      id: 'edge_dino_archaeopteryx',
-      source_id: 'div_dinosauria_aves',
-      target_id: 'tax_archaeopteryx',
-      branch_length_mya: 95,
+      id: 'edge_marine_mosasaur',
+      source_id: 'div_marine_reptiles',
+      target_id: 'tax_mosasaurus',
+      branch_length_mya: 170,
       confidence_score: 0.95
     },
     {
-      id: 'edge_dino_dodo',
+      id: 'edge_marine_ichthyo',
+      source_id: 'div_marine_reptiles',
+      target_id: 'tax_ichthyosaurus',
+      branch_length_mya: 40,
+      confidence_score: 0.96
+    },
+    {
+      id: 'edge_sauro_pterosauria',
       source_id: 'div_dinosauria_aves',
-      target_id: 'tax_dodo',
-      branch_length_mya: 245,
+      target_id: 'div_pterosauria',
+      branch_length_mya: 17,
       confidence_score: 0.97
     },
     {
-      id: 'edge_dino_eagle',
+      id: 'edge_ptero_quetzalcoatlus',
+      source_id: 'div_pterosauria',
+      target_id: 'tax_quetzalcoatlus',
+      branch_length_mya: 160,
+      confidence_score: 0.96
+    },
+
+    // --- Dinosauria Subclades (Theropoda, Sauropodomorpha, Ornithischia) ---
+    {
+      id: 'edge_dino_theropoda',
       source_id: 'div_dinosauria_aves',
-      target_id: 'tax_haliaeetus',
-      branch_length_mya: 245,
+      target_id: 'div_theropoda',
+      branch_length_mya: 14,
+      confidence_score: 0.99
+    },
+    {
+      id: 'edge_dino_sauropoda',
+      source_id: 'div_dinosauria_aves',
+      target_id: 'div_sauropodomorpha',
+      branch_length_mya: 17,
+      confidence_score: 0.98
+    },
+    {
+      id: 'edge_dino_ornithischia',
+      source_id: 'div_dinosauria_aves',
+      target_id: 'div_ornithischia',
+      branch_length_mya: 17,
+      confidence_score: 0.98
+    },
+
+    // --- Sauropods ---
+    {
+      id: 'edge_sauro_brachio',
+      source_id: 'div_sauropodomorpha',
+      target_id: 'tax_brachiosaurus',
+      branch_length_mya: 74,
+      confidence_score: 0.96
+    },
+    {
+      id: 'edge_sauro_diplo',
+      source_id: 'div_sauropodomorpha',
+      target_id: 'tax_diplodocus',
+      branch_length_mya: 74,
+      confidence_score: 0.95
+    },
+    {
+      id: 'edge_sauro_argen',
+      source_id: 'div_sauropodomorpha',
+      target_id: 'tax_argentinosaurus',
+      branch_length_mya: 132,
+      confidence_score: 0.94
+    },
+
+    // --- Ornithischians (Triceratops, Ankylosaurus, Stegosaurus, Parasaurolophus) ---
+    {
+      id: 'edge_ornith_triceratops',
+      source_id: 'div_ornithischia',
+      target_id: 'tax_triceratops',
+      branch_length_mya: 160,
+      confidence_score: 0.98
+    },
+    {
+      id: 'edge_ornith_ankylosaurus',
+      source_id: 'div_ornithischia',
+      target_id: 'tax_ankylosaurus',
+      branch_length_mya: 160,
+      confidence_score: 0.98
+    },
+    {
+      id: 'edge_ornith_stegosaurus',
+      source_id: 'div_ornithischia',
+      target_id: 'tax_stegosaurus',
+      branch_length_mya: 73,
+      confidence_score: 0.97
+    },
+    {
+      id: 'edge_ornith_parasaurolophus',
+      source_id: 'div_ornithischia',
+      target_id: 'tax_parasaurolophus',
+      branch_length_mya: 151,
+      confidence_score: 0.96
+    },
+
+    // --- Theropoda Splits: Tyrannosauroidea, Dromaeosauridae, Spinosauridae, Birds ---
+    {
+      id: 'edge_thero_tyranno',
+      source_id: 'div_theropoda',
+      target_id: 'div_tyrannosauroidea',
+      branch_length_mya: 66,
+      confidence_score: 0.99
+    },
+    {
+      id: 'edge_thero_dromaeo',
+      source_id: 'div_theropoda',
+      target_id: 'div_dromaeosauridae',
+      branch_length_mya: 86,
+      confidence_score: 0.98
+    },
+    {
+      id: 'edge_thero_spino_carno',
+      source_id: 'div_theropoda',
+      target_id: 'div_spinosauridae_carnosauria',
+      branch_length_mya: 76,
+      confidence_score: 0.97
+    },
+    {
+      id: 'edge_thero_avialae',
+      source_id: 'div_theropoda',
+      target_id: 'div_avialae_birds',
+      branch_length_mya: 81,
       confidence_score: 0.99
     },
 
-    // Mammalia
+    // --- Tyrannosauroids (All Specific Species) ---
     {
-      id: 'edge_amnio_mammalia',
-      source_id: 'div_amniota',
-      target_id: 'div_mammalia_crown',
-      branch_length_mya: 140,
+      id: 'edge_tyran_trex',
+      source_id: 'div_tyrannosauroidea',
+      target_id: 'tax_tyrannosaurus',
+      branch_length_mya: 97,
+      confidence_score: 1.0
+    },
+    {
+      id: 'edge_tyran_tarbo',
+      source_id: 'div_tyrannosauroidea',
+      target_id: 'tax_tarbosaurus',
+      branch_length_mya: 95,
+      confidence_score: 0.98
+    },
+    {
+      id: 'edge_tyran_alberto',
+      source_id: 'div_tyrannosauroidea',
+      target_id: 'tax_albertosaurus',
+      branch_length_mya: 94,
+      confidence_score: 0.97
+    },
+    {
+      id: 'edge_tyran_gorgo',
+      source_id: 'div_tyrannosauroidea',
+      target_id: 'tax_gorgosaurus',
+      branch_length_mya: 89,
+      confidence_score: 0.96
+    },
+    {
+      id: 'edge_tyran_daspleto',
+      source_id: 'div_tyrannosauroidea',
+      target_id: 'tax_daspletosaurus',
+      branch_length_mya: 88,
+      confidence_score: 0.96
+    },
+    {
+      id: 'edge_tyran_yutyrannus',
+      source_id: 'div_tyrannosauroidea',
+      target_id: 'tax_yutyrannus',
+      branch_length_mya: 40,
+      confidence_score: 0.98
+    },
+    {
+      id: 'edge_tyran_dilong',
+      source_id: 'div_tyrannosauroidea',
+      target_id: 'tax_dilong',
+      branch_length_mya: 39,
+      confidence_score: 0.95
+    },
+    {
+      id: 'edge_tyran_guanlong',
+      source_id: 'div_tyrannosauroidea',
+      target_id: 'tax_guanlong',
+      branch_length_mya: 5,
+      confidence_score: 0.96
+    },
+    {
+      id: 'edge_tyran_nanuq',
+      source_id: 'div_tyrannosauroidea',
+      target_id: 'tax_nanuqsaurus',
+      branch_length_mya: 96,
+      confidence_score: 0.94
+    },
+    {
+      id: 'edge_tyran_alioramus',
+      source_id: 'div_tyrannosauroidea',
+      target_id: 'tax_alioramus',
+      branch_length_mya: 95,
+      confidence_score: 0.95
+    },
+
+    // --- Dromaeosaurs (Raptors) ---
+    {
+      id: 'edge_drom_velociraptor',
+      source_id: 'div_dromaeosauridae',
+      target_id: 'tax_velociraptor',
+      branch_length_mya: 70,
+      confidence_score: 0.98
+    },
+    {
+      id: 'edge_drom_deinonychus',
+      source_id: 'div_dromaeosauridae',
+      target_id: 'tax_deinonychus',
+      branch_length_mya: 30,
       confidence_score: 0.99
     },
+    {
+      id: 'edge_drom_utahraptor',
+      source_id: 'div_dromaeosauridae',
+      target_id: 'tax_utahraptor',
+      branch_length_mya: 10,
+      confidence_score: 0.97
+    },
+    {
+      id: 'edge_drom_microraptor',
+      source_id: 'div_dromaeosauridae',
+      target_id: 'tax_microraptor',
+      branch_length_mya: 25,
+      confidence_score: 0.96
+    },
+
+    // --- Spinosauridae & Carnosauria ---
+    {
+      id: 'edge_spino_spinosaurus',
+      source_id: 'div_spinosauridae_carnosauria',
+      target_id: 'tax_spinosaurus',
+      branch_length_mya: 56,
+      confidence_score: 0.97
+    },
+    {
+      id: 'edge_spino_allosaurus',
+      source_id: 'div_spinosauridae_carnosauria',
+      target_id: 'tax_allosaurus',
+      branch_length_mya: 5,
+      confidence_score: 0.98
+    },
+    {
+      id: 'edge_spino_carnotaurus',
+      source_id: 'div_spinosauridae_carnosauria',
+      target_id: 'tax_carnotaurus',
+      branch_length_mya: 83,
+      confidence_score: 0.96
+    },
+
+    // --- Avialae & Birds ---
+    {
+      id: 'edge_avial_archaeopteryx',
+      source_id: 'div_avialae_birds',
+      target_id: 'tax_archaeopteryx',
+      branch_length_mya: 1.5,
+      confidence_score: 0.98
+    },
+    {
+      id: 'edge_avial_dodo',
+      source_id: 'div_avialae_birds',
+      target_id: 'tax_dodo',
+      branch_length_mya: 150,
+      confidence_score: 0.97
+    },
+    {
+      id: 'edge_avial_eagle',
+      source_id: 'div_avialae_birds',
+      target_id: 'tax_haliaeetus',
+      branch_length_mya: 150,
+      confidence_score: 0.99
+    },
+
+    // --- Mammalia & Placentals ---
     {
       id: 'edge_mam_platypus',
       source_id: 'div_mammalia_crown',
@@ -1295,20 +2523,13 @@ export const SEED_DATA: SeedDataPayload = {
       confidence_score: 0.99
     },
 
-    // Placental Mammals
+    // --- Placental Radiations (Carnivora, Cetacea, Proboscidea, Primates, Rodents) ---
     {
       id: 'edge_placen_rodent',
       source_id: 'div_placentalia_orders',
       target_id: 'tax_mus_musculus',
       branch_length_mya: 95,
       confidence_score: 0.99
-    },
-    {
-      id: 'edge_placen_cetacean',
-      source_id: 'div_placentalia_orders',
-      target_id: 'tax_balaenoptera',
-      branch_length_mya: 95,
-      confidence_score: 0.97
     },
     {
       id: 'edge_placen_carnivora',
@@ -1318,28 +2539,19 @@ export const SEED_DATA: SeedDataPayload = {
       confidence_score: 0.98
     },
     {
-      id: 'edge_carni_feliform_smilodon',
-      source_id: 'div_carnivora_feliformia_caniformia',
-      target_id: 'tax_smilodon',
-      branch_length_mya: 53.4,
-      confidence_score: 0.92
+      id: 'edge_placen_cetacea',
+      source_id: 'div_placentalia_orders',
+      target_id: 'div_cetacea',
+      branch_length_mya: 43,
+      confidence_score: 0.98
     },
     {
-      id: 'edge_carni_feliform_lion',
-      source_id: 'div_carnivora_feliformia_caniformia',
-      target_id: 'tax_panthera_leo',
-      branch_length_mya: 55,
-      confidence_score: 0.99
+      id: 'edge_placen_proboscidea',
+      source_id: 'div_placentalia_orders',
+      target_id: 'div_proboscidea',
+      branch_length_mya: 60,
+      confidence_score: 0.97
     },
-    {
-      id: 'edge_carni_caniform_wolf',
-      source_id: 'div_carnivora_feliformia_caniformia',
-      target_id: 'tax_canis_lupus',
-      branch_length_mya: 55,
-      confidence_score: 0.99
-    },
-
-    // Primates & Humans
     {
       id: 'edge_placen_hominidae',
       source_id: 'div_placentalia_orders',
@@ -1347,6 +2559,137 @@ export const SEED_DATA: SeedDataPayload = {
       branch_length_mya: 88.2,
       confidence_score: 0.99
     },
+
+    // --- Carnivora (Felidae & Canidae) ---
+    {
+      id: 'edge_carni_felidae',
+      source_id: 'div_carnivora_feliformia_caniformia',
+      target_id: 'div_felidae',
+      branch_length_mya: 30,
+      confidence_score: 0.99
+    },
+    {
+      id: 'edge_carni_canidae',
+      source_id: 'div_carnivora_feliformia_caniformia',
+      target_id: 'div_canidae_ursidae',
+      branch_length_mya: 13,
+      confidence_score: 0.99
+    },
+
+    // --- Felidae (Cats & Sabertooths) ---
+    {
+      id: 'edge_feli_smilodon',
+      source_id: 'div_felidae',
+      target_id: 'tax_smilodon',
+      branch_length_mya: 23.4,
+      confidence_score: 0.98
+    },
+    {
+      id: 'edge_feli_lion',
+      source_id: 'div_felidae',
+      target_id: 'tax_panthera_leo',
+      branch_length_mya: 25,
+      confidence_score: 1.0
+    },
+    {
+      id: 'edge_feli_tiger',
+      source_id: 'div_felidae',
+      target_id: 'tax_panthera_tigris',
+      branch_length_mya: 25,
+      confidence_score: 0.99
+    },
+    {
+      id: 'edge_feli_cheetah',
+      source_id: 'div_felidae',
+      target_id: 'tax_acinonyx_jubatus',
+      branch_length_mya: 25,
+      confidence_score: 0.98
+    },
+    {
+      id: 'edge_feli_snow_leopard',
+      source_id: 'div_felidae',
+      target_id: 'tax_panthera_uncia',
+      branch_length_mya: 25,
+      confidence_score: 0.98
+    },
+    {
+      id: 'edge_feli_jaguar',
+      source_id: 'div_felidae',
+      target_id: 'tax_panthera_onca',
+      branch_length_mya: 25,
+      confidence_score: 0.98
+    },
+
+    // --- Canidae & Ursidae ---
+    {
+      id: 'edge_cani_wolf',
+      source_id: 'div_canidae_ursidae',
+      target_id: 'tax_canis_lupus',
+      branch_length_mya: 42,
+      confidence_score: 1.0
+    },
+    {
+      id: 'edge_cani_direwolf',
+      source_id: 'div_canidae_ursidae',
+      target_id: 'tax_aenocyon_dirus',
+      branch_length_mya: 41.9,
+      confidence_score: 0.98
+    },
+    {
+      id: 'edge_cani_cavebear',
+      source_id: 'div_canidae_ursidae',
+      target_id: 'tax_ursus_spelaeus',
+      branch_length_mya: 41.7,
+      confidence_score: 0.97
+    },
+
+    // --- Cetacea (Whales) ---
+    {
+      id: 'edge_ceta_pakicetus',
+      source_id: 'div_cetacea',
+      target_id: 'tax_pakicetus',
+      branch_length_mya: 2,
+      confidence_score: 0.98
+    },
+    {
+      id: 'edge_ceta_basilosaurus',
+      source_id: 'div_cetacea',
+      target_id: 'tax_basilosaurus',
+      branch_length_mya: 14,
+      confidence_score: 0.98
+    },
+    {
+      id: 'edge_ceta_bluewhale',
+      source_id: 'div_cetacea',
+      target_id: 'tax_balaenoptera',
+      branch_length_mya: 52,
+      confidence_score: 0.99
+    },
+    {
+      id: 'edge_ceta_orca',
+      source_id: 'div_cetacea',
+      target_id: 'tax_orcinus_orca',
+      branch_length_mya: 52,
+      confidence_score: 0.99
+    },
+
+    // --- Proboscidea (Mammoths & Elephants) ---
+    {
+      id: 'edge_probo_mammoth',
+      source_id: 'div_proboscidea',
+      target_id: 'tax_mammuthus',
+      branch_length_mya: 34.6,
+      confidence_score: 0.98
+    },
+    {
+      id: 'edge_probo_elephant',
+      source_id: 'div_proboscidea',
+      target_id: 'tax_loxodonta',
+      branch_length_mya: 35,
+      confidence_score: 0.99
+    },
+
+    // --- Hominidae & Hominini ---
     {
       id: 'edge_homini_chimp',
       source_id: 'div_hominidae_crown',
@@ -1355,17 +2698,52 @@ export const SEED_DATA: SeedDataPayload = {
       confidence_score: 0.99
     },
     {
-      id: 'edge_homini_neanderthal',
+      id: 'edge_homini_split',
       source_id: 'div_hominidae_crown',
-      target_id: 'tax_neanderthal',
-      branch_length_mya: 6.2,
-      confidence_score: 0.96
+      target_id: 'div_hominini',
+      branch_length_mya: 2.6,
+      confidence_score: 0.99
     },
     {
-      id: 'edge_homini_human',
-      source_id: 'div_hominidae_crown',
+      id: 'edge_homin_australo',
+      source_id: 'div_hominini',
+      target_id: 'tax_australopithecus',
+      branch_length_mya: 1.0,
+      confidence_score: 0.97
+    },
+    {
+      id: 'edge_homin_habilis',
+      source_id: 'div_hominini',
+      target_id: 'tax_homo_habilis',
+      branch_length_mya: 2.1,
+      confidence_score: 0.98
+    },
+    {
+      id: 'edge_homin_erectus',
+      source_id: 'div_hominini',
+      target_id: 'tax_homo_erectus',
+      branch_length_mya: 2.4,
+      confidence_score: 0.99
+    },
+    {
+      id: 'edge_homin_heidel',
+      source_id: 'div_hominini',
+      target_id: 'tax_homo_heidelbergensis',
+      branch_length_mya: 3.6,
+      confidence_score: 0.98
+    },
+    {
+      id: 'edge_homin_neanderthal',
+      source_id: 'div_hominini',
+      target_id: 'tax_neanderthal',
+      branch_length_mya: 3.8,
+      confidence_score: 0.99
+    },
+    {
+      id: 'edge_homin_human',
+      source_id: 'div_hominini',
       target_id: 'tax_homo_sapiens',
-      branch_length_mya: 6.8,
+      branch_length_mya: 4.2,
       confidence_score: 1.0
     }
   ],
@@ -1390,6 +2768,13 @@ export const SEED_DATA: SeedDataPayload = {
       source_id: 'tax_canis_lupus',
       target_id: 'tax_canis_lupus',
       synonym_name: 'Canis lupus lupus',
+      source: 'GBIF'
+    },
+    {
+      id: 'syn_trex_1',
+      source_id: 'tax_tyrannosaurus',
+      target_id: 'tax_tyrannosaurus',
+      synonym_name: 'Manospondylus gigas',
       source: 'GBIF'
     },
     {

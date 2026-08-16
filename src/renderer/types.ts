@@ -70,4 +70,6 @@ export interface RendererOptions {
   activeMRCAIds?: Set<string>;
   hoveredNodeId?: string | null;
   selectedNodeId?: string | null;
+  focusedCladeId?: string | null; // If set, isolates and roots the tree view on this specific clade
 }
+

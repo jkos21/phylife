@@ -176,6 +176,20 @@ export class SearchModal {
           <button class="badge domain-chip" data-domain="Archaea" aria-pressed="false" aria-label="Filter archaea" style="border-color: var(--domain-archaea);">Archaea</button>
         </div>
 
+        <!-- Featured Animal Lineage & Clade Quick Chips -->
+        <div style="padding: 8px 16px 0; display: flex; gap: 5px; flex-wrap: wrap; align-items: center;" role="toolbar" aria-label="Quick jump to popular animal clades">
+          <span style="font-size: 10.5px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-right: 2px;">Lineages:</span>
+          <button class="badge clade-quick-chip" data-query="Tyrannosaur" style="cursor: pointer; background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3);">🦖 Tyrannosauroids</button>
+          <button class="badge clade-quick-chip" data-query="Dromaeosaur" style="cursor: pointer; background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3);">🦅 Raptors</button>
+          <button class="badge clade-quick-chip" data-query="Sauropod" style="cursor: pointer; background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3);">🦕 Sauropods</button>
+          <button class="badge clade-quick-chip" data-query="Ornithischia" style="cursor: pointer; background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3);">🛡️ Horned / Armored</button>
+          <button class="badge clade-quick-chip" data-query="Felidae" style="cursor: pointer; background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3);">🦁 Big Cats & Sabertooths</button>
+          <button class="badge clade-quick-chip" data-query="Cetacea" style="cursor: pointer; background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3);">🐋 Whales</button>
+          <button class="badge clade-quick-chip" data-query="Homo" style="cursor: pointer; background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3);">🧠 Early Humans</button>
+          <button class="badge clade-quick-chip" data-query="Shark" style="cursor: pointer; background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3);">🦈 Sharks & Megalodon</button>
+          <button class="badge clade-quick-chip" data-query="Arthropod" style="cursor: pointer; background: rgba(244, 63, 94, 0.1); border-color: rgba(244, 63, 94, 0.3);">🦟 Megafauna Arthropods</button>
+        </div>
+
         <div class="search-results-list" id="search-results-list" role="listbox" aria-label="Search suggestions"></div>
       </div>
     `;
@@ -190,6 +204,15 @@ export class SearchModal {
     const input = this.element.querySelector('.search-input') as HTMLInputElement;
     input.addEventListener('input', e => {
       this.performSearch((e.target as HTMLInputElement).value);
+    });
+
+    // Clade quick chips
+    this.element.querySelectorAll('.clade-quick-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const query = chip.getAttribute('data-query') || '';
+        input.value = query;
+        this.performSearch(query);
+      });
     });
 
     // Domain chips

@@ -3,7 +3,7 @@ import { type PhyNode, type TaxonNode, type TaxonMediaPackage, isTaxonNode, isDi
 import { mediaFetcher } from '../pipeline/mediaFetcher.ts';
 import { cladeExpansionService } from '../services/cladeExpansionService.ts';
 
-export type NodeInspectorTab = 'overview' | 'media' | 'videos' | 'podcasts' | 'lineage';
+export type NodeInspectorTab = 'overview' | 'species' | 'media' | 'videos' | 'podcasts' | 'lineage';
 
 export class NodeInspector {
   private element: HTMLElement;
@@ -14,21 +14,25 @@ export class NodeInspector {
   private mediaPackage: TaxonMediaPackage | null = null;
   private isLoadingMedia: boolean = false;
   private isOpen: boolean = false;
+  private speciesSearchQuery: string = '';
 
   private onNodeSelectCallback?: (nodeId: string) => void;
   private onFindMRCACallback?: (nodeId: string) => void;
   private onCladeExpandedCallback?: (cladeId: string) => void;
+  private onFocusCladeCallback?: (cladeId: string | null) => void;
 
   constructor(
     store: PhyGraphStore,
     onNodeSelect?: (nodeId: string) => void,
     onFindMRCA?: (nodeId: string) => void,
-    onCladeExpanded?: (cladeId: string) => void
+    onCladeExpanded?: (cladeId: string) => void,
+    onFocusClade?: (cladeId: string | null) => void
   ) {
     this.store = store;
     this.onNodeSelectCallback = onNodeSelect;
     this.onFindMRCACallback = onFindMRCA;
     this.onCladeExpandedCallback = onCladeExpanded;
+    this.onFocusCladeCallback = onFocusClade;
 
     this.backdrop = document.createElement('div');
     this.backdrop.className = 'drawer-backdrop';
@@ -54,7 +58,7 @@ export class NodeInspector {
 
   public async inspect(node: PhyNode): Promise<void> {
     this.currentNode = node;
-    this.currentTab = 'overview';
+    this.speciesSearchQuery = '';
     this.mediaPackage = null;
     this.render();
     this.open();
@@ -73,6 +77,11 @@ export class NodeInspector {
         }
       }
     }
+  }
+
+  public setTab(tab: NodeInspectorTab): void {
+    this.currentTab = tab;
+    this.render();
   }
 
   public open(): void {
@@ -98,7 +107,7 @@ export class NodeInspector {
   private renderEmpty(): void {
     this.element.innerHTML = `
       <div style="padding: 30px; text-align: center; color: var(--text-muted);">
-        Select any node in the tree to inspect its taxonomic lineage, media, and evolutionary timescale.
+        Select any node in the tree to inspect its taxonomic lineage, member species, media, and evolutionary timescale.
       </div>
     `;
   }
@@ -110,6 +119,7 @@ export class NodeInspector {
     const isTaxon = isTaxonNode(node);
     const taxon = isTaxon ? (node as TaxonNode) : null;
     const lineage = this.store.getLineage(node.id);
+    const cladeSpecies = this.store.getCladeSpecies(node.id);
 
     const title = isTaxon ? node.scientific_name : node.name;
     const commonName = node.common_name || (isTaxon ? 'Unspecified common name' : 'Ancestral Divergence Clade');
@@ -122,6 +132,8 @@ export class NodeInspector {
       } else if (taxon.thumbnail_url) {
         thumbUrl = taxon.thumbnail_url;
       }
+    } else if (cladeSpecies.length > 0 && cladeSpecies[0].thumbnail_url) {
+      thumbUrl = cladeSpecies[0].thumbnail_url;
     }
 
     const extinctionBadge = isTaxon
@@ -167,6 +179,9 @@ export class NodeInspector {
         <!-- Tab Navigation -->
         <div class="inspector-tabs" role="tablist" aria-label="Inspector Views" style="display: flex; gap: 4px; border-bottom: 1px solid var(--border-color); margin: 14px 0 10px 0; padding-bottom: 4px; overflow-x: auto;">
           <button class="tab-btn ${this.currentTab === 'overview' ? 'active' : ''}" role="tab" aria-selected="${this.currentTab === 'overview'}" data-tab="overview">Overview</button>
+          <button class="tab-btn ${this.currentTab === 'species' ? 'active' : ''}" role="tab" aria-selected="${this.currentTab === 'species'}" data-tab="species">
+            🦁 Species (${cladeSpecies.length})
+          </button>
           ${isTaxon ? `
             <button class="tab-btn ${this.currentTab === 'videos' ? 'active' : ''}" role="tab" aria-selected="${this.currentTab === 'videos'}" data-tab="videos">
               🎬 Videos ${this.mediaPackage?.videos.length ? `(${this.mediaPackage.videos.length})` : ''}
@@ -181,11 +196,15 @@ export class NodeInspector {
 
         <!-- Tab Contents -->
         <div class="tab-content-container" role="tabpanel">
-          ${this.renderTabContent(node, isTaxon, lineage)}
+          ${this.renderTabContent(node, isTaxon, lineage, cladeSpecies)}
         </div>
 
         <!-- Action Row -->
         <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 20px;">
+          <button class="btn-primary" id="btn-focus-clade" style="justify-content: center; width: 100%;" title="Focus and Isolate this Clade on Tree" aria-label="Focus and Isolate this Clade on Tree">
+            🎯 Focus Subtree on Canvas
+          </button>
+
           <button class="btn-secondary" id="btn-expand-clade" style="justify-content: center; width: 100%;" title="Expand Clade & Sibling Lineages" aria-label="Expand Clade and Sibling Lineages">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <circle cx="11" cy="11" r="8"></circle>
@@ -197,7 +216,7 @@ export class NodeInspector {
           </button>
 
           ${isTaxon ? `
-            <button class="btn-primary" id="btn-find-mrca-with-node" style="justify-content: center; width: 100%;" title="Find Common Ancestor (MRCA) with this Taxon" aria-label="Find Common Ancestor (MRCA) with this Taxon">
+            <button class="btn-secondary" id="btn-find-mrca-with-node" style="justify-content: center; width: 100%;" title="Find Common Ancestor (MRCA) with this Taxon" aria-label="Find Common Ancestor (MRCA) with this Taxon">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
               </svg>
@@ -208,12 +227,15 @@ export class NodeInspector {
       </div>
     `;
 
-    this.attachEvents(node);
+    this.attachEvents(node, cladeSpecies);
   }
 
-  private renderTabContent(node: PhyNode, isTaxon: boolean, lineage: PhyNode[]): string {
+  private renderTabContent(node: PhyNode, isTaxon: boolean, lineage: PhyNode[], cladeSpecies: TaxonNode[]): string {
     if (this.currentTab === 'overview') {
-      return this.renderOverviewTab(node, isTaxon);
+      return this.renderOverviewTab(node, isTaxon, cladeSpecies);
+    }
+    if (this.currentTab === 'species') {
+      return this.renderSpeciesTab(node, isTaxon, cladeSpecies);
     }
     if (this.currentTab === 'videos') {
       return this.renderVideosTab();
@@ -230,7 +252,7 @@ export class NodeInspector {
     return '';
   }
 
-  private renderOverviewTab(node: PhyNode, isTaxon: boolean): string {
+  private renderOverviewTab(node: PhyNode, isTaxon: boolean, cladeSpecies: TaxonNode[]): string {
     const taxon = isTaxon ? (node as TaxonNode) : null;
     return `
       <div style="display: flex; flex-direction: column; gap: 14px;">
@@ -243,6 +265,22 @@ export class NodeInspector {
               ${node.recent_discovery_note}
             </div>
             ${node.updated_at ? `<div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Updated: ${node.updated_at}</div>` : ''}
+          </div>
+        ` : ''}
+
+        ${cladeSpecies.length > 0 ? `
+          <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 12px; display: flex; align-items: center; justify-content: space-between;">
+            <div>
+              <div style="font-size: 12px; font-weight: 700; color: var(--text-primary);">
+                ${isTaxon ? `Related Species in Group (${cladeSpecies.length})` : `Member Species in Clade (${cladeSpecies.length})`}
+              </div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">
+                Drill down and inspect all animals and lineages in this group.
+              </div>
+            </div>
+            <button class="btn-secondary" id="btn-quick-view-species" style="font-size: 11px; padding: 4px 8px;">
+              View All ↗
+            </button>
           </div>
         ` : ''}
 
@@ -267,6 +305,13 @@ export class NodeInspector {
           <div class="source-card">
             <div class="source-card-label">Temporal Range / Fossil Record</div>
             <div class="source-card-val">${taxon.temporal_range}</div>
+          </div>
+        ` : ''}
+
+        ${isTaxon && taxon?.habitat ? `
+          <div class="source-card">
+            <div class="source-card-label">Habitat & Distribution</div>
+            <div class="source-card-val">${taxon.habitat}</div>
           </div>
         ` : ''}
 
@@ -303,6 +348,96 @@ export class NodeInspector {
               </div>
             ` : ''}
           </div>
+        </div>
+      </div>
+    `;
+  }
+
+  private renderSpeciesTab(node: PhyNode, _isTaxon: boolean, cladeSpecies: TaxonNode[]): string {
+    const isClade = isDivergenceNode(node);
+    const filterQuery = this.speciesSearchQuery.toLowerCase().trim();
+    const filtered = filterQuery
+      ? cladeSpecies.filter(sp =>
+          sp.scientific_name.toLowerCase().includes(filterQuery) ||
+          (sp.common_name && sp.common_name.toLowerCase().includes(filterQuery)) ||
+          (sp.traits && sp.traits.some(t => t.toLowerCase().includes(filterQuery)))
+        )
+      : cladeSpecies;
+
+    if (cladeSpecies.length === 0) {
+      return `
+        <div style="text-align: center; padding: 25px; color: var(--text-muted);">
+          No member species found in this group yet. Click <strong>⚡ Expand Clade</strong> to fetch and graft additional sister lineages.
+        </div>
+      `;
+    }
+
+    return `
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 12px; font-weight: 700; color: var(--text-primary);">
+            ${isClade ? `All Member Species (${cladeSpecies.length})` : `Sister Species & Lineage Members (${cladeSpecies.length})`}
+          </span>
+          <span style="font-size: 11px; color: var(--text-muted);">Click any animal to drill down</span>
+        </div>
+
+        <!-- Quick Filter Input inside Drawer -->
+        <input type="text"
+               class="search-input species-filter-input"
+               style="padding: 7px 10px; font-size: 12px; border-radius: var(--radius-sm);"
+               placeholder="Filter species by name or trait..."
+               value="${this.speciesSearchQuery}">
+
+        <div class="species-cards-grid" style="display: flex; flex-direction: column; gap: 8px; max-height: 480px; overflow-y: auto;">
+          ${filtered.map(sp => {
+            const isCurrent = sp.id === node.id;
+            const thumb = sp.thumbnail_url || 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=200&auto=format&fit=crop&q=80';
+            const extinctBadge = sp.extinct
+              ? `<span class="badge badge-extinct" style="font-size: 9px; padding: 1px 4px;">💀 Extinct (${sp.extinction_era || 'Fossil'})</span>`
+              : `<span class="badge badge-extant" style="font-size: 9px; padding: 1px 4px;">🌿 Living</span>`;
+
+            return `
+              <div class="species-drilldown-card ${isCurrent ? 'selected' : ''}"
+                   data-species-id="${sp.id}"
+                   style="
+                     display: flex;
+                     gap: 10px;
+                     background: ${isCurrent ? 'rgba(56, 189, 248, 0.12)' : 'var(--bg-surface)'};
+                     border: 1px solid ${isCurrent ? 'var(--accent-primary)' : 'var(--border-color)'};
+                     border-radius: var(--radius-md);
+                     padding: 10px;
+                     transition: all var(--transition-fast);
+                     cursor: pointer;
+                   ">
+                <img src="${thumb}" alt="${sp.scientific_name}" style="width: 58px; height: 58px; border-radius: var(--radius-sm); object-fit: cover; flex-shrink: 0; background: #000;" onerror="this.src='https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=200&auto=format&fit=crop&q=80'">
+                
+                <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: space-between;">
+                  <div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 4px;">
+                      <span style="font-size: 13px; font-weight: 700; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        ${sp.scientific_name}
+                      </span>
+                      ${extinctBadge}
+                    </div>
+                    <div style="font-size: 11.5px; color: var(--text-secondary); margin-top: 1px;">
+                      ${sp.common_name || 'Unspecified common name'}
+                    </div>
+                  </div>
+
+                  <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 4px;">
+                    <span style="font-size: 10.5px; color: var(--text-muted);">
+                      ${sp.temporal_range || ''}
+                    </span>
+                    <div style="display: flex; gap: 4px;">
+                      <button class="btn-secondary btn-species-inspect" data-id="${sp.id}" style="font-size: 10px; padding: 2px 6px;">
+                        Inspect ↗
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('')}
         </div>
       </div>
     `;
@@ -400,7 +535,7 @@ export class NodeInspector {
               ${p.description || ''}
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px; pt-2; border-top: 1px solid rgba(255, 255, 255, 0.05);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px; border-top: 1px solid rgba(255, 255, 255, 0.05);">
               <span style="font-size: 11px; font-weight: 600; color: var(--text-muted);">
                 🎙️ ${p.showName} • ${p.duration || 'Full Episode'}
               </span>
@@ -468,7 +603,7 @@ export class NodeInspector {
     `;
   }
 
-  private attachEvents(node: PhyNode): void {
+  private attachEvents(node: PhyNode, cladeSpecies: TaxonNode[]): void {
     this.element.querySelector('#drawer-close')?.addEventListener('click', () => this.close());
 
     // Tab buttons
@@ -480,6 +615,19 @@ export class NodeInspector {
           this.render();
         }
       });
+    });
+
+    // Quick view species button on overview tab
+    this.element.querySelector('#btn-quick-view-species')?.addEventListener('click', () => {
+      this.currentTab = 'species';
+      this.render();
+    });
+
+    // Focus clade button
+    this.element.querySelector('#btn-focus-clade')?.addEventListener('click', () => {
+      if (this.onFocusCladeCallback) {
+        this.onFocusCladeCallback(node.id);
+      }
     });
 
     // Expand clade button
@@ -495,6 +643,79 @@ export class NodeInspector {
         alert(err.message || 'Clade already expanded');
       }
     });
+
+    // Species search input in species tab
+    const speciesFilterInput = this.element.querySelector('.species-filter-input') as HTMLInputElement;
+    if (speciesFilterInput) {
+      speciesFilterInput.addEventListener('input', e => {
+        this.speciesSearchQuery = (e.target as HTMLInputElement).value;
+        const grid = this.element.querySelector('.species-cards-grid');
+        if (grid) {
+          const filterQuery = this.speciesSearchQuery.toLowerCase().trim();
+          const filtered = filterQuery
+            ? cladeSpecies.filter(sp =>
+                sp.scientific_name.toLowerCase().includes(filterQuery) ||
+                (sp.common_name && sp.common_name.toLowerCase().includes(filterQuery)) ||
+                (sp.traits && sp.traits.some(t => t.toLowerCase().includes(filterQuery)))
+              )
+            : cladeSpecies;
+
+          grid.innerHTML = filtered.map(sp => {
+            const isCurrent = sp.id === node.id;
+            const thumb = sp.thumbnail_url || 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=200&auto=format&fit=crop&q=80';
+            const extinctBadge = sp.extinct
+              ? `<span class="badge badge-extinct" style="font-size: 9px; padding: 1px 4px;">💀 Extinct (${sp.extinction_era || 'Fossil'})</span>`
+              : `<span class="badge badge-extant" style="font-size: 9px; padding: 1px 4px;">🌿 Living</span>`;
+
+            return `
+              <div class="species-drilldown-card ${isCurrent ? 'selected' : ''}"
+                   data-species-id="${sp.id}"
+                   style="
+                     display: flex;
+                     gap: 10px;
+                     background: ${isCurrent ? 'rgba(56, 189, 248, 0.12)' : 'var(--bg-surface)'};
+                     border: 1px solid ${isCurrent ? 'var(--accent-primary)' : 'var(--border-color)'};
+                     border-radius: var(--radius-md);
+                     padding: 10px;
+                     transition: all var(--transition-fast);
+                     cursor: pointer;
+                   ">
+                <img src="${thumb}" alt="${sp.scientific_name}" style="width: 58px; height: 58px; border-radius: var(--radius-sm); object-fit: cover; flex-shrink: 0; background: #000;" onerror="this.src='https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=200&auto=format&fit=crop&q=80'">
+                
+                <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: space-between;">
+                  <div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 4px;">
+                      <span style="font-size: 13px; font-weight: 700; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        ${sp.scientific_name}
+                      </span>
+                      ${extinctBadge}
+                    </div>
+                    <div style="font-size: 11.5px; color: var(--text-secondary); margin-top: 1px;">
+                      ${sp.common_name || 'Unspecified common name'}
+                    </div>
+                  </div>
+
+                  <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 4px;">
+                    <span style="font-size: 10.5px; color: var(--text-muted);">
+                      ${sp.temporal_range || ''}
+                    </span>
+                    <div style="display: flex; gap: 4px;">
+                      <button class="btn-secondary btn-species-inspect" data-id="${sp.id}" style="font-size: 10px; padding: 2px 6px;">
+                        Inspect ↗
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('');
+
+          this.attachSpeciesCardEvents();
+        }
+      });
+    }
+
+    this.attachSpeciesCardEvents();
 
     // Lineage navigation clicks and keyboard activation
     this.element.querySelectorAll('.lineage-chip').forEach(chip => {
@@ -517,6 +738,39 @@ export class NodeInspector {
       if (this.onFindMRCACallback) {
         this.onFindMRCACallback(node.id);
       }
+    });
+  }
+
+  private attachSpeciesCardEvents(): void {
+    this.element.querySelectorAll('.species-drilldown-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const id = card.getAttribute('data-species-id');
+        if (id) {
+          const spNode = this.store.getNode(id);
+          if (spNode) {
+            if (this.onNodeSelectCallback) {
+              this.onNodeSelectCallback(id);
+            }
+            this.inspect(spNode);
+          }
+        }
+      });
+    });
+
+    this.element.querySelectorAll('.btn-species-inspect').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const id = btn.getAttribute('data-id');
+        if (id) {
+          const spNode = this.store.getNode(id);
+          if (spNode) {
+            if (this.onNodeSelectCallback) {
+              this.onNodeSelectCallback(id);
+            }
+            this.inspect(spNode);
+          }
+        }
+      });
     });
   }
 }

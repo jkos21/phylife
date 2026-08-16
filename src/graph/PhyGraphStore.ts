@@ -11,6 +11,8 @@ import {
   type DomainKingdom,
   type TaxonomicRank,
   type GeologicalEra,
+  type AuditLogEntry,
+  type KGCacheEntry,
   isTaxonNode,
   isDivergenceNode
 } from './types.ts';
@@ -27,6 +29,10 @@ export class PhyGraphStore {
   private rankIndex: Map<TaxonomicRank, Set<string>> = new Map();
   private searchIndex: Map<string, Set<string>> = new Map(); // token -> Set of nodeIds
 
+  // Auditable KG transaction log & local caching
+  private auditLog: AuditLogEntry[] = [];
+  private localCache: Map<string, KGCacheEntry> = new Map();
+
   private rootId: string = 'div_luca';
 
   constructor() {
@@ -42,6 +48,8 @@ export class PhyGraphStore {
     this.domainIndex.clear();
     this.rankIndex.clear();
     this.searchIndex.clear();
+    this.auditLog = [];
+    this.localCache.clear();
 
     const kingdoms: DomainKingdom[] = [
       'Metazoa',
@@ -53,6 +61,39 @@ export class PhyGraphStore {
     ];
     for (const k of kingdoms) {
       this.domainIndex.set(k, new Set());
+    }
+  }
+
+  public recordAudit(entry: Omit<AuditLogEntry, 'id' | 'timestamp'>): AuditLogEntry {
+    const fullEntry: AuditLogEntry = {
+      id: `audit_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+      timestamp: new Date().toISOString(),
+      ...entry
+    };
+    this.auditLog.push(fullEntry);
+    return fullEntry;
+  }
+
+  public getAuditLog(): AuditLogEntry[] {
+    return [...this.auditLog];
+  }
+
+  public cacheEnrichedTaxon(taxon: TaxonNode, source: string): void {
+    this.localCache.set(taxon.id, {
+      key: taxon.id,
+      node: taxon,
+      source,
+      cached_at: new Date().toISOString()
+    });
+
+    if (!this.getNode(taxon.id)) {
+      this.addNode(taxon);
+      this.recordAudit({
+        action: 'live_search_cached',
+        target_id: taxon.id,
+        actor: 'live_search_enrichment',
+        details: `Enriched & cached taxon "${taxon.scientific_name}" from ${source}.`
+      });
     }
   }
 
@@ -245,6 +286,111 @@ export class PhyGraphStore {
 
     return lineage;
   }
+
+  /**
+   * Retrieves all descendant species/taxa under a given clade,
+   * or all sister species in the parent clade if the node is already a species leaf.
+   */
+  public getCladeSpecies(nodeId: string): TaxonNode[] {
+    const node = this.nodes.get(nodeId);
+    if (!node) return [];
+
+    let startId = nodeId;
+    const directChildren = this.getChildrenIds(nodeId);
+
+    // If it's a leaf taxon with no children, use its parent clade as the grouping anchor
+    if (directChildren.length === 0 && this.parentMap.has(nodeId)) {
+      startId = this.parentMap.get(nodeId)!;
+    }
+
+    const speciesList: TaxonNode[] = [];
+    const visited = new Set<string>();
+
+    const traverse = (currId: string) => {
+      if (visited.has(currId)) return;
+      visited.add(currId);
+
+      const currNode = this.nodes.get(currId);
+      if (!currNode) return;
+
+      const children = this.getChildrenIds(currId);
+      if (children.length === 0) {
+        if (isTaxonNode(currNode)) {
+          speciesList.push(currNode);
+        }
+      } else {
+        if (isTaxonNode(currNode) && currNode.rank === 'species') {
+          speciesList.push(currNode);
+        }
+        for (const childId of children) {
+          traverse(childId);
+        }
+      }
+    };
+
+    traverse(startId);
+
+    // Deduplicate and sort: extant first, then by scientific name
+    const uniqueMap = new Map<string, TaxonNode>();
+    for (const sp of speciesList) {
+      uniqueMap.set(sp.id, sp);
+    }
+    return Array.from(uniqueMap.values()).sort((a, b) => a.scientific_name.localeCompare(b.scientific_name));
+  }
+
+  /**
+   * Retrieves all direct or indirect sister taxa sharing the same parent clade.
+   */
+  public getSisterTaxa(taxonId: string): TaxonNode[] {
+    const parentId = this.parentMap.get(taxonId);
+    if (!parentId) return [];
+
+    const allInClade = this.getCladeSpecies(parentId);
+    return allInClade.filter(t => t.id !== taxonId);
+  }
+
+  /**
+   * Retrieves the closest ancestral divergence or higher-order clade node.
+   */
+  public getParentClade(nodeId: string): PhyNode | undefined {
+    let currId: string | undefined = this.parentMap.get(nodeId);
+    while (currId) {
+      const parentNode = this.nodes.get(currId);
+      if (parentNode) {
+        if (isDivergenceNode(parentNode)) return parentNode;
+        if (isTaxonNode(parentNode) && parentNode.rank !== 'species' && parentNode.rank !== 'subspecies') {
+          return parentNode;
+        }
+      }
+      currId = this.parentMap.get(currId);
+    }
+    return undefined;
+  }
+
+  /**
+   * Retrieves all node IDs belonging to the subtree rooted at nodeId.
+   */
+  public getSubtreeNodeIds(nodeId: string): Set<string> {
+    const ids = new Set<string>();
+    const traverse = (id: string) => {
+      if (ids.has(id)) return;
+      ids.add(id);
+      const children = this.getChildrenIds(id);
+      for (const c of children) {
+        traverse(c);
+      }
+    };
+    traverse(nodeId);
+    return ids;
+  }
+
+  /**
+   * Generates hierarchical breadcrumbs from LUCA down to a specific clade.
+   */
+  public getCladeBreadcrumbs(nodeId: string): PhyNode[] {
+    return this.getLineage(nodeId);
+  }
+
 
   /**
    * Computes the Most Recent Common Ancestor (MRCA) between two taxa.
@@ -517,7 +663,8 @@ export class PhyGraphStore {
       taxa,
       divergences,
       edges: Array.from(this.edges.values()),
-      synonyms
+      synonyms,
+      audit_log: [...this.auditLog]
     };
   }
 
@@ -541,6 +688,9 @@ export class PhyGraphStore {
       for (const syn of data.synonyms) {
         this.addSynonym(syn);
       }
+    }
+    if (data.audit_log) {
+      this.auditLog = [...data.audit_log];
     }
   }
 

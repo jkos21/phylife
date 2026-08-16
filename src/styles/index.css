@@ -1315,6 +1315,112 @@ input:checked + .slider:before {
   }
 }
 
+/* ==========================================================================
+   Clade Focus Bar & Species Drill-Down Components
+   ========================================================================== */
+.clade-focus-bar {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 35;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(12px);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  max-width: 90vw;
+  animation: slideDownFade 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideDownFade {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -10px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.clade-focus-crumbs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.clade-crumb-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 3px 6px;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.clade-crumb-btn:hover {
+  color: var(--accent-primary);
+  background: rgba(56, 189, 248, 0.1);
+}
+
+.clade-crumb-btn.active {
+  color: #ffffff;
+  font-weight: 700;
+  background: rgba(56, 189, 248, 0.2);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+.clade-crumb-sep {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.clade-crumb-close {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #f87171;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.clade-crumb-close:hover {
+  background: rgba(239, 68, 68, 0.25);
+  color: #ffffff;
+}
+
+.species-drilldown-card:hover {
+  border-color: var(--accent-primary) !important;
+  background: rgba(56, 189, 248, 0.08) !important;
+  transform: translateY(-1px);
+}
+
+.species-filter-input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+}
+
+.clade-quick-chip:hover {
+  border-color: var(--accent-primary) !important;
+  background: rgba(56, 189, 248, 0.2) !important;
+  color: #ffffff !important;
+}
+
 @media (max-width: 480px) {
   .navbar {
     height: 52px;
@@ -1349,3 +1455,4 @@ input:checked + .slider:before {
     font-size: 8.5px;
   }
 }
+

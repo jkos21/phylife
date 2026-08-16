@@ -513,12 +513,12 @@ async function runTestSuite() {
   });
 
   const initialStats = graphStore.getStatistics();
-  assert(initialStats.totalNodes === 69, 'Bootstrap', `PhyGraphStore contains exactly 69 nodes (found: ${initialStats.totalNodes})`);
-  assert(initialStats.totalTaxonNodes === 43, 'Bootstrap', `PhyGraphStore contains 43 Taxon nodes`);
-  assert(initialStats.totalDivergenceNodes === 26, 'Bootstrap', `PhyGraphStore contains 26 Divergence Clade nodes`);
-  assert(initialStats.totalEdges === 68, 'Bootstrap', `PhyGraphStore contains exactly 68 Edges (found: ${initialStats.totalEdges})`);
+  assert(initialStats.totalNodes === 134, 'Bootstrap', `PhyGraphStore contains exactly 134 nodes (found: ${initialStats.totalNodes})`);
+  assert(initialStats.totalTaxonNodes === 91, 'Bootstrap', `PhyGraphStore contains 91 Taxon nodes`);
+  assert(initialStats.totalDivergenceNodes === 43, 'Bootstrap', `PhyGraphStore contains 43 Divergence Clade nodes`);
+  assert(initialStats.totalEdges === 133, 'Bootstrap', `PhyGraphStore contains exactly 133 Edges (found: ${initialStats.totalEdges})`);
   assert(initialStats.rootId === 'div_luca', 'Bootstrap', `Root node is Hadean LUCA (div_luca)`);
-  assert(initialStats.domainCounts.Metazoa === 22, 'Bootstrap', `Metazoa domain has 22 taxa`);
+  assert(initialStats.domainCounts.Metazoa === 70, 'Bootstrap', `Metazoa domain has 70 taxa (dense animal lineages)`);
   assert(initialStats.domainCounts.Viridiplantae === 7, 'Bootstrap', `Viridiplantae domain has 7 taxa`);
   assert(initialStats.domainCounts.Fungi === 4, 'Bootstrap', `Fungi domain has 4 taxa`);
   assert(initialStats.domainCounts.Bacteria === 4, 'Bootstrap', `Bacteria domain has 4 taxa`);
@@ -728,26 +728,41 @@ async function runTestSuite() {
   assert(overviewTitle?.textContent?.includes('Homo sapiens') === true, 'NodeInspector', `Overview displays scientific name Homo sapiens (found: ${overviewTitle?.textContent})`);
   assert(nodeInspector.getElement().querySelector('.badge-extant') !== null, 'NodeInspector', 'Extant (Living) badge rendered');
 
-  // 4.2 Videos Tab
+  // 4.2 Species & Member Taxa Tab (Drill-Down)
+  const speciesTabBtn = nodeInspector.getElement().querySelector('.tab-btn[data-tab="species"]') as any;
+  speciesTabBtn?.click();
+  const humanSisterCards = nodeInspector.getElement().querySelectorAll('.species-drilldown-card') as unknown as MockElement[];
+  assert(humanSisterCards.length >= 5, 'NodeInspector Species Tab', `Hominini species tab displays ${humanSisterCards.length} hominin & great ape species (Neanderthal, Denisovan, Australopithecus, Chimp)`);
+
+  // Inspect Tyrannosauroidea Clade for dense species drill-down
+  const rexClade = graphStore.getNode('div_tyrannosauroidea')!;
+  await nodeInspector.inspect(rexClade);
+  const rexSpeciesTabBtn = nodeInspector.getElement().querySelector('.tab-btn[data-tab="species"]') as any;
+  rexSpeciesTabBtn?.click();
+  const rexCards = nodeInspector.getElement().querySelectorAll('.species-drilldown-card') as unknown as MockElement[];
+  assert(rexCards.length >= 10, 'NodeInspector Species Drill-Down', `Tyrannosauroidea clade displays all ${rexCards.length} member species (T-Rex, Tarbosaurus, Albertosaurus, Yutyrannus, etc.)`);
+
+  // 4.3 Videos Tab
+  await nodeInspector.inspect(humanNode);
   const videosTabBtn = nodeInspector.getElement().querySelector('.tab-btn[data-tab="videos"]') as any;
   videosTabBtn?.click();
   const videoLinks = nodeInspector.getElement().querySelectorAll('.media-card-link') as unknown as MockElement[];
   assert(videoLinks.length >= 3, 'NodeInspector Videos', `Videos tab contains ${videoLinks.length} educational video recommendations`);
   assert(videoLinks.some((link: MockElement) => link.getAttribute('href')?.includes('youtube.com') === true), 'NodeInspector Videos', 'YouTube deep search queries generated properly');
 
-  // 4.3 Podcasts Tab
+  // 4.4 Podcasts Tab
   const podcastsTabBtn = nodeInspector.getElement().querySelector('.tab-btn[data-tab="podcasts"]') as any;
   podcastsTabBtn?.click();
   const podcastLinks = nodeInspector.getElement().querySelectorAll('.media-card-link') as unknown as MockElement[];
   assert(podcastLinks.length >= 2, 'NodeInspector Podcasts', `Podcasts tab contains ${podcastLinks.length} audio episodes (Ologies, Common Descent, Radiolab)`);
 
-  // 4.4 Photos Tab
+  // 4.5 Photos Tab
   const photosTabBtn = nodeInspector.getElement().querySelector('.tab-btn[data-tab="media"]') as any;
   photosTabBtn?.click();
   const photoImages = nodeInspector.getElement().querySelectorAll('img') as unknown as MockElement[];
   assert(photoImages.length > 0, 'NodeInspector Photos', 'Photos tab loaded media items and image galleries');
 
-  // 4.5 Lineage Tab
+  // 4.6 Lineage Tab
   const lineageTabBtn = nodeInspector.getElement().querySelector('.tab-btn[data-tab="lineage"]') as any;
   lineageTabBtn?.click();
   const lineageChips = nodeInspector.getElement().querySelectorAll('.lineage-chip') as unknown as MockElement[];
@@ -758,7 +773,7 @@ async function runTestSuite() {
   assert(pannedNodeId === 'div_luca', 'NodeInspector Lineage', 'Clicking lineage breadcrumb pans camera to ancestral node (div_luca)');
 
   // --------------------------------------------------------------------------
-  // STEP 5: On-Demand Clade Expansion
+  // STEP 5: On-Demand Clade Expansion & Clade Focus Mode
   // --------------------------------------------------------------------------
   logHeader('Step 5: On-Demand Clade Expansion & Local Graph Grafting');
 
@@ -769,10 +784,9 @@ async function runTestSuite() {
   expandBtn?.click();
 
   const nodesAfterFeliformia = graphStore.getAllNodes().length;
-  assert(nodesAfterFeliformia === nodesBeforeFeliformia + 3, 'Clade Expansion', `Feliformia expansion grafted 3 new sister taxa: Cheetah, Snow Leopard, Jaguar`);
-  assert(graphStore.getNode('tax_acinonyx_jubatus') !== undefined, 'Clade Expansion', 'Cheetah (tax_acinonyx_jubatus) node added to graphStore');
-  assert(graphStore.getNode('tax_panthera_uncia') !== undefined, 'Clade Expansion', 'Snow Leopard (tax_panthera_uncia) node added to graphStore');
-  assert(graphStore.getNode('tax_panthera_onca') !== undefined, 'Clade Expansion', 'Jaguar (tax_panthera_onca) node added to graphStore');
+  assert(nodesAfterFeliformia === nodesBeforeFeliformia + 2, 'Clade Expansion', `Feliformia expansion grafted 2 new sister taxa: Leopard & Cougar`);
+  assert(graphStore.getNode('tax_panthera_pardus') !== undefined, 'Clade Expansion', 'Leopard (tax_panthera_pardus) node added to graphStore');
+  assert(graphStore.getNode('tax_puma_concolor') !== undefined, 'Clade Expansion', 'Cougar (tax_puma_concolor) node added to graphStore');
 
   // Expand Dinosauria clade
   await nodeInspector.inspect(graphStore.getNode('div_dinosauria_aves')!);
@@ -780,9 +794,16 @@ async function runTestSuite() {
   expandDinoBtn?.click();
 
   const nodesAfterDino = graphStore.getAllNodes().length;
-  assert(nodesAfterDino === nodesAfterFeliformia + 2, 'Clade Expansion', `Dinosauria expansion grafted 2 extinct species: Carnotaurus & Ankylosaurus`);
-  assert(graphStore.getNode('tax_carnotaurus') !== undefined, 'Clade Expansion', 'Carnotaurus (tax_carnotaurus) added to graphStore');
-  assert(graphStore.getNode('tax_ankylosaurus') !== undefined, 'Clade Expansion', 'Ankylosaurus (tax_ankylosaurus) added to graphStore');
+  assert(nodesAfterDino === nodesAfterFeliformia + 2, 'Clade Expansion', `Dinosauria expansion grafted 2 exotic species: Therizinosaurus & Pachycephalosaurus`);
+  assert(graphStore.getNode('tax_therizinosaurus') !== undefined, 'Clade Expansion', 'Therizinosaurus (tax_therizinosaurus) added to graphStore');
+  assert(graphStore.getNode('tax_pachycephalosaurus') !== undefined, 'Clade Expansion', 'Pachycephalosaurus (tax_pachycephalosaurus) added to graphStore');
+
+  // Clade Focus Mode Test
+  renderer.focusClade('div_tyrannosauroidea');
+  assert(renderer.getFocusedCladeId() === 'div_tyrannosauroidea', 'Clade Focus Mode', 'Canvas renderer re-rooted and focused on Tyrannosauroidea clade');
+  renderer.focusClade(null);
+  assert(renderer.getFocusedCladeId() === null, 'Clade Focus Mode', 'Canvas renderer reset to full tree of life');
+
 
   // --------------------------------------------------------------------------
   // STEP 6: Creator Preferences & Media Prioritization

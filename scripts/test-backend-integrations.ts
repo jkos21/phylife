@@ -127,8 +127,9 @@ async function runBackendIntegrationTestSuite() {
   console.log('\n📌 [Suite 6/8] On-Demand Clade Zoom & Subtree Grafting...');
   const expandResult = cladeExpansionService.expandClade(store, 'div_dinosauria_aves');
   assert(expandResult.nodesAddedCount >= 2, `Clade expansion grafted ${expandResult.nodesAddedCount} dinosaur sister taxa`);
-  assert(store.getNode('tax_carnotaurus') !== undefined, 'Carnotaurus grafted into local store');
-  assert(store.getNode('tax_ankylosaurus') !== undefined, 'Ankylosaurus grafted into local store');
+  assert(store.getNode('tax_therizinosaurus') !== undefined, 'Therizinosaurus grafted into local store');
+  assert(store.getNode('tax_pachycephalosaurus') !== undefined, 'Pachycephalosaurus grafted into local store');
+
 
   // -------------------------------------------------------------
   // SUITE 7: PhyGraphStore & $O(depth)$ MRCA Pathfinding

@@ -24,6 +24,18 @@ dist/
 dist-ssr/
 *.local
 
+# Database binary and runtime files (do not track binaries, metadata/text formats are tracked)
+*.sqlite
+*.sqlite3
+*.db
+*.bin
+*.sqlite-wal
+*.sqlite-shm
+*.db-wal
+*.db-shm
+
+
+
 # Environment variables
 .env
 .env.*

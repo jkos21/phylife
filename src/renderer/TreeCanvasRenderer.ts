@@ -80,6 +80,18 @@ export class TreeCanvasRenderer {
     }
   }
 
+  public focusClade(cladeId: string | null): void {
+    if (this.options.focusedCladeId !== cladeId) {
+      this.options.focusedCladeId = cladeId;
+      this.recomputeLayout();
+      this.resetCamera();
+    }
+  }
+
+  public getFocusedCladeId(): string | null {
+    return this.options.focusedCladeId || null;
+  }
+
   public setLayoutMode(mode: LayoutMode): void {
     if (this.options.layoutMode !== mode) {
       this.options.layoutMode = mode;
@@ -91,6 +103,7 @@ export class TreeCanvasRenderer {
   public getLayoutMode(): LayoutMode {
     return this.options.layoutMode;
   }
+
 
   public recomputeLayout(): void {
     if (this.options.layoutMode === 'radial') {

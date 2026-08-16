@@ -126,8 +126,8 @@ export class PipelineModal {
               <span class="rank-badge" style="background: rgba(14, 165, 233, 0.15); color: var(--accent-primary);">Manual Refresh Mode</span>
             </div>
             <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
-              Primary storage target: <code style="font-family: var(--font-mono); color: var(--accent-primary);">public/data/phylogeny_graph.json</code><br>
-              Status: Verified persisted snapshot drives initial application state for all users without hardcoded TS dependencies. CLI refresh: <code style="font-family: var(--font-mono); color: var(--text-primary);">npm run graph:refresh</code>.
+              Primary storage target: <code style="font-family: var(--font-mono); color: var(--accent-primary);">public/data/phylife_kg.jsonld</code><br>
+              Status: Verified persisted W3C Knowledge Graph drives initial application state for all users. CLI clean seed: <code style="font-family: var(--font-mono); color: var(--text-primary);">npm run graph:seed</code>.
             </div>
           </div>
 

@@ -19,8 +19,11 @@ export function computeDendrogramLayout(
   edges: RenderEdge[];
   rings: GeologicalRing[];
 } {
-  const rootId = store.getRootId();
-  const rootNode = store.getNode(rootId);
+  const effectiveRootId = (options.focusedCladeId && store.getNode(options.focusedCladeId))
+    ? options.focusedCladeId
+    : store.getRootId();
+
+  const rootNode = store.getNode(effectiveRootId);
   if (!rootNode) {
     return { nodes: [], edges: [], rings: [] };
   }
@@ -40,7 +43,8 @@ export function computeDendrogramLayout(
     return sum;
   };
 
-  countLeaves(rootId);
+  countLeaves(effectiveRootId);
+
 
   const leafYMap = new Map<string, number>();
   leafIds.forEach((id, index) => {
@@ -128,7 +132,7 @@ export function computeDendrogramLayout(
     return { x, y };
   };
 
-  traverse(rootId, 0);
+  traverse(effectiveRootId, 0);
 
   // Build orthogonal branches
   for (const edge of store.getAllEdges()) {

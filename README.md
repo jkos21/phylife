@@ -20,7 +20,7 @@ Built on a local in-memory property graph with $O(\text{depth})$ pathfinding, dy
   - **Nonlinear Sqrt Scaling**: Calibrated slider mapping providing high-resolution control for Phanerozoic and Cenozoic eras.
 - **⚡ Persisted Property Graph Engine (`PhyGraphStore` & `GraphDataLoader`)**:
   - Embedded local property graph with indexed adjacency maps and full-text inverted search.
-  - Asynchronous loading from persisted snapshot (`public/data/phylogeny_graph.json`) with automatic bundled fallback.
+  - Asynchronous loading from persisted W3C Knowledge Graph snapshot (`public/data/phylife_kg.jsonld`) with automatic bundled fallback.
   - $O(\text{depth})$ Lowest Common Ancestor (**MRCA**) calculation.
   - Export to **JSON**, **GraphML**, and standard **Newick (`.nwk`)** format.
 - **✨ Animated MRCA Explorer**:
@@ -87,8 +87,9 @@ npm run test:walkthrough      # Full automated UI & interaction walkthrough test
 PhyLife provides built-in CLI commands to seed, validate, refresh, and synchronize the phylogenetic property graph:
 
 ```bash
-# Persist the canonical knowledge graph snapshot to public/data/phylogeny_graph.json
+# Clean-start seed the canonical knowledge graph snapshot to public/data/phylife_kg.jsonld & SQLite DB
 npm run graph:seed
+
 
 # Reconcile external sources and refresh the persisted knowledge graph snapshot
 npm run graph:refresh
