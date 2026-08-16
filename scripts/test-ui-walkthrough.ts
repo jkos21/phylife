@@ -447,6 +447,7 @@ import { MRCAExplorer } from '../src/ui/MRCAExplorer.ts';
 import { NodeInspector } from '../src/ui/NodeInspector.ts';
 import { UserPreferencesModal } from '../src/ui/UserPreferencesModal.ts';
 import { RecentChangesModal } from '../src/ui/RecentChangesModal.ts';
+import { CladeDrilldownModal } from '../src/ui/CladeDrilldownModal.ts';
 import { TreeControls } from '../src/ui/TreeControls.ts';
 import { themeManager } from '../src/ui/ThemeManager.ts';
 import { userPreferences } from '../src/services/userPreferences.ts';
@@ -587,8 +588,20 @@ async function runTestSuite() {
     }
   );
 
+  const cladeDrilldownModal = new CladeDrilldownModal(graphStore, {
+    onCladeGrafted: (targetId, _count) => {
+      renderer.recomputeLayout();
+      navbar.updateStats(graphStore.getAllNodes().length);
+      renderer.panToNode(targetId);
+    },
+    onFocusClade: cladeId => {
+      renderer.focusClade(cladeId);
+    }
+  });
+
   const navbar = new Navbar({
     onSearchClick: () => searchModal.open(),
+    onDrilldownClick: () => cladeDrilldownModal.open(),
     onMRCAClick: () => mrcaExplorer.open(),
     onPipelineClick: () => {},
     onPreferencesClick: () => preferencesModal.open(),
@@ -618,8 +631,10 @@ async function runTestSuite() {
   documentMock.body.appendChild(mrcaExplorer.getElement() as any);
   documentMock.body.appendChild(preferencesModal.getElement() as any);
   documentMock.body.appendChild(recentChangesModal.getElement() as any);
+  documentMock.body.appendChild(cladeDrilldownModal.getElement() as any);
 
   assert(navbar.getElement().querySelector('#nav-search-trigger') !== null, 'Bootstrap', 'Navbar mounted with search trigger');
+  assert(navbar.getElement().querySelector('#btn-drilldown-trigger') !== null, 'Bootstrap', 'Navbar mounted with live drilldown trigger');
   assert(navbar.getElement().querySelector('#btn-mrca-trigger') !== null, 'Bootstrap', 'Navbar mounted with MRCA trigger');
 
   // --------------------------------------------------------------------------
@@ -824,6 +839,29 @@ async function runTestSuite() {
   assert(renderer.getFocusedCladeId() === 'div_tyrannosauroidea', 'Clade Focus Mode', 'Canvas renderer re-rooted and focused on Tyrannosauroidea clade');
   renderer.focusClade(null);
   assert(renderer.getFocusedCladeId() === null, 'Clade Focus Mode', 'Canvas renderer reset to full tree of life');
+
+  // 5.4 Live Clade Drill-Down Modal Walkthrough
+  logHeader('Step 5.4: Live Clade & Family Drill-Down Explorer (Corvidae)');
+  const drilldownTrigger = navbar.getElement().querySelector('#btn-drilldown-trigger') as any;
+  drilldownTrigger?.click();
+  assert(cladeDrilldownModal.getElement().classList.contains('active'), 'Clade Drilldown', 'CladeDrilldownModal opened on #btn-drilldown-trigger click');
+
+  // Execute lookup for Corvidae
+  const nodesBeforeCorvidae = graphStore.getAllNodes().length;
+  await cladeDrilldownModal.performCladeLookup('Corvidae');
+  const corvidCards = cladeDrilldownModal.getElement().querySelectorAll('.badge') as unknown as MockElement[];
+  assert(corvidCards.length > 0, 'Clade Drilldown', 'Retrieved and rendered Corvidae member species from taxonomy service');
+
+  // Click Graft All button
+  const graftAllBtn = cladeDrilldownModal.getElement().querySelector('#drilldown-btn-graft-all') as any;
+  assert(graftAllBtn !== null, 'Clade Drilldown', 'Graft All Species button rendered in CladeDrilldownModal');
+  graftAllBtn?.click();
+  await new Promise(r => setTimeout(r, 400));
+
+  const nodesAfterCorvidae = graphStore.getAllNodes().length;
+  assert(nodesAfterCorvidae >= nodesBeforeCorvidae + 2, 'Clade Drilldown', `Corvidae clade grafted ${nodesAfterCorvidae - nodesBeforeCorvidae} species into graphStore`);
+  assert(graphStore.getNode('tax_corvus_corax') !== undefined || graphStore.getNode('tax_cyanocitta_cristata') !== undefined, 'Clade Drilldown', 'Corvus corax or Cyanocitta cristata present in graphStore');
+  assert(!cladeDrilldownModal.getElement().classList.contains('active'), 'Clade Drilldown', 'CladeDrilldownModal automatically dismissed after successful graft');
 
 
   // --------------------------------------------------------------------------

@@ -2,6 +2,7 @@ import { PhyGraphStore } from '../graph/PhyGraphStore.ts';
 import { type PhyNode, type TaxonNode, type TaxonMediaPackage, isTaxonNode, isDivergenceNode } from '../graph/types.ts';
 import { mediaFetcher } from '../pipeline/mediaFetcher.ts';
 import { cladeExpansionService } from '../services/cladeExpansionService.ts';
+import { toastManager } from './ToastNotification.ts';
 
 export type NodeInspectorTab = 'overview' | 'species' | 'media' | 'videos' | 'podcasts' | 'lineage';
 
@@ -20,19 +21,22 @@ export class NodeInspector {
   private onFindMRCACallback?: (nodeId: string) => void;
   private onCladeExpandedCallback?: (cladeId: string) => void;
   private onFocusCladeCallback?: (cladeId: string | null) => void;
+  private onOpenDrilldownCallback?: (cladeName: string) => void;
 
   constructor(
     store: PhyGraphStore,
     onNodeSelect?: (nodeId: string) => void,
     onFindMRCA?: (nodeId: string) => void,
     onCladeExpanded?: (cladeId: string) => void,
-    onFocusClade?: (cladeId: string | null) => void
+    onFocusClade?: (cladeId: string | null) => void,
+    onOpenDrilldown?: (cladeName: string) => void
   ) {
     this.store = store;
     this.onNodeSelectCallback = onNodeSelect;
     this.onFindMRCACallback = onFindMRCA;
     this.onCladeExpandedCallback = onCladeExpanded;
     this.onFocusCladeCallback = onFocusClade;
+    this.onOpenDrilldownCallback = onOpenDrilldown;
 
     this.backdrop = document.createElement('div');
     this.backdrop.className = 'drawer-backdrop';
@@ -201,22 +205,21 @@ export class NodeInspector {
 
         <!-- Action Row -->
         <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 20px;">
-          <button class="btn-primary" id="btn-focus-clade" style="justify-content: center; width: 100%;" title="Focus and Isolate this Clade on Tree" aria-label="Focus and Isolate this Clade on Tree">
+          <button class="btn-primary" id="btn-focus-clade" style="justify-content: center; width: 100%; font-weight: 700;" title="Focus and Isolate this Clade on Tree" aria-label="Focus and Isolate this Clade on Tree">
             🎯 Focus Subtree on Canvas
           </button>
 
-          <button class="btn-secondary" id="btn-expand-clade" style="justify-content: center; width: 100%;" title="Expand Clade & Sibling Lineages" aria-label="Expand Clade and Sibling Lineages">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-              <line x1="11" y1="8" x2="11" y2="14"></line>
-              <line x1="8" y1="11" x2="14" y2="11"></line>
-            </svg>
-            ⚡ Expand Clade & Sibling Lineages
+          <button class="btn-secondary" id="btn-expand-clade" style="justify-content: center; width: 100%; background: rgba(56, 189, 248, 0.12); border-color: rgba(56, 189, 248, 0.4); color: #38bdf8; font-weight: 700; padding: 10px 14px;" title="Fetch and Graft Member Species from GBIF Backbone" aria-label="Fetch and Graft Member Species from GBIF Backbone">
+            <span style="font-size: 15px;">🌐</span>
+            <span>Fetch & Graft Live Species (GBIF API)</span>
+          </button>
+
+          <button class="btn-secondary" id="btn-open-clade-drilldown" style="justify-content: center; width: 100%; font-size: 12px; padding: 7px 12px;" title="Open in Live Clade Drill-Down Explorer" aria-label="Open in Live Clade Drill-Down Explorer">
+            <span>🔍 Open Family in Clade Explorer ↗</span>
           </button>
 
           ${isTaxon ? `
-            <button class="btn-secondary" id="btn-find-mrca-with-node" style="justify-content: center; width: 100%;" title="Find Common Ancestor (MRCA) with this Taxon" aria-label="Find Common Ancestor (MRCA) with this Taxon">
+            <button class="btn-secondary" id="btn-find-mrca-with-node" style="justify-content: center; width: 100%; font-size: 12px;" title="Find Common Ancestor (MRCA) with this Taxon" aria-label="Find Common Ancestor (MRCA) with this Taxon">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
               </svg>
@@ -639,7 +642,13 @@ export class NodeInspector {
       }
 
       try {
-        await cladeExpansionService.expandCladeLive(this.store, node.id);
+        const result = await cladeExpansionService.expandCladeLive(this.store, node.id);
+        toastManager.show({
+          icon: '🌐',
+          title: 'Clade Expanded via GBIF',
+          message: `Grafted ${result.nodesAddedCount} new member species into ${result.cladeName}!`
+        });
+
         if (this.onCladeExpandedCallback) {
           this.onCladeExpandedCallback(node.id);
         }
@@ -650,6 +659,14 @@ export class NodeInspector {
       } catch (err: any) {
         alert(err.message || 'Clade expansion could not be completed.');
         this.render();
+      }
+    });
+
+    // Open in Clade Drill-Down Modal
+    this.element.querySelector('#btn-open-clade-drilldown')?.addEventListener('click', () => {
+      const targetName = isTaxonNode(node) ? (node.scientific_name.split(' ')[0] || node.scientific_name) : node.name;
+      if (this.onOpenDrilldownCallback) {
+        this.onOpenDrilldownCallback(targetName);
       }
     });
 

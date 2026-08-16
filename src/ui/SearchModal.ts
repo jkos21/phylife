@@ -2,11 +2,13 @@ import { PhyGraphStore } from '../graph/PhyGraphStore.ts';
 import { type PhyNode, isTaxonNode, type DomainKingdom } from '../graph/types.ts';
 import { externalTaxonomyService, type GlobalTaxonMatch } from '../services/ExternalTaxonomyService.ts';
 import { cladeExpansionService } from '../services/cladeExpansionService.ts';
+import { toastManager } from './ToastNotification.ts';
 
 export class SearchModal {
   private element: HTMLElement;
   private store: PhyGraphStore;
   private onSelectCallback: (node: PhyNode) => void;
+  private onOpenDrilldownCallback?: (cladeName?: string) => void;
   private isOpen = false;
   private selectedDomain: DomainKingdom | null = null;
   private selectedIndex = 0;
@@ -16,9 +18,14 @@ export class SearchModal {
   private debounceTimer: any = null;
   private isSearchingGlobal = false;
 
-  constructor(store: PhyGraphStore, onSelect: (node: PhyNode) => void) {
+  constructor(
+    store: PhyGraphStore, 
+    onSelect: (node: PhyNode) => void,
+    onOpenDrilldown?: (cladeName?: string) => void
+  ) {
     this.store = store;
     this.onSelectCallback = onSelect;
+    this.onOpenDrilldownCallback = onOpenDrilldown;
     this.element = document.createElement('div');
     this.element.className = 'modal-backdrop';
     this.render();
@@ -183,6 +190,11 @@ export class SearchModal {
 
     try {
       const graftedNode = await cladeExpansionService.graftUnlistedTaxon(this.store, match.scientificName);
+      toastManager.show({
+        icon: '🌱',
+        title: 'Taxon Discovered & Grafted',
+        message: `Successfully grafted "${graftedNode.scientific_name}" (${graftedNode.common_name || 'Species'}) from GBIF Backbone into the Tree of Life!`
+      });
       this.onSelectCallback(graftedNode);
       this.close();
     } catch (err: any) {
@@ -204,6 +216,20 @@ export class SearchModal {
     }
 
     let html = '';
+
+    const currentQuery = (this.element.querySelector('.search-input') as HTMLInputElement)?.value?.trim();
+    if (currentQuery) {
+      html += `
+        <div class="search-drilldown-prompt" style="padding: 10px 14px; margin: 6px 10px 8px; background: rgba(56, 189, 248, 0.1); border: 1px dashed rgba(56, 189, 248, 0.4); border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center;">
+          <div style="font-size: 12px; color: var(--text-primary);">
+            <span>🌐 Looking to explore all members of <strong>${currentQuery}</strong>?</span>
+          </div>
+          <button class="btn-primary btn-open-drilldown-from-search" style="font-size: 11px; padding: 4px 10px; font-weight: 700;">
+            Open in Clade Explorer ↗
+          </button>
+        </div>
+      `;
+    }
 
     // 1. Local Knowledge Graph Matches
     if (this.currentLocalResults.length > 0) {
@@ -326,6 +352,15 @@ export class SearchModal {
             selectItem();
           }
         });
+      }
+    });
+
+    // Attach click for drilldown prompt button
+    list.querySelector('.btn-open-drilldown-from-search')?.addEventListener('click', () => {
+      const q = (this.element.querySelector('.search-input') as HTMLInputElement)?.value?.trim();
+      this.close();
+      if (this.onOpenDrilldownCallback) {
+        this.onOpenDrilldownCallback(q);
       }
     });
   }

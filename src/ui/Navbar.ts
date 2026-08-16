@@ -3,6 +3,7 @@ import type { LayoutMode } from '../renderer/types.ts';
 
 export interface NavbarCallbacks {
   onSearchClick: () => void;
+  onDrilldownClick: () => void;
   onMRCAClick: () => void;
   onPipelineClick: () => void;
   onPreferencesClick: () => void;
@@ -105,6 +106,11 @@ export class Navbar {
       </div>
 
       <div class="nav-actions">
+        <button class="btn-primary" id="btn-drilldown-trigger" aria-label="Live Family and Clade Drill-Down (GBIF & OpenTree)" title="Live Family & Clade Drill-Down (GBIF & OpenTree)" style="background: linear-gradient(135deg, #0284c7, #06b6d4); border-color: #38bdf8; box-shadow: 0 0 12px rgba(56, 189, 248, 0.35); font-weight: 700; display: flex; align-items: center; gap: 6px; padding: 6px 12px;">
+          <span style="font-size: 14px;">🌐</span>
+          <span class="nav-action-label">Live Drilldown</span>
+        </button>
+
         <button class="btn-secondary" id="btn-recent-trigger" aria-label="View Recent Taxonomic Updates & Delta Changes" title="View Recent Taxonomic Updates & Delta Changes" style="padding: 6px 10px; font-size: 12.5px; display: flex; align-items: center; gap: 6px;">
           <span aria-hidden="true">✨</span>
           <span class="nav-action-label">Recent Updates</span>
@@ -115,7 +121,7 @@ export class Navbar {
           <span class="nav-action-label">Creators</span>
         </button>
 
-        <button class="btn-primary" id="btn-mrca-trigger" aria-label="Explore Most Recent Common Ancestor" title="Explore Most Recent Common Ancestor">
+        <button class="btn-secondary" id="btn-mrca-trigger" aria-label="Explore Most Recent Common Ancestor" title="Explore Most Recent Common Ancestor">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
           </svg>
@@ -149,6 +155,10 @@ export class Navbar {
 
     this.element.querySelector('#nav-search-trigger')?.addEventListener('click', () => {
       this.callbacks.onSearchClick();
+    });
+
+    this.element.querySelector('#btn-drilldown-trigger')?.addEventListener('click', () => {
+      this.callbacks.onDrilldownClick();
     });
 
     this.element.querySelector('#btn-recent-trigger')?.addEventListener('click', () => {

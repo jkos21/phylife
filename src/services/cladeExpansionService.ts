@@ -467,7 +467,7 @@ export class CladeExpansionService {
     return store.getRootId();
   }
 
-  private generateTaxonId(scientificName: string): string {
+  public generateTaxonId(scientificName: string): string {
     const clean = scientificName.toLowerCase().replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_').slice(0, 40);
     return `tax_${clean}`;
   }

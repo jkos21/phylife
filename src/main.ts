@@ -11,6 +11,7 @@ import { MRCAExplorer } from './ui/MRCAExplorer.ts';
 import { PipelineModal } from './ui/PipelineModal.ts';
 import { UserPreferencesModal } from './ui/UserPreferencesModal.ts';
 import { RecentChangesModal } from './ui/RecentChangesModal.ts';
+import { CladeDrilldownModal } from './ui/CladeDrilldownModal.ts';
 import { userPreferences } from './services/userPreferences.ts';
 import type { MRCAResult } from './graph/types.ts';
 
@@ -26,6 +27,7 @@ class PhyLifeApp {
   private pipelineModal!: PipelineModal;
   private preferencesModal!: UserPreferencesModal;
   private recentChangesModal!: RecentChangesModal;
+  private cladeDrilldownModal!: CladeDrilldownModal;
 
   constructor() {
     this.appElement = document.getElementById('app')!;
@@ -56,7 +58,19 @@ class PhyLifeApp {
   private cladeFocusBar!: HTMLElement;
 
   private setupUI(): void {
-    // 1. Modals & Drawers
+    // 1. Clade Drilldown Modal
+    this.cladeDrilldownModal = new CladeDrilldownModal(graphStore, {
+      onCladeGrafted: (targetNodeId, _addedCount) => {
+        this.renderer.recomputeLayout();
+        this.navbar.updateStats(graphStore.getAllNodes().length);
+        this.renderer.panToNode(targetNodeId);
+      },
+      onFocusClade: cladeId => {
+        this.setCladeFocus(cladeId);
+      }
+    });
+
+    // 2. Modals & Drawers
     this.nodeInspector = new NodeInspector(
       graphStore,
       nodeId => {
@@ -77,14 +91,23 @@ class PhyLifeApp {
       },
       cladeId => {
         this.setCladeFocus(cladeId);
+      },
+      cladeName => {
+        this.cladeDrilldownModal.open(cladeName);
       }
     );
 
-    this.searchModal = new SearchModal(graphStore, node => {
-      this.renderer.panToNode(node.id);
-      this.renderer.setOptions({ selectedNodeId: node.id });
-      this.nodeInspector.inspect(node);
-    });
+    this.searchModal = new SearchModal(
+      graphStore, 
+      node => {
+        this.renderer.panToNode(node.id);
+        this.renderer.setOptions({ selectedNodeId: node.id });
+        this.nodeInspector.inspect(node);
+      },
+      cladeName => {
+        this.cladeDrilldownModal.open(cladeName);
+      }
+    );
 
     this.mrcaExplorer = new MRCAExplorer(graphStore, (result: MRCAResult) => {
       this.handleHighlightMRCAPath(result);
@@ -117,9 +140,10 @@ class PhyLifeApp {
       }
     );
 
-    // 2. Navigation Bar
+    // 3. Navigation Bar
     this.navbar = new Navbar({
       onSearchClick: () => this.searchModal.open(),
+      onDrilldownClick: () => this.cladeDrilldownModal.open(),
       onMRCAClick: () => this.mrcaExplorer.open(),
       onPipelineClick: () => this.pipelineModal.open(),
       onPreferencesClick: () => this.preferencesModal.open(),
@@ -134,7 +158,7 @@ class PhyLifeApp {
     this.navbar.updateStats(graphStore.getAllNodes().length);
     this.appElement.appendChild(this.navbar.getElement());
 
-    // 3. Viewport Container & Canvas
+    // 4. Viewport Container & Canvas
     const viewportContainer = document.createElement('main');
     viewportContainer.className = 'viewport-container';
 
@@ -227,6 +251,7 @@ class PhyLifeApp {
     document.body.appendChild(this.pipelineModal.getElement());
     document.body.appendChild(this.preferencesModal.getElement());
     document.body.appendChild(this.recentChangesModal.getElement());
+    document.body.appendChild(this.cladeDrilldownModal.getElement());
   }
 
   private setupRenderer(): void {

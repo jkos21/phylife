@@ -8,9 +8,13 @@ Built on a local in-memory property graph with $O(\text{depth})$ pathfinding, dy
 
 ## 📸 Key Features
 
+- **🌐 Live Family & Clade Drill-Down Explorer (GBIF & OpenTree)**:
+  - **Front-and-Center Navbar Tool**: Access the dedicated **`🌐 Live Drilldown`** modal directly from the navbar to search, preview, and graft any biological family, genus, or order on Earth (*Corvidae*, *Ursidae*, *Falconidae*, *Delphinidae*, *Spheniscidae*, *Rosaceae*, *Lamnidae*, *Pinaceae*, *Octopodidae*, *Ceratopsidae*, *Canidae*, *Felidae*).
+  - **Instant Live API Status & Preview**: Displays real-time API connection indicators to GBIF Backbone Taxonomy and Open Tree of Life v3, and renders resolved species cards with images, diagnostic traits, and living/fossil status.
+  - **One-Click Subtree Grafting (`🚀 Graft Clade into Tree`)**: Automatically calculates pairwise TimeTree divergence ages, grafts all member nodes and branch edges into `PhyGraphStore`, updates tree layouts, triggers floating toast notifications, and smoothly zooms to the newly grafted clade.
 - **🌐 Live External API Dynamic Enrichment & In-Browser SQLite KG Caching**:
   - **Live Global Taxonomy Search**: Search across millions of species via live connections to **GBIF Backbone Taxonomy** (`/v1/species/suggest`, `/v1/species/match`) and **Open Tree of Life TNRS** (`/v3/tnrs/match_names`).
-  - **Dynamic Subtree Grafting & Clade Drill-Down**: Expand any family, genus, or order on demand (*Felidae*, *Canidae*, *Cetacea*, *Dinosauria*, *Viridiplantae*); the engine traverses lineage hierarchies, calibrates divergence ages via `TimeTreeClient`, and dynamically grafts nodes and branch edges directly into `PhyGraphStore`.
+  - **Dynamic Subtree Grafting & Clade Drill-Down**: Expand any family, genus, or order on demand; the engine traverses lineage hierarchies, calibrates divergence ages via `TimeTreeClient`, and dynamically grafts nodes and branch edges directly into `PhyGraphStore`.
   - **Unlisted Taxon Discovery**: Search any unlisted organism (e.g. *Orcinus orca*, *Ailuropoda melanoleuca*, *Smilodon fatalis*); the engine automatically discovers its lineage, attaches it to the closest ancestor in the active tree, and enriches it with Wikipedia thumbnail media.
   - **In-Browser SQLite & IndexedDB Persistence**: All dynamically grafted taxa, divergence timings, and provenance audit records (`kg_audit_log`, `kg_cache`) persist locally across browser reloads.
 - **🌐 Deep-Zoom Canvas Visualizer & Clade Focus Mode**:

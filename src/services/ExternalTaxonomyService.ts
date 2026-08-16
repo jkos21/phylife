@@ -690,7 +690,250 @@ export class ExternalTaxonomyService {
       ];
     }
 
-    if (n.includes('plant') || n.includes('flora') || n.includes('conifer') || n.includes('tree')) {
+    if (n.includes('corvid') || n.includes('crow') || n.includes('raven') || n.includes('jay') || n.includes('corvus')) {
+      return [
+        {
+          usageKey: 2482468,
+          scientificName: 'Corvus corax',
+          canonicalName: 'Corvus corax',
+          commonName: 'Common Raven',
+          rank: 'species',
+          kingdom: 'Metazoa',
+          family: 'Corvidae',
+          genus: 'Corvus',
+          extinct: false,
+          traits: ['Complex tool use & vocal mimicry', 'High encephalization quotient', 'Complex problem solving'],
+          description: 'Passerine bird with exceptional intelligence, problem-solving abilities, and complex social vocalizations.'
+        },
+        {
+          usageKey: 2482496,
+          scientificName: 'Corvus brachyrhynchos',
+          canonicalName: 'Corvus brachyrhynchos',
+          commonName: 'American Crow',
+          rank: 'species',
+          kingdom: 'Metazoa',
+          family: 'Corvidae',
+          genus: 'Corvus',
+          extinct: false,
+          traits: ['Facial recognition memory', 'Cooperative flock mobbing', 'Omnivorous adaptability'],
+          description: 'Common North American passerine bird known for recognizing individual human faces and generational learning.'
+        },
+        {
+          usageKey: 2482593,
+          scientificName: 'Cyanocitta cristata',
+          canonicalName: 'Cyanocitta cristata',
+          commonName: 'Blue Jay',
+          rank: 'species',
+          kingdom: 'Metazoa',
+          family: 'Corvidae',
+          genus: 'Cyanocitta',
+          extinct: false,
+          traits: ['Crest feather display', 'Acorn caching & forest regeneration', 'Hawk call mimicry'],
+          description: 'Vibrant blue passerine native to eastern North America, critical for oak forest seed dispersal.'
+        }
+      ];
+    }
+
+    if (n.includes('ursid') || n.includes('bear') || n.includes('ursus')) {
+      return [
+        {
+          usageKey: 2433433,
+          scientificName: 'Ursus arctos',
+          canonicalName: 'Ursus arctos',
+          commonName: 'Brown Bear / Grizzly',
+          rank: 'species',
+          kingdom: 'Metazoa',
+          family: 'Ursidae',
+          genus: 'Ursus',
+          extinct: false,
+          traits: ['Massive shoulder muscle hump', 'Hyper-sensitive olfactory sense', 'Winter torpor dormancy'],
+          description: 'Large apex omnivore distributed across the forests and mountains of North America and Eurasia.'
+        },
+        {
+          usageKey: 2433451,
+          scientificName: 'Ursus maritimus',
+          canonicalName: 'Ursus maritimus',
+          commonName: 'Polar Bear',
+          rank: 'species',
+          kingdom: 'Metazoa',
+          family: 'Ursidae',
+          genus: 'Ursus',
+          extinct: false,
+          traits: ['Hollow translucent hair insulation', 'Black heat-absorbent skin', 'Seal blubber specialist'],
+          description: 'Hypercarnivorous marine bear adapted to Arctic sea ice, reaching masses over 700 kg.'
+        },
+        {
+          usageKey: 2433400,
+          scientificName: 'Ailuropoda melanoleuca',
+          canonicalName: 'Ailuropoda melanoleuca',
+          commonName: 'Giant Panda',
+          rank: 'species',
+          kingdom: 'Metazoa',
+          family: 'Ursidae',
+          genus: 'Ailuropoda',
+          extinct: false,
+          traits: ['Opposable pseudo-thumb radial sesamoid', 'Bamboo specialization', 'Black and white camouflage'],
+          description: 'Basal ursid native to south central China, specialized in consuming fibrous bamboo shoots.'
+        }
+      ];
+    }
+
+    if (n.includes('falcon') || n.includes('falco')) {
+      return [
+        {
+          usageKey: 2481037,
+          scientificName: 'Falco peregrinus',
+          canonicalName: 'Falco peregrinus',
+          commonName: 'Peregrine Falcon',
+          rank: 'species',
+          kingdom: 'Metazoa',
+          family: 'Falconidae',
+          genus: 'Falco',
+          extinct: false,
+          traits: ['389 km/h hunting stoop dive', 'Bony nostril tubercle air baffles', 'Nictitating membrane eye protection'],
+          description: 'Fastest animal on Earth, reaching diving stoop speeds over 389 km/h when hunting aerial prey.'
+        },
+        {
+          usageKey: 2481055,
+          scientificName: 'Falco sparverius',
+          canonicalName: 'Falco sparverius',
+          commonName: 'American Kestrel',
+          rank: 'species',
+          kingdom: 'Metazoa',
+          family: 'Falconidae',
+          genus: 'Falco',
+          extinct: false,
+          traits: ['Hover-hunting hovering flight', 'Ultraviolet rodent trail vision', 'False eye-spot markings'],
+          description: 'Smallest falcon in North America, capable of hovering in place while hunting insects and rodents.'
+        }
+      ];
+    }
+
+    if (n.includes('penguin') || n.includes('sphenisc')) {
+      return [
+        {
+          usageKey: 2481661,
+          scientificName: 'Aptenodytes forsteri',
+          canonicalName: 'Aptenodytes forsteri',
+          commonName: 'Emperor Penguin',
+          rank: 'species',
+          kingdom: 'Metazoa',
+          family: 'Spheniscidae',
+          genus: 'Aptenodytes',
+          extinct: false,
+          traits: ['500-meter deep diving', 'Antarctic winter breeding huddle', 'Solid bone underwater ballast'],
+          description: 'Tallest and heaviest of all living penguin species, enduring temperatures down to -60°C in Antarctic winters.'
+        },
+        {
+          usageKey: 2481630,
+          scientificName: 'Spheniscus magellanicus',
+          canonicalName: 'Spheniscus magellanicus',
+          commonName: 'Magellanic Penguin',
+          rank: 'species',
+          kingdom: 'Metazoa',
+          family: 'Spheniscidae',
+          genus: 'Spheniscus',
+          extinct: false,
+          traits: ['Banded counter-shaded plumage', 'Burrow nesting ecology', 'Pelagic schooling fish feeder'],
+          description: 'South American penguin breeding in coastal Argentina, Chile and the Falkland Islands.'
+        }
+      ];
+    }
+
+    if (n.includes('rosacea') || n.includes('rose') || n.includes('rosa')) {
+      return [
+        {
+          usageKey: 3002621,
+          scientificName: 'Rosa gallica',
+          canonicalName: 'Rosa gallica',
+          commonName: 'French Rose',
+          rank: 'species',
+          kingdom: 'Viridiplantae',
+          family: 'Rosaceae',
+          genus: 'Rosa',
+          extinct: false,
+          traits: ['Prickle dermal appendages', 'Vitamin C rich rose hips', 'Compound pinnate foliage'],
+          description: 'Deciduous flowering shrub native to southern and central Europe, cultivated since antiquity.'
+        },
+        {
+          usageKey: 3001086,
+          scientificName: 'Malus domestica',
+          canonicalName: 'Malus domestica',
+          commonName: 'Apple',
+          rank: 'species',
+          kingdom: 'Viridiplantae',
+          family: 'Rosaceae',
+          genus: 'Malus',
+          extinct: false,
+          traits: ['Pome accessory fruit structure', 'Heterozygosity cross-pollination', 'Winter chilling requirement'],
+          description: 'Deciduous fruit tree in the rose family, one of the most widely cultivated tree fruits in human history.'
+        }
+      ];
+    }
+
+    if (n.includes('shark') || n.includes('lamnid') || n.includes('carcharodon')) {
+      return [
+        {
+          usageKey: 2420672,
+          scientificName: 'Carcharodon carcharias',
+          canonicalName: 'Carcharodon carcharias',
+          commonName: 'Great White Shark',
+          rank: 'species',
+          kingdom: 'Metazoa',
+          family: 'Lamnidae',
+          genus: 'Carcharodon',
+          extinct: false,
+          traits: ['Regional endothermy warm blood', 'Ampullae of Lorenzini electroreception', 'Serrated triangular teeth'],
+          description: 'Apex marine predator reaching lengths over 6 meters, capable of breaching clear out of water.'
+        },
+        {
+          usageKey: 2420650,
+          scientificName: 'Isurus oxyrinchus',
+          canonicalName: 'Isurus oxyrinchus',
+          commonName: 'Shortfin Mako Shark',
+          rank: 'species',
+          kingdom: 'Metazoa',
+          family: 'Lamnidae',
+          genus: 'Isurus',
+          extinct: false,
+          traits: ['74 km/h burst swimming speed', 'Hydrodynamic dermal denticles', 'Caudal keel stabilization'],
+          description: 'Fastest shark in the global ocean, capable of sustained high-speed pursuit of swordfish and tuna.'
+        }
+      ];
+    }
+
+    if (n.includes('octopus') || n.includes('octopod')) {
+      return [
+        {
+          usageKey: 2289295,
+          scientificName: 'Enteroctopus dofleini',
+          canonicalName: 'Enteroctopus dofleini',
+          commonName: 'Giant Pacific Octopus',
+          rank: 'species',
+          kingdom: 'Metazoa',
+          family: 'Octopodidae',
+          genus: 'Enteroctopus',
+          extinct: false,
+          traits: ['Chromatophore camouflage shifting', 'Three hearts & blue hemocyanin blood', 'Distributed tentacle neural ring'],
+          description: 'Largest octopus species on Earth, reaching arm spans over 4 meters across the cold North Pacific depths.'
+        },
+        {
+          usageKey: 2289280,
+          scientificName: 'Hapalochlaena lunulata',
+          canonicalName: 'Hapalochlaena lunulata',
+          commonName: 'Greater Blue-ringed Octopus',
+          rank: 'species',
+          kingdom: 'Metazoa',
+          family: 'Octopodidae',
+          genus: 'Hapalochlaena',
+          extinct: false,
+          traits: ['Tetrodotoxin neurotoxin', 'Flashing iridescent blue warning rings', 'Small tidal pool ambush predator'],
+          description: 'Small but venomous cephalopod carrying symbiotic bacteria producing potent neurotoxin.'
+        }
+      ];
+    }
+
+    if (n.includes('plant') || n.includes('flora') || n.includes('conifer') || n.includes('tree') || n.includes('pinacea') || n.includes('pinus')) {
       return [
         {
           usageKey: 2684824,
