@@ -60,6 +60,3 @@ dist-ssr/
 ehthumbs.db
 Thumbs.db
 
-# Agent workspaces
-.agent/
-.agents/
