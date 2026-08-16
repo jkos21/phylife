@@ -8,13 +8,18 @@ Built on a local in-memory property graph with $O(\text{depth})$ pathfinding, dy
 
 ## 📸 Key Features
 
+- **🌐 Live External API Dynamic Enrichment & In-Browser SQLite KG Caching**:
+  - **Live Global Taxonomy Search**: Search across millions of species via live connections to **GBIF Backbone Taxonomy** (`/v1/species/suggest`, `/v1/species/match`) and **Open Tree of Life TNRS** (`/v3/tnrs/match_names`).
+  - **Dynamic Subtree Grafting & Clade Drill-Down**: Expand any family, genus, or order on demand (*Felidae*, *Canidae*, *Cetacea*, *Dinosauria*, *Viridiplantae*); the engine traverses lineage hierarchies, calibrates divergence ages via `TimeTreeClient`, and dynamically grafts nodes and branch edges directly into `PhyGraphStore`.
+  - **Unlisted Taxon Discovery**: Search any unlisted organism (e.g. *Orcinus orca*, *Ailuropoda melanoleuca*, *Smilodon fatalis*); the engine automatically discovers its lineage, attaches it to the closest ancestor in the active tree, and enriches it with Wikipedia thumbnail media.
+  - **In-Browser SQLite & IndexedDB Persistence**: All dynamically grafted taxa, divergence timings, and provenance audit records (`kg_audit_log`, `kg_cache`) persist locally across browser reloads.
 - **🌐 Deep-Zoom Canvas Visualizer & Clade Focus Mode**:
   - **Radial Geological Phylogram**: Concentric geological timescale rings (Hadean, Archean, Proterozoic, Paleozoic, Mesozoic, Cenozoic) with domain-coded bezier branches.
   - **Hierarchical Dendrogram**: Rectangular phylogram with time-calibrated linear bands and clean branch slicing.
   - **🎯 Clade Focus Mode**: Re-roots and isolates the canvas onto any intermediate clade (e.g. *Tyrannosauroidea*, *Dinosauria*, *Felidae*, *Cetacea*) utilizing the full 360° canvas space with interactive glassmorphic breadcrumbs.
   - **Dynamic Level of Detail (LoD)**: Automatic Level of Detail filtering from domain crowns down to terminal species.
 - **🦁 High-Resolution Species Drill-Down & Paleontological Lineages**:
-  - Dense coverage of 134 nodes across all 6 kingdoms, featuring 10 Tyrannosauroid species (*T. rex*, *Tarbosaurus*, *Albertosaurus*, *Yutyrannus*, *Guanlong*, etc.), Dromaeosaur raptors, Sauropods, Horned/Armored dinosaurs, Whales, Big Cats & Sabertooths, Early Hominins, Sharks, and Paleozoic Megafauna.
+  - Dense coverage across all 6 kingdoms, featuring 10 Tyrannosauroid species (*T. rex*, *Tarbosaurus*, *Albertosaurus*, *Yutyrannus*, *Guanlong*, etc.), Dromaeosaur raptors, Sauropods, Horned/Armored dinosaurs, Whales, Big Cats & Sabertooths, Early Hominins, Sharks, and Paleozoic Megafauna.
   - Dedicated **"🦁 Species / Member Taxa"** tab in Node Inspector with live filtering, morphological trait badges, and one-click navigation.
 - **⏳ Interactive Geological Chronogram & Divergence Timeline**:
   - **Real-Time Isochrone Horizons**: Renders a glowing isochrone ring (Radial) or vertical line (Dendrogram) slicing branches at epoch $T$.

@@ -1,5 +1,6 @@
 import { graphStore } from './graph/PhyGraphStore.ts';
 import { graphDataLoader } from './services/GraphDataLoader.ts';
+import { kgCacheStore } from './services/KGCacheStore.ts';
 import { TreeCanvasRenderer } from './renderer/TreeCanvasRenderer.ts';
 import { Navbar } from './ui/Navbar.ts';
 import { TimelineBar } from './ui/TimelineBar.ts';
@@ -35,13 +36,16 @@ class PhyLifeApp {
     // 1. Load initial persisted knowledge graph
     await graphDataLoader.loadInitialGraph(graphStore);
 
-    // 2. Build UI containers
+    // 2. Re-hydrate dynamic KG cached taxa & divergences
+    kgCacheStore.loadPersistedDeltas(graphStore);
+
+    // 3. Build UI containers
     this.setupUI();
 
-    // 3. Mount Canvas Engine
+    // 4. Mount Canvas Engine
     this.setupRenderer();
 
-    // 4. Listen to preference updates
+    // 5. Listen to preference updates
     userPreferences.subscribe(prefs => {
       this.renderer.setOptions({
         highlightRecentDeltas: prefs.highlightRecentDeltas
@@ -316,6 +320,14 @@ class PhyLifeApp {
 
 // Bootstrap on DOM load
 window.addEventListener('DOMContentLoaded', () => {
-  new PhyLifeApp();
+  const app = new PhyLifeApp();
+  (window as any).__phylife = {
+    app,
+    graphStore,
+    kgCacheStore,
+    getGraphAuditLog: () => graphStore.getAuditLog(),
+    getKGAuditLog: () => kgCacheStore.getAuditLogs(),
+    getAllNodes: () => graphStore.getAllNodes()
+  };
 });
 

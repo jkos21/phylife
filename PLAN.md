@@ -6,12 +6,13 @@
 
 ## 🎯 Active & Upcoming Roadmap Items
 
-### 1. 🌐 Live External API Dynamic Enrichment & SQLite KG Caching
+### 1. 🌐 Live External API Dynamic Enrichment & SQLite KG Caching ✅ [COMPLETED]
 - **Goal**: Allow users to query and discover unlisted species and clades in real-time.
 - **Components**:
   - Live fetcher services connecting to **GBIF Backbone Taxonomy**, **Open Tree of Life API v3**, **TimeTree 5**, and **Wikimedia/Wikispecies API**.
   - Dynamic graph grafting: automatically attaches new taxa to their respective family/genus divergence node in `PhyGraphStore`.
-  - Persistence caching: writes newly discovered taxa and provenance directly to SQLite `kg_cache` and `kg_audit_log` tables.
+  - Persistence caching: writes newly discovered taxa and provenance directly to SQLite/IndexedDB `kg_cache` and `kg_audit_log` storage.
+  - Global biodiversity search in `SearchModal` and live expansion drilldowns in `NodeInspector`.
 
 ---
 

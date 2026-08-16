@@ -11,6 +11,9 @@ import { cladeExpansionService } from '../src/services/cladeExpansionService.ts'
 import { userPreferences } from '../src/services/userPreferences.ts';
 import { pipelineRunner } from '../src/pipeline/pipelineRunner.ts';
 
+import { externalTaxonomyService } from '../src/services/ExternalTaxonomyService.ts';
+import { kgCacheStore } from '../src/services/KGCacheStore.ts';
+
 let passedAssertions = 0;
 let totalAssertions = 0;
 
@@ -33,7 +36,7 @@ async function runBackendIntegrationTestSuite() {
   // -------------------------------------------------------------
   // SUITE 1: Open Tree of Life (OToL API v3) Integration
   // -------------------------------------------------------------
-  console.log('📌 [Suite 1/8] Open Tree of Life (OToL TNRS & Subtree API)...');
+  console.log('📌 [Suite 1/10] Open Tree of Life (OToL TNRS & Subtree API)...');
   try {
     const matches = await otolClient.matchNames(['Homo sapiens', 'Panthera leo', 'Ginkgo biloba']);
     assert(Array.isArray(matches) && matches.length === 3, 'OToL TNRS returns matched taxa');
@@ -46,7 +49,7 @@ async function runBackendIntegrationTestSuite() {
   // -------------------------------------------------------------
   // SUITE 2: TimeTree Chronogram Calibration & Geological Eras
   // -------------------------------------------------------------
-  console.log('\n📌 [Suite 2/8] TimeTree Chronogram & Chronostratigraphy Engine...');
+  console.log('\n📌 [Suite 2/10] TimeTree Chronogram & Chronostratigraphy Engine...');
   const humanLionPair = await timeTreeClient.getPairwiseDivergence('Homo sapiens', 'Panthera leo');
   assert(humanLionPair.divergence_mya === 95.0, 'Human–Lion divergence is calibrated to 95.0 Ma');
   assert(humanLionPair.geological_era === 'Mesozoic', '95.0 Ma is classified as Mesozoic');
@@ -65,7 +68,7 @@ async function runBackendIntegrationTestSuite() {
   // -------------------------------------------------------------
   // SUITE 3: Domain Metadata Reconciliation (WFO / MycoBank / GBIF)
   // -------------------------------------------------------------
-  console.log('\n📌 [Suite 3/8] Domain Taxonomy Enrichers (WFO, MycoBank, GBIF)...');
+  console.log('\n📌 [Suite 3/10] Domain Taxonomy Enrichers (WFO, MycoBank, GBIF)...');
   const wfoMatch = await domainEnricher.enrichWFO('Arabidopsis thaliana');
   assert(wfoMatch !== null && wfoMatch.wfo_id.startsWith('wfo-'), 'WFO identifier resolved for Arabidopsis');
 
@@ -76,9 +79,32 @@ async function runBackendIntegrationTestSuite() {
   assert(gbifMatch !== null && typeof gbifMatch.usageKey === 'number', 'GBIF Backbone key resolved for Panthera leo');
 
   // -------------------------------------------------------------
-  // SUITE 4: Media Fetcher & Creator Prioritization Engine
+  // SUITE 4: Global Taxonomy Service & GBIF Backbone Children (Item 1)
   // -------------------------------------------------------------
-  console.log('\n📌 [Suite 4/8] Public Media Fetcher & Creator Personalization...');
+  console.log('\n📌 [Suite 4/10] Live External Taxonomy & Clade Children Discovery...');
+  const pandaMatches = await externalTaxonomyService.searchGlobalTaxa('Giant Panda', 3);
+  assert(pandaMatches.length > 0, 'Global taxonomy search finds Giant Panda');
+  assert(pandaMatches[0].scientificName.includes('Ailuropoda') || pandaMatches[0].canonicalName.includes('Ailuropoda'), 'Matched scientific name is Ailuropoda melanoleuca');
+
+  const orcaMatches = await externalTaxonomyService.searchGlobalTaxa('Orcinus orca', 2);
+  assert(orcaMatches.length > 0 && orcaMatches[0].rank === 'species', 'Global search finds Orcinus orca as species');
+
+  const felidChildren = await externalTaxonomyService.fetchCladeChildren('Felidae', 5);
+  assert(felidChildren.length >= 3, `Discovered ${felidChildren.length} member species in Felidae`);
+  assert(felidChildren.some(c => c.scientificName.includes('Panthera') || c.scientificName.includes('Acinonyx') || c.scientificName.includes('Smilodon')), 'Discovered big cats in Felidae subtree');
+
+  // -------------------------------------------------------------
+  // SUITE 5: In-Browser SQLite / IndexedDB KG Caching (Item 1)
+  // -------------------------------------------------------------
+  console.log('\n📌 [Suite 5/10] In-Browser SQLite & Knowledge Graph Cache Layer...');
+  kgCacheStore.set('test_taxon_cheetah', { scientificName: 'Acinonyx jubatus' }, 'GBIF_API', 24);
+  const cachedCheetah = kgCacheStore.get('test_taxon_cheetah');
+  assert(cachedCheetah !== null && cachedCheetah.scientificName === 'Acinonyx jubatus', 'KG cache stores and retrieves taxa correctly');
+
+  // -------------------------------------------------------------
+  // SUITE 6: Media Fetcher & Creator Prioritization Engine
+  // -------------------------------------------------------------
+  console.log('\n📌 [Suite 6/10] Public Media Fetcher & Creator Personalization...');
   userPreferences.toggleCreator('pbs_eons'); // Ensure PBS Eons is prioritized
   const mediaPkg = await mediaFetcher.fetchCompleteMediaPackage({
     id: 'tax_panthera_leo',
@@ -96,9 +122,9 @@ async function runBackendIntegrationTestSuite() {
   assert(mediaPkg.videos[0].isCreatorMatch === true, 'Prioritized creator video ranks at the top (PBS Eons / BBC)');
 
   // -------------------------------------------------------------
-  // SUITE 5: Delta Sync & Freshness Patching Engine
+  // SUITE 7: Delta Sync & Freshness Patching Engine
   // -------------------------------------------------------------
-  console.log('\n📌 [Suite 5/8] Delta Sync Engine & Scientific Freshness...');
+  console.log('\n📌 [Suite 7/10] Delta Sync Engine & Scientific Freshness...');
   const store = new PhyGraphStore();
   store.importJSON({
     version: '1.0.0',
@@ -122,19 +148,23 @@ async function runBackendIntegrationTestSuite() {
   assert(afterSummary.newTaxaCount >= beforeSummary.newTaxaCount + 2, 'Recent changes summary reflects newly added taxa');
 
   // -------------------------------------------------------------
-  // SUITE 6: On-Demand Clade Expansion Engine
+  // SUITE 8: Live Asynchronous Clade Expansion & Graph Grafting (Item 1)
   // -------------------------------------------------------------
-  console.log('\n📌 [Suite 6/8] On-Demand Clade Zoom & Subtree Grafting...');
-  const expandResult = cladeExpansionService.expandClade(store, 'div_dinosauria_aves');
-  assert(expandResult.nodesAddedCount >= 2, `Clade expansion grafted ${expandResult.nodesAddedCount} dinosaur sister taxa`);
-  assert(store.getNode('tax_therizinosaurus') !== undefined, 'Therizinosaurus grafted into local store');
-  assert(store.getNode('tax_pachycephalosaurus') !== undefined, 'Pachycephalosaurus grafted into local store');
+  console.log('\n📌 [Suite 8/10] Live Clade Expansion & Subtree Grafting...');
+  const expandResult = await cladeExpansionService.expandCladeLive(store, 'div_dinosauria_aves');
+  assert(expandResult.nodesAddedCount >= 2, `Live clade expansion grafted ${expandResult.nodesAddedCount} dinosaur sister taxa`);
+  assert(store.getNode('tax_therizinosaurus_cheloniformis') !== undefined || store.getNode('tax_therizinosaurus') !== undefined, 'Therizinosaurus grafted into local store');
+  assert(store.getNode('tax_pachycephalosaurus_wyomingensis') !== undefined || store.getNode('tax_pachycephalosaurus') !== undefined, 'Pachycephalosaurus grafted into local store');
 
+  // Test dynamic unlisted species grafting
+  const graftedPanda = await cladeExpansionService.graftUnlistedTaxon(store, 'Ailuropoda melanoleuca');
+  assert(graftedPanda !== undefined && graftedPanda.id === 'tax_ailuropoda_melanoleuca', 'Giant Panda grafted dynamically into tree of life');
+  assert(store.getNode('tax_ailuropoda_melanoleuca') !== undefined, 'Grafted Panda node is accessible in PhyGraphStore');
 
   // -------------------------------------------------------------
-  // SUITE 7: PhyGraphStore & $O(depth)$ MRCA Pathfinding
+  // SUITE 9: PhyGraphStore & $O(depth)$ MRCA Pathfinding
   // -------------------------------------------------------------
-  console.log('\n📌 [Suite 7/8] PhyGraphStore MRCA, Lineage & Graph Export...');
+  console.log('\n📌 [Suite 9/10] PhyGraphStore MRCA, Lineage & Graph Export...');
   const humanFungusMRCA = store.findMRCA('tax_homo_sapiens', 'tax_amanita_muscaria');
   assert(humanFungusMRCA !== null, 'MRCA found between Human and Fly Agaric');
   assert(humanFungusMRCA?.mrca_node.id === 'div_opisthokonta', 'Human–Fungi MRCA is Opisthokonta (1500 Ma)');
@@ -147,9 +177,9 @@ async function runBackendIntegrationTestSuite() {
   assert(graphMLStr.includes('<graphml') && graphMLStr.includes('</graphml>'), 'GraphML format exported successfully');
 
   // -------------------------------------------------------------
-  // SUITE 8: 6-Step Atomic ETL Pipeline Synchronization
+  // SUITE 10: 6-Step Atomic ETL Pipeline Synchronization
   // -------------------------------------------------------------
-  console.log('\n📌 [Suite 8/8] 6-Step Atomic ETL Pipeline Execution...');
+  console.log('\n📌 [Suite 10/10] 6-Step Atomic ETL Pipeline Execution...');
   let pipelineStepsExecuted = 0;
   pipelineRunner.onProgress(p => {
     if (p.stepIndex > pipelineStepsExecuted) {

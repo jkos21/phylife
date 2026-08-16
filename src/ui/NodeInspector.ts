@@ -631,16 +631,25 @@ export class NodeInspector {
     });
 
     // Expand clade button
-    this.element.querySelector('#btn-expand-clade')?.addEventListener('click', () => {
+    const expandBtn = this.element.querySelector('#btn-expand-clade') as HTMLButtonElement | null;
+    expandBtn?.addEventListener('click', async () => {
+      if (expandBtn) {
+        expandBtn.disabled = true;
+        expandBtn.innerHTML = `<span>⏳ Connecting to GBIF & Open Tree of Life...</span>`;
+      }
+
       try {
-        const result = cladeExpansionService.expandClade(this.store, node.id);
+        await cladeExpansionService.expandCladeLive(this.store, node.id);
         if (this.onCladeExpandedCallback) {
           this.onCladeExpandedCallback(node.id);
         }
-        alert(`Clade Expanded! Added ${result.nodesAddedCount} sister/deep taxa to the local graph store.`);
+        
+        // Auto-switch to species tab to show newly discovered taxa
+        this.currentTab = 'species';
         this.render();
       } catch (err: any) {
-        alert(err.message || 'Clade already expanded');
+        alert(err.message || 'Clade expansion could not be completed.');
+        this.render();
       }
     });
 
